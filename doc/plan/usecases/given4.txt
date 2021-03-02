@@ -1,0 +1,2 @@
+The user sets the pen's color using the UI so subsequent lines drawn when the turtle moves use
+that color.

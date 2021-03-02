@@ -1,0 +1,13 @@
+The user sets a variable's value and sees it updated in the UI's Variable view.
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- parser makes tokens from text
+  - parser sees String and checks it against valid list of command names
+  - parser creates generic token after no matches with command names
+- compiler creates a function from all tokens
+- function recursively gets next two token values
+- function calls command.perform()
+- command notifies work space view controller that new variable created
+- workspace view controller updates the view
