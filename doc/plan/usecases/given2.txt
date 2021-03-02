@@ -1,0 +1,10 @@
+The user types '50 fd' in the command window and sees an error message that the command was not
+formatted correctly.
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- parser makes tokens from text
+- compiler checks token type of first token and recognizes it is a parameter which is invalid
+- function informs ocmpiler that something has gone wrong
+- compiler calls makeAlert() in view controller and a popup appears

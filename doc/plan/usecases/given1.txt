@@ -1,0 +1,18 @@
+The user types 'fd 50' in the command window, and sees the turtle move in the display window
+leaving a trail, and the command is added to the environment's history.
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- Parser turns fd and 50 into their respective tokens.
+- Compiler creates new function with these tokens.
+- The function recognizes first token is command
+- command.isReady()
+  - command returns false because it has not been given parameter
+- function looks at next token, which is type constant
+  - therefore does command.giveNextExpectedToken(), passing the 50 to it
+- command.isReady()
+- it is ready, so calls command.perform()
+- turle.move(50)
+- controller alerts view as it is constantly checking the location
+- view.updateTurtle(x,y)
