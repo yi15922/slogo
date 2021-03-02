@@ -46,38 +46,45 @@ Our team is trying to create a user interface that lets users run basic SLogo co
     * `isReady()`: tells whether the command is ready to be run, this requires it to have all its expected tokens.
     * Once a `Command` object has all its required tokens, it will be executed and the return value passed to the next command in the stack in the case of nested commands.
     * Contains instance variables `commandName`and `numberOfExpectedTokens`. `commandName` is the command token user writes to call the command, and `numberOfExpectedTokens` is the number of parameters expected by each command.
+    * Has direct access to `Workspace` to access or create `Variable` and `Function` objects in the workspace.
 
-* `Compiler`: parses user entered strings and creates `Command` objects
+* `Compiler`: Gets `Token`s from `Parser` and creates `Function` objects with these tokens.
     * Also identifies syntax errors in user entered code by checking against its internal `Map` of allowed commands.
-    * Calls `Command.isReady()` with each token passed to a command.
-    * `runCommand()`: runs the command recursively to take care of nested commands:
+    * Detects the beginning and end of a user defined function to determine when to create new `Function` objects.
+
+* `Parser`: Used by the compiler to package user inputs into `Token` objects of the correct type.
+    * Has standard scanning methods like `getNextToken()` and `hasNextToken()`.
+    * Detects using regex the type of `Token` to create tokens of the correct types.
+    * Checks each `String` input against a list of default command strings.
+        * If no match, create a generic `Token` holding the string. This can be used as a user defined `Function` name or a `Variable` name.
+        * If there is a match, constructs the corresponding `Command` subclass (e.g. `ForwardCommand`).
+
+    * Detects end of user input
+    * Detects the beginning of lists and creates `List` objects.
+
+    * Handles white spaces
+
+
+* `Function`: Holds a collection of `Token` objects
+    * Is constructed by passing it a collection of `Token`
+    * `run()`: attempts to go through all its `Token` objects in order, calling `runCommand()` on each token of type `Command`.
+    * `runCommand(command)`: runs the command recursively to take care of nested commands:
         * If `Command.isReady()` is true, call `perform()` on the command and return the return value.
-        * If command is not ready, call `Parser.getNextToken()` and check what type of token it is.
-        * If it is the expected type (`Variable` or `Constant`), pass it to the `Command` using `Command.giveNextExpectedToken()` and make recursive `runCommand()` call on it again.
+        * If command is not ready, call `getNextToken()` and check what type of token it is.
+        * If it is the expected type (`Variable` or `Constant`), pass it to the `Command` using `Command.giveNextExpectedToken()` and make recursive `runCommand(command)` call on it again.
         * If the next token is another `Command`, make recursive `runCommand()` call on the inner command, passing the return value to the outer command using `Command.giveNextExpectedToken()`.
 
-* `Parser`: Used by the compiler to package user inputs into `Token` objects.
-    * Has standard scanning methods like `getNextToken()` and `hasNextToken()`
-    * Detects end of user input'
-    * Detects the beginning of lists and creates `List` objects.
-    * Handles white spaces
-    * Detects the beginning of a user defined function, and creates a collection of `Token` for a `Function` object, adding it to `Workspace`.
-    * Also adds `Variable` objects to the `Workspace` if the user declares any.
+* `Variable`: holds a `int` value and `String` name and can be queried using `getValue` and `setValue`.
 
 
-
-* `Function`: extends `Command`
-    * Keeps an internal `List` of `Token` objects, and a `List` of `Variable`.
-    * Adds each `Variable` to the environment
-    * Also uses the list of variables to determine the command's number of expected `Token`s.
-    * Once created, is added to the `Compiler`'s `Map` of callable commands.
-    * Overrides `Command.perform()` to perform all of its list of commands in order.
-
-* `Variable`: created when the user declares a new variable, can hold any data type.
-* `WorkSpace`: Keeps track of user defined `Variables`
-    * `Variables` can be checked and updated using methods `updateVariable()` and `getVariable()`.
+* `Workspace`: Keeps a collection of user defined `Variable` and `Function`
     * `Variable`s can be added using `addVariable()`.
-* `View`: extends `PanelView`, extended by `TurtlePanelView`, `ConsolePanelView`, `FunctionPanelView`. `View` is a front-end internal API because it will be used by other front-end programmers to create the panels in the GUI.
+    * `Function` can be added using `addFunction()`.
+    * Calling `getVariable()` or `getFunction()` gets them by name and returns the respective objects. If not found, throw an exception.
+    * Communicates with `WorkspaceViewController` to update the variable display in the workspace view.
+
+
+* `View`: extends `PanelView`, extended by `TurtleView`, `ConsoleView`, `WorkspaceView`. `View` is a front-end internal API because it will be used by other front-end programmers to create the panels in the GUI.
     * Each subclass has a corresponding controller extending `ViewController`, which is the front-end external API.
     * View will not communicate with controller when interpreting input affecting visuals such as turtle image, background color, and pen color, since the Model has no need to interact with such features.
 
