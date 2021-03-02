@@ -4,6 +4,7 @@
 ### Names
 Patrick Liu (pyl8)
 Liam Idrovo (lai3)
+Kenneth Moore III (km460)
 #### Examples
 
 Here is a graphical look at my design:
@@ -24,42 +25,60 @@ taken from [Brilliant Examples of Sketched UI Wireframes and Mock-Ups](https://o
 Our team is trying to create a user interface that lets users run basic SLogo commands and craft programs. The commands directly interact with a turtle on the screen. It should be flexible on the front-end to support a variety of languages and styling options, and flexible on the back-end to support more complex turtle commands and data structures. Hence, the structure of a command and how the turtle's position is changed should be closed for modification, but the commands should be open for extension in order to support new commands. In essence, text entered by the user in the GUI should be passed to a compiler that parses through the String and calls the appropriate commands in the back-end, which then updates the turtle position/orientation in the front-end.
 
 ## Overview
-* `Turtle`: the model of the application
-    * Keeps track of its current position and orientation
+* `Turtle`: the model of the application, also the backend external API. The backend updates the turtle's state through this class, and the front end also interfaces to update the visual state of the turtle.
+    * Keeps track of its current position, orientation, pen state and visibility state
     * Keeps a record of its history (all positions it had been to)
     * Has states that can be updated such as:
         * `position`
         * `orientation`
         * `penUp`
+        * `isVisible`
     * Has methods such as:
         * `move()`
         * `turn()`
         * `penUp()`
+        * `visibility()`
+* `Token`: an interface that is extended by `Command`, `Constant`, `Var`, `List`, `Comment`. The `Compiler` converts user entered strings into these objects.
 
-* `Command`: an interface that makes a change to the `Turtle`.
-    * Has a `perform` method that performs the function of the command, potentially by updating the state of the `Turtle` by calling its API.
-    * Contains instance variables `commandName`and `numberOfParameters`. `commandName` is the command token user writes to call the command, and `numberOfParameters` is the number of parameters expected by each command.
-* `Commands:` contains all possible command objects and loads them to Compiler
-    * Contains instantiations of all objects implementing Command interface.
-    * Contains static method `loadCommands()` that returns HashMap with command tokens as keys and command objects as values. Method is static so that instantiaion of Commands class is not required for Compiler to call `loadCommands()`.
+* `Command`: an interface that makes a change to the `Turtle`. `Command` is a backend internal API that backend programmers can use to create new commands that are recognized by the `Parser`
+    * Has a `perform()` method that performs the function of the command, potentially by updating the state of the `Turtle` by calling its API. `perform` is called at runtime and will return the return value of the given `Command`.
+    * Has `giveNextExpectedToken()` which passes a `Token` to the next token the command expects.
+    * `isReady()`: tells whether the command is ready to be run, this requires it to have all its expected tokens.
+    * Once a `Command` object has all its required tokens, it will be executed and the return value passed to the next command in the stack in the case of nested commands.
+    * Contains instance variables `commandName`and `numberOfExpectedTokens`. `commandName` is the command token user writes to call the command, and `numberOfExpectedTokens` is the number of parameters expected by each command.
+
 * `Compiler`: parses user entered strings and creates `Command` objects
-    * Also identifies syntax errors in user entered code
-    * Passes each `Command` object created to `ProgramCounter`
-    * Notifies `ProgramCounter` when parsing is done.
-    * Identifies functions from `FunctionEditor`, and creates `Function` objects that with a collection of `Command`.
+    * Also identifies syntax errors in user entered code by checking against its internal `Map` of allowed commands.
+    * Calls `Command.isReady()` with each token passed to a command.
+    * `runCommand()`: runs the command recursively to take care of nested commands:
+        * If `Command.isReady()` is true, call `perform()` on the command and return the return value.
+        * If command is not ready, call `Parser.getNextToken()` and check what type of token it is.
+        * If it is the expected type (`Variable` or `Constant`), pass it to the `Command` using `Command.giveNextExpectedToken()` and make recursive `runCommand()` call on it again.
+        * If the next token is another `Command`, make recursive `runCommand()` call on the inner command, passing the return value to the outer command using `Command.giveNextExpectedToken()`.
+
+* `Parser`: Used by the compiler to package user inputs into `Token` objects.
+    * Has standard scanning methods like `getNextToken()` and `hasNextToken()`
+    * Detects end of user input'
+    * Detects the beginning of lists and creates `List` objects.
+    * Handles white spaces
+    * Detects the beginning of a user defined function, and creates a collection of `Token` for a `Function` object, adding it to `Workspace`.
     * Also adds `Variable` objects to the `Workspace` if the user declares any.
 
-* `Function`: extends `Collection` stores `Command` objects created by `Compiler` and runs them sequentially
-    * Either using `LinkedList` or `ArrayList`
-    * Can store one or more `Command` objects
-    * has method `run()` that will call `perform()` on all its `Command`s in order.
-    * A function can contain other `Functions`
+
+
+* `Function`: extends `Command`
+    * Keeps an internal `List` of `Token` objects, and a `List` of `Variable`.
+    * Adds each `Variable` to the environment
+    * Also uses the list of variables to determine the command's number of expected `Token`s.
+    * Once created, is added to the `Compiler`'s `Map` of callable commands.
+    * Overrides `Command.perform()` to perform all of its list of commands in order.
+
 * `Variable`: created when the user declares a new variable, can hold any data type.
 * `WorkSpace`: Keeps track of user defined `Variables`
     * `Variables` can be checked and updated using methods `updateVariable()` and `getVariable()`.
     * `Variable`s can be added using `addVariable()`.
-* `View`: extends `PanelView`, extended by `TurtlePanelView`, `ConsolePanelView`, `FunctionPanelView`.
-    * Each subclass has a corresponding controller
+* `View`: extends `PanelView`, extended by `TurtlePanelView`, `ConsolePanelView`, `FunctionPanelView`. `View` is a front-end internal API because it will be used by other front-end programmers to create the panels in the GUI.
+    * Each subclass has a corresponding controller extending `ViewController`, which is the front-end external API.
     * View will not communicate with controller when interpreting input affecting visuals such as turtle image, background color, and pen color, since the Model has no need to interact with such features.
 
 ## User Interface
@@ -74,7 +93,14 @@ We will be utilizing the [Command design pattern](https://www.oodesign.com/comma
 
 The Command interface holds a `commandName` instance variable because it isolates the assocation of a certain token with a command to the command's class. The great thing about this is that the only thing that must be adjusted to change the token associated with a command is that command's `commandName`. The `commandName` is loaded as a key in the HashMap returned by Commands `loadCommands()` static method. This means that Compiler will always be comparing user-inputted tokens directly with the tokens assigned to `commandName`. This obeys the open/closed principle because the Compiler class is closed to modification, but open to extension when creating a new command by implementing Command interface with a new command class. The only modification required is the instantiation of this new class in the Commands class.
 ## Test Plan
-Group
+We will conduct both positive tests, what a good user would do, and negative tests which try to break the program.  These test will see if program can handle invalid info / edge cases.
+
+Strategys to make API's more readable
+* Test benches (a whole bunch of tests put together) for functionality that has chance at going wrong
+* Useful parameter and return values for tests to be easy to run
+* Throw exceptions so that we know when and where the program goes bad
+
+
 
 ## Design Considerations
 A controller class could possibly be added later in the communication flow between View and Compiler if non-text user input that affects the model is implemented at a later point.
