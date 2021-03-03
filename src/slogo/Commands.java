@@ -6,11 +6,11 @@ import javafx.scene.web.HTMLEditorSkin.Command;
 
 public class Commands {
 
-    public static Map<String, Command> loadCommands() {
-        Map<String, Command> commands = new HashMap<>();
-
-        Command forward = new Forward();
-
-        return commands;
-    }
+//    public static Map<String, Command> loadCommands() {
+//        Map<String, Command> commands = new HashMap<>();
+//
+//        Command forward = new Forward();
+//
+//        return commands;
+//    }
 }

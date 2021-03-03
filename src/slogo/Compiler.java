@@ -14,7 +14,7 @@ public class Compiler {
     private Map<String, Command> myCommands;
 
     public Compiler() {
-        myCommands = Commands.loadCommands();
+        // myCommands = Commands.loadCommands();
     }
 
     /**
