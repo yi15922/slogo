@@ -5,21 +5,7 @@
 Patrick Liu (pyl8)
 Liam Idrovo (lai3)
 Kenneth Moore III (km460)
-#### Examples
-
-Here is a graphical look at my design:
-
-![This is cool, too bad you can't see it](online-shopping-uml-example.png "An initial UI")
-
-made from [a tool that generates UML from existing code](http://staruml.io/).
-
-
-Here is our amazing UI:
-
-![This is cool, too bad you can't see it](29-sketched-ui-wireframe.jpg "An alternate design")
-
-taken from [Brilliant Examples of Sketched UI Wireframes and Mock-Ups](https://onextrapixel.com/40-brilliant-examples-of-sketched-ui-wireframes-and-mock-ups/).
-
+Yi
 
 ## Introduction
 Our team is trying to create a user interface that lets users run basic SLogo commands and craft programs. The commands directly interact with a turtle on the screen. It should be flexible on the front-end to support a variety of languages and styling options, and flexible on the back-end to support more complex turtle commands and data structures. Hence, the structure of a command and how the turtle's position is changed should be closed for modification, but the commands should be open for extension in order to support new commands. In essence, text entered by the user in the GUI should be passed to a compiler that parses through the String and calls the appropriate commands in the back-end, which then updates the turtle position/orientation in the front-end.
@@ -40,47 +26,48 @@ Our team is trying to create a user interface that lets users run basic SLogo co
         * `visibility()`
 * `Token`: an interface that is extended by `Command`, `Constant`, `Var`, `List`, `Comment`. The `Compiler` converts user entered strings into these objects.
 
-* `Command`: an interface that makes a change to the `Turtle`. `Command` is a backend internal API that backend programmers can use to create new commands that are recognized by the `Parser`
-    * Has a `perform()` method that performs the function of the command, potentially by updating the state of the `Turtle` by calling its API. `perform` is called at runtime and will return the return value of the given `Command`.
-    * Has `giveNextExpectedToken()` which passes a `Token` to the next token the command expects.
-    * `isReady()`: tells whether the command is ready to be run, this requires it to have all its expected tokens.
-    * Once a `Command` object has all its required tokens, it will be executed and the return value passed to the next command in the stack in the case of nested commands.
+* `SLogoRunnable`: an interface that marks an object as runnable and expects 0 or more parameters.
+    * `isReady()`: tells whether the `SLogoRunnable` is ready to be run, this requires it to have all its expected tokens.
+    * `giveNextExpectedToke()`: passes a `Token` as a parameter.
+    * `run()`: runs the runnable and returns a result.
+
+* `Command`: a abstract class that extends `Token` and `SLogoRunnable`. `Command` is a backend internal API that backend programmers can use to create new commands that are recognized by the `Parser`
+    * Concrete implementations will override the `run()` method to perform the function of the command, potentially by updating the state of the `Turtle` by calling its API. `run()` is called at runtime and will return the return value of the given `Command`.
     * Contains instance variables `commandName`and `numberOfExpectedTokens`. `commandName` is the command token user writes to call the command, and `numberOfExpectedTokens` is the number of parameters expected by each command.
-    * Has direct access to `Workspace` to access or create `Variable` and `Function` objects in the workspace.
+    * Has direct access to `Workspace` to access or create `WorkspaceEntry` objects in the workspace.
 
 * `Compiler`: Gets `Token`s from `Parser` and creates `Function` objects with these tokens.
     * Also identifies syntax errors in user entered code by checking against its internal `Map` of allowed commands.
-    * Detects the beginning and end of a user defined function to determine when to create new `Function` objects.
 
 * `Parser`: Used by the compiler to package user inputs into `Token` objects of the correct type.
     * Has standard scanning methods like `getNextToken()` and `hasNextToken()`.
-    * Detects using regex the type of `Token` to create tokens of the correct types.
+    * Detects using regex the type of `Token` to create tokens of the correct types (possibly using a _Factory_ design pattern).
     * Checks each `String` input against a list of default command strings.
-        * If no match, create a generic `Token` holding the string. This can be used as a user defined `Function` name or a `Variable` name.
+        * If no match, create a generic `Token` holding the string. This can later be used as a user defined `Function` name or a `Variable` name.
         * If there is a match, constructs the corresponding `Command` subclass (e.g. `ForwardCommand`).
-
     * Detects end of user input
     * Detects the beginning of lists and creates `List` objects.
-
     * Handles white spaces
 
 
-* `Function`: Holds a collection of `Token` objects
+* `Function`: extends `SLogoRunnable` and `WorkspaceEntry`, holds a collection of `Token` objects.
     * Is constructed by passing it a collection of `Token`
-    * `run()`: attempts to go through all its `Token` objects in order, calling `runCommand()` on each token of type `Command`.
-    * `runCommand(command)`: runs the command recursively to take care of nested commands:
-        * If `Command.isReady()` is true, call `perform()` on the command and return the return value.
-        * If command is not ready, call `getNextToken()` and check what type of token it is.
-        * If it is the expected type (`Variable` or `Constant`), pass it to the `Command` using `Command.giveNextExpectedToken()` and make recursive `runCommand(command)` call on it again.
-        * If the next token is another `Command`, make recursive `runCommand()` call on the inner command, passing the return value to the outer command using `Command.giveNextExpectedToken()`.
+    * Overrides `run()`: attempts to go through all its `Token` objects in order, calling `run()` on each token of type `SLogoRunnable`.
+    * `run(runnable)`: calls run() recursively to take care of nested `SLogoRunnable`s:
+        * If `runnable.isReady()` is true, call `run()` on the it and return the return value.
+        * If runnable is not ready, call `getNextToken()` and check what type of token it is.
+        * If it is type `Constant`, pass it to the `SLogoRunnable` using `runnable.giveNextExpectedToken()` and make recursive `run(runnable)` call on it again.
+        * If the next token is a generic `Token`, check the `Workspace` and get the concrete token type. If the type is `SLogoRunnable`, make recursive `run()` call on the inner runnable, passing the return value to the outer runnable using `runnable.giveNextExpectedToken()`.
+    * Can be added as a searchable entry in the `Workspace`.
 
-* `Variable`: holds a `int` value and `String` name and can be queried using `getValue` and `setValue`.
+* `Variable`: extends `WorkspaceEntry`
+    * Holds a `int` value and `String` name and can be queried using `getValue` and `setValue`.
+    * Can be added as an entry to the `Workspace`
 
 
-* `Workspace`: Keeps a collection of user defined `Variable` and `Function`
-    * `Variable`s can be added using `addVariable()`.
-    * `Function` can be added using `addFunction()`.
-    * Calling `getVariable()` or `getFunction()` gets them by name and returns the respective objects. If not found, throw an exception.
+* `Workspace`: Keeps a collection of user defined `WorkspaceEntry` objects
+    * `add()`: adds the passed `WorkspaceEntry` object.
+    * `search()` returns the `WorkspaceEntry` by name and returns the respective objects. If not found, returns `null`.
     * Communicates with `WorkspaceViewController` to update the variable display in the workspace view.
 
 
@@ -89,7 +76,6 @@ Our team is trying to create a user interface that lets users run basic SLogo co
     * View will not communicate with controller when interpreting input affecting visuals such as turtle image, background color, and pen color, since the Model has no need to interact with such features.
 
 ## User Interface
-View guy
 
 ## Design Details
 
@@ -102,7 +88,7 @@ The Command interface holds a `commandName` instance variable because it isolate
 ## Test Plan
 We will conduct both positive tests, what a good user would do, and negative tests which try to break the program.  These test will see if program can handle invalid info / edge cases.
 
-Strategys to make API's more readable
+Strategies to make API's more readable
 * Test benches (a whole bunch of tests put together) for functionality that has chance at going wrong
 * Useful parameter and return values for tests to be easy to run
 * Throw exceptions so that we know when and where the program goes bad
@@ -125,14 +111,48 @@ Tests for Turtle Feature
 * Check turtle show
     * ensure turtles show state can change
 
+Tests for Commands
+There should be a test for each command supported by SLogo to test its proper function. Each command should be accompanied by positive tests that a typical user might enter, and negative tests that may be syntactically correct but may throw a runtime error. Three specific test scenarios are detailed below:
+* HIDETURTLE and SHOWTURTLE
+    * A test passes the commands "HT ST HT ST" to the Parser
+    * The Compiler should create a separate Function for each Command since they take no parameters
+    * After each Function is run, the tester will assert that the visual state of the turtle (hidden or shown) is correct, and that the return value of the Command is correct (0 for HT, 1 for ST)
+* LESS?
+    * A test contains many possible forms of a LESS? comparison and their expected result, including:
+        * Two constants (i.e. LESS? 1 2)
+        * Two variables (i.e. LESS? x y)
+        * One constant, one variable (i.e. LESS? x 2)
+    * After each Function is run, the tester will assert that the return value matches the expected result
+* FORWARD (negative test case)
+    * A test passes the command "FD x" to the Parser, where x is a number greater than either dimension of the allowable turtle space
+    * The Command will attempt to update the Turtle's position, but should throw an exception after learning that the new position is out of bounds (i.e. it is an illegal action)
+    * The tester will assert that the Command threw the proper exception
+
+Tests for View
+The front-end of this project should accurately display the state of the turtle and give users the option to style certain aspects of the GUI.
+* Set Background Color
+    * A test would simulate a click from the user attempting to change the background color, followed by a click on each available color.
+    * The tester will assert that the property BackgroundColor in the appropriate Panel is set to the expected color after each click
+* Set Turtle Image
+    * A test would simulate a click from the user attempting to change the turtle image, followed by a click on each available image.
+    * The tester will assert that the Image variable used to display the turtle is set the expected value after each click
+* See Available Variables
+    * A test would create variables with varying names and values (i.e. x = 25, probabilityOfRain = 80, metersInGigaMeters = 1000000000)
+    * The test would consist of user commands of the form 'make expr value'
+    *  After each command, the tester will assert that the WorkspacePanel contains the corresponding variable and that its name and value are displayed correctly
+
 ## Design Considerations
-A controller class could possibly be added later in the communication flow between View and Compiler if non-text user input that affects the model is implemented at a later point.
+A controller class could possibly be added later in the communication flow between View and Compiler if non-text user input that affects the model is implemented at a later point. However, for our Basic implementation we will assume that the only interaction the user has with the Turtle comes in the form of text input, and the basic styling options that should be on the GUI.
+
+Another design decision we discussed at length was the responsibilites and communication between the Compiler and Function. Currently, our plan is to have the Compiler, given a list of Tokens from the Parser, create Functions with one or more Commands that can "run" themselves. Essentially, when the Compiler encounters a Command token, it creates a new Function object with the remaining tokens, and the Function is responsible for parsing through the remaining tokens to run the given Command. This structure takes advantage of recursion to handle nested commands/functions.
+One alternative we strongly considered was having the Compiler create Stacks of Commands for each runnable Command, and then running the Commands in order. For example, a nested command like 'fd fd 50' would result in a Stack with the inner 'fd 50' command on top. The Compiler would then have more responsibilities, since it is in charge of turning the given tokens into a form that is runnable. This approach has the advantage of being easier to visualize, since Stacks of Commands are a helpful way to picture nested commands. However, we ultimately decided this approach gave the Compiler too much responsibility. We are consciously separate the Compiler from knowledge of what specific Commands need to run.
+
 ## Team Responsibilities
 
-* Team Member #1
+* Yi - Parser & Compiler, communication between Compiler and Function
 
-* Team Member #2
+* Liam - View (the three panels), communication between each View and its respective controller
 
-* Team Member #3
+* Patrick - Token inheritance hierarchy (Command, Variable, Constant, List, Comment) and Function, communication between Compiler and Function
 
-* Team Member #4
+* Kenneth - Turtle and controllers for the View panels 
