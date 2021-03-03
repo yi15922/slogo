@@ -1,0 +1,8 @@
+User sets background color for the turtle's display area
+
+- User presses "Background Color" button on ButtonPanel
+- ButtonPanelController handles the click event, and calls ButtonPanel.showAvailableColors()
+- ButtonPanel displays drop-down menu of available background colors
+- User selects a color from the menu
+- ButtonPanelController handles the click event, and calls ButtonPanel.setBackgroundColor()
+- ButtonPanel changes background color of turtle scene to the specified color

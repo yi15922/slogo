@@ -1,0 +1,8 @@
+User creates a variable and sees its name and value in the right panel of the GUI
+
+- User enters command 'make x 25'
+- The command is placed in a Function and then run, following the steps outlined in command2.txt
+- A Variable token with name 'x' and value 25 is placed in the Workspace
+- The WorkspaceController calls WorkspacePanel.addVariable() with the name and value as a String and int, respectively
+  - The WorkspacePanel does not know anything about Tokens
+- The WorkspacePanel adds the variable information to its list of variables to display 
