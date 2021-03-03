@@ -1,0 +1,25 @@
+The user types 'fd fd 50' in the command window, and sees the turtle move 100 units (since the inner
+'fd 50' moves 50 and returns 50 to the outer command)
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- Parser turns fd, fd, and 50 into their respective tokens.
+- Compiler creates new function with these tokens.
+- The function recognizes first token is command fd
+- fd.isReady()
+  - fd returns false because it has not been given parameter
+- function looks at next token, which is command fd2
+- fd2.isReady() on the next token
+  - fd2 also returns false because it has not been given parameter
+- function looks at next token, which is type constant
+  - calls fd2.giveNextExpectedToken() with constant token 50
+- fd2.isReady()
+- it is ready, so function calls fd2.perform()
+  - turtle.move(50) and returns 50
+- now the function calls fd.giveNextExpectedToken() with the value 50 wrapped in a constant token
+- fd.isReady() is now true
+- fd.perform() on first command
+  - turtle.move(50)
+- controller alerts view as it is constantly checking the location
+- view.updateTurtleCoordinates(x,y)

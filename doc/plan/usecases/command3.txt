@@ -1,0 +1,34 @@
+The user types 'if sum 1 2 [fd 50 rt 180]' in the command window, and sees the turtle move 50 units
+and then turn around
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- Parser turns if, sum, 1, 2, and [fd 50 rt 180] into their respective tokens
+  - the list token is composed of the four tokens fd, 50, rt, and 180
+- Compiler creates new function with these tokens.
+- The function recognizes first token is command if
+- if.isReady()
+  - returns false because it has not been given parameters
+- function looks at next token, which is command sum
+- sum.isReady()
+  - also returns false because it has not been given parameters
+- function looks at next token, which is type constant
+  - calls sum.giveNextExpectedToken() with constant token 1
+- sum.isReady() still returns false
+- function looks at next token, which is type constant
+  - calls sum.giveNextExpectedToken() with constant token 2
+- sum.isReady() now returns true, function calls sum.perform()
+  - returns 1 + 2 = 3
+- now the function calls if.giveNextExpectedToken() with the value 3 wrapped in a constant token
+- if.isReady() still returns false
+- function looks at next token, which is type list
+  - calls sum.giveNextExpectedToken() with list token
+- if.isRead() now returns true, function calls if.perform()
+  - if evaluates the constant token, checks that it is not 0, then performs the commands in the list
+  - to summarize:
+    - fd.giveNextExpectedToken() with constant token 50, fd.perform() moves turtle 50 units
+    - rt.giveNextExpectedToken() with constant token 180, rt.perform() turns turtle 180 degrees to the right
+- controller alerts view as it is constantly checking the location and orientation of the turtle
+- view.updateTurtleCoordinates(x,y)
+- view.updateTurtleOrientation(degrees)
