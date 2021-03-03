@@ -14,6 +14,7 @@ package slogo;
  * a generic {@code Token} type with no specific subclass, it will search through the workspace
  * for a {@code Variable} or {@code Function} with a matching name.
  *
+ * @author Yi Chen
  */
 public interface Workspace {
 
@@ -30,7 +31,7 @@ public interface Workspace {
   /**
    * Returns the {@code WorkspaceEntry} with the matching name identifier. If not found,
    * return null.
-   * @param a search {@code String}.
+   * @param name search {@code String}.
    * @return the {@code WorkspaceEntry} matching the search name, or {@code null}.
    */
   public WorkspaceEntry search(String name);
