@@ -107,7 +107,23 @@ Strategys to make API's more readable
 * Useful parameter and return values for tests to be easy to run
 * Throw exceptions so that we know when and where the program goes bad
 
-
+Tests for Turtle Feature
+* Check that turtle moves
+    * check if it moves in x direction
+        * expected outcome: x internal state is updated
+    * check if it moves in y direction
+        * expected outcome: y interanl state is updated
+    * give direction for out of bounds
+        * expected outcome: throws Exception
+* Check that turtle turns
+    * make sure turtle turns appropriate number of degrees
+        * expected outcome: direction internal state is updated
+        * make sure turtle informs view it has changed
+        * turtle makes call to controller using what just learned in class
+* Check turtle pen
+    * ensure pen can turn on and off
+* Check turtle show
+    * ensure turtles show state can change
 
 ## Design Considerations
 A controller class could possibly be added later in the communication flow between View and Compiler if non-text user input that affects the model is implemented at a later point.
