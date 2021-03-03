@@ -2,6 +2,7 @@ package slogo;
 
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.web.HTMLEditorSkin.Command;
 
 public class Commands {
 

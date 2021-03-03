@@ -3,6 +3,7 @@ package slogo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.web.HTMLEditorSkin.Command;
 
 /**
  * Parses user input to check if it is valid Slogo syntax. If so, orders instance of
@@ -33,12 +34,12 @@ public class Compiler {
         while (parserPointer < splitInput.length) {
             Command command = myCommands.get(splitInput[parserPointer++]);
             //reading command parameters
-            List<String> parameters = new ArrayList<>();
-            for (int i=1; i <= command.getNumberOfParameters(); ++i) {
-                parameters.add(splitInput[parserPointer++]);
-            }
-            command.setParameters(parameters);
-            function.addCommand(command);
+//            List<String> parameters = new ArrayList<>();
+//            for (int i=1; i <= command.get(); ++i) {
+//                parameters.add(splitInput[parserPointer++]);
+//            }
+//            command.setParameters(parameters);
+//            function.addCommand(command);
         }
         return "";
     }
