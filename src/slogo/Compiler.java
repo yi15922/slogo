@@ -24,25 +24,25 @@ public class Compiler {
      * @return          empty string if input processed into commands succesfully
      *                  otherwise, string with first error marked is returned
      */
-    public String processInput(String input) {
-        String correctedInput = getCorrectedInput(input);
-        if (!input.equals(correctedInput)) return correctedInput;
-        String[] splitInput = splitInputIntoCommands(correctedInput);
-        Function function = new Function();
-
-        int parserPointer = 0;
-        while (parserPointer < splitInput.length) {
-            Command command = myCommands.get(splitInput[parserPointer++]);
-            //reading command parameters
+//    public String processInput(String input) {
+//        String correctedInput = getCorrectedInput(input);
+//        if (!input.equals(correctedInput)) return correctedInput;
+//        String[] splitInput = splitInputIntoCommands(correctedInput);
+//        Function function = new Function();
+//
+//        int parserPointer = 0;
+//        while (parserPointer < splitInput.length) {
+//            Command command = myCommands.get(splitInput[parserPointer++]);
+//            reading command parameters
 //            List<String> parameters = new ArrayList<>();
 //            for (int i=1; i <= command.get(); ++i) {
 //                parameters.add(splitInput[parserPointer++]);
 //            }
 //            command.setParameters(parameters);
 //            function.addCommand(command);
-        }
-        return "";
-    }
+//        }
+//        return "";
+//    }
 
 
 
