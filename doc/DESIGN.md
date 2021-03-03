@@ -5,7 +5,7 @@
 Patrick Liu (pyl8)
 Liam Idrovo (lai3)
 Kenneth Moore III (km460)
-Yi
+Yi Chen (yc311)
 
 ## Introduction
 Our team is trying to create a user interface that lets users run basic SLogo commands and craft programs. The commands directly interact with a turtle on the screen. It should be flexible on the front-end to support a variety of languages and styling options, and flexible on the back-end to support more complex turtle commands and data structures. Hence, the structure of a command and how the turtle's position is changed should be closed for modification, but the commands should be open for extension in order to support new commands. In essence, text entered by the user in the GUI should be passed to a compiler that parses through the String and calls the appropriate commands in the back-end, which then updates the turtle position/orientation in the front-end.
