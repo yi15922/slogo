@@ -1,0 +1,9 @@
+The user enters command to togglePen
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- parser makes tokens from text
+- function is made
+- function calls command.perform()
+- this calls turtle.togglePen()
