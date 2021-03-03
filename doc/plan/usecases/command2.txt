@@ -1,0 +1,21 @@
+The user types 'make x 25' in the command window, and sees a new variable 'x' in the workspace
+with value 25.
+
+- User presses run button
+- Controller for console panel takes the text
+- parser pulls text from controller
+- Parser turns make, x, and 25 into their respective tokens.
+  - make is a command, x is a generic token, and 25 is a constant
+- Compiler creates new function with these tokens.
+- The function recognizes first token is command make
+- make.isReady()
+  - returns false because it has not been given parameters
+- function looks at next token, which is type token
+  - function calls make.getNextExpectedToken() with generic token
+- function looks at following token, which is type constant
+  - function calls make.getNextExpectedToken() with constant token
+- make.isReady() now returns true so function calls make.perform()
+- make creates new variable token with the name of the generic token and the value of the constant
+- make places new variable token in the workspace
+- controller alerts view that a new variable has been added to the workspace
+- workspace view updates itself with the new variable name and value
