@@ -23,7 +23,7 @@ public Interface Turtle{
   public void togglePen();
 
   /**
-  * The method toggles the booleann visible to be either visible or not.  
+  * The method toggles the booleann visible to be either visible or not.
   */
   public void toggleVisibility();
 }
