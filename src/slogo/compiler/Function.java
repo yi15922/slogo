@@ -1,6 +1,8 @@
-package slogo;
+package slogo.compiler;
 
 import java.util.Collection;
+import slogo.compiler.SLogoRunnable;
+import slogo.compiler.Token;
 
 /**
  * A {@code Function} is a {@code Token} than extends {@code SLogoRunnable} and
@@ -11,7 +13,7 @@ import java.util.Collection;
  *
  * @author Yi Chen
  */
-public interface Function extends SLogoRunnable, WorkspaceEntry{
+public interface Function extends SLogoRunnable, slogo.WorkspaceEntry {
 
   /**
    * Adds the passed {@code Token} to the collection of parameters. This is used to create

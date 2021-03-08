@@ -1,6 +1,9 @@
-package slogo;
+package slogo.compiler.command;
 
 import java.util.List;
+import slogo.SLogoException;
+import slogo.compiler.Token;
+import slogo.compiler.SLogoRunnable;
 
 /**
  * An interface that provides methods to completely define an SLogo supported command.
@@ -11,7 +14,12 @@ import java.util.List;
  *
  * @author Patrick Liu
  */
-public interface Command extends SLogoRunnable{
+public abstract class Command implements SLogoRunnable {
+    private String commandName;
+
+    public Command(String name){
+        commandName = name;
+    }
 
     /**
      * Performs the intended function of the Command, with the end result potentially affecting
@@ -24,7 +32,7 @@ public interface Command extends SLogoRunnable{
      * @return - a {@code Constant} token containing the return value of the command.
      */
     @Override
-    public Token run() throws SLogoException;
+    public abstract Token run() throws SLogoException;
 
 
     /**
@@ -33,6 +41,11 @@ public interface Command extends SLogoRunnable{
      * while each inner list contains all possible types of Tokens that can be taken for that parameter.
      * @return - List of parameters needed, specifying possible Token types for each parameter
      */
-    public List<List<Token>> getExpectedTokens();
+//    public List<List<Token>> getExpectedTokens();
+
+    @Override
+    public String toString(){
+        return commandName;
+    }
 
 }
