@@ -6,5 +6,5 @@ formatted correctly.
 - parser pulls text from controller
 - parser makes tokens from text
 - compiler checks token type of first token and recognizes it is a parameter which is invalid
-- function informs ocmpiler that something has gone wrong
+- function informs compiler that something has gone wrong
 - compiler calls makeAlert() in view controller and a popup appears
