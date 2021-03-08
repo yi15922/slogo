@@ -1,4 +1,4 @@
-package slogo;
+package slogo.compiler;
 
 /**
  * Superclass of all possible tokens recognized by the Parser: Command, Variable, Constant,
