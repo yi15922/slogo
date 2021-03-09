@@ -50,4 +50,24 @@ class CommandTest {
     assertThrows(SLogoException.class, () -> function = new Function(command, parameterTokens));
   }
 
+  @Test
+  void testTowardsCommand() {
+    command = new TowardsCommand();
+    parameterTokens.add(new Constant(10));
+    parameterTokens.add(new Constant(20));
+    function = new Function(command, parameterTokens);
+    assertEquals(0.0, function.run().getValue()); // todo: replace with actual distance
+  }
+
+  @Test
+  void testRecursiveTowardsCommand() {
+    command = new TowardsCommand();
+    parameterTokens.add(new ForwardCommand());
+    parameterTokens.add(new ForwardCommand());
+    parameterTokens.add(new Constant(20));
+    parameterTokens.add(new Constant(50));
+    function = new Function(command, parameterTokens);
+    assertEquals(0.0, function.run().getValue()); // todo: replace with actual distance
+  }
+
 }

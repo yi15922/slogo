@@ -15,6 +15,8 @@ public class TowardsCommand extends Command {
   @Override
   public Token run() throws SLogoException {
     // todo: call Turtle method
+    System.out.println("Moving " + expectedParameters.get(0).getValue() + " x and " +
+        expectedParameters.get(1).getValue() + " y");
     return new Constant(0); // todo: return degrees turtle turned
   }
 }

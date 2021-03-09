@@ -64,6 +64,9 @@ public class Function extends Token implements SLogoRunnable {
   // to create parameters for the initial command and all nested commands
   private void parseParameterTokens(Command initCommand, Stack<Token> parameterTokens) throws SLogoException {
     while (! initCommand.isReady()) {
+      if (parameterTokens.isEmpty()) {
+        throw new SLogoException("Invalid syntax");
+      }
       Token nextToken = parameterTokens.pop();
       if (nextToken.isEqualTokenType(new Constant(0))) { // wrap constants inside a variable Token
         double tokenValue = nextToken.getValue();
