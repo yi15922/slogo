@@ -38,9 +38,9 @@ public class Function extends Token implements SLogoRunnable {
   /**
    * Compiler is responsible for ensuring that the first {@code Token} given to the {@code Function}
    * is a {@code Command} since SLogo syntax dictates that all user interactions are in the form of commands
-   * @param initCommand
-   * @param parameterTokens
-   * @throws SLogoException
+   * @param initCommand - the first command intended to be run
+   * @param parameterTokens - a list of all remaining tokens in the user-entered String
+   * @throws SLogoException - if there is invalid syntax in the command
    */
   public Function(Command initCommand, List<Token> parameterTokens) throws SLogoException  {
     super("Function");
@@ -60,6 +60,8 @@ public class Function extends Token implements SLogoRunnable {
   }
 
   // recursively assembles and runs a command
+  // takes in Stack of all remaining Tokens in the user-entered String, pops off Tokens that it uses
+  // to create parameters for the initial command and all nested commands
   private void parseParameterTokens(Command initCommand, Stack<Token> parameterTokens) throws SLogoException {
     while (! initCommand.isReady()) {
       Token nextToken = parameterTokens.pop();
@@ -72,7 +74,7 @@ public class Function extends Token implements SLogoRunnable {
           Token resultToken = new Function((Command) nextToken, parameterTokens).run();
           parameterTokens.push(resultToken);
         }
-        catch (InputMismatchException e) {
+        catch (ClassCastException e) {
           throw new SLogoException("Invalid syntax"); // received a generic Token, List, or Function
         }
       }

@@ -17,6 +17,7 @@ public class ForwardCommand extends Command {
     @Override
     public Token run() throws SLogoException {
         // todo: call Turtle move method
+        System.out.println("Turtle has moved " + expectedParameters.get(0).getValue() + " pixels");
         return new Constant(expectedParameters.get(0).getValue());
     }
 
