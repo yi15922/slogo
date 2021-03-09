@@ -3,6 +3,7 @@ package slogo.compiler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 import slogo.SLogoException;
 import slogo.compiler.command.SLogoCommand;
@@ -38,18 +39,7 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
    * @param parameterTokens - a list of all remaining tokens in the user-entered String
    * @throws SLogoException - if there is invalid syntax in the command
    */
-  public SLogoFunction(SLogoCommand initCommand, List<SLogoToken> parameterTokens) throws SLogoException  {
-    super("Function");
-    commandList = new ArrayList<>();
-    Stack<SLogoToken> tokenStack = new Stack<>();
-    for (int i = parameterTokens.size() - 1; i >= 0; i--) {
-      tokenStack.push(parameterTokens.get(i));
-    }
-    parseParameterTokens(initCommand, tokenStack);
-  }
-
-  // todo: clean up the competing constructors, finalize stack vs. list for parameters
-  public SLogoFunction(SLogoCommand initCommand, Stack<SLogoToken> parameterTokens) throws SLogoException {
+  public SLogoFunction(SLogoCommand initCommand, Queue<SLogoToken> parameterTokens) throws SLogoException  {
     super("Function");
     commandList = new ArrayList<>();
     parseParameterTokens(initCommand, parameterTokens);
@@ -58,12 +48,12 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
   // recursively assembles and runs a command
   // takes in Stack of all remaining Tokens in the user-entered String, pops off Tokens that it uses
   // to create parameters for the initial command and all nested commands
-  private void parseParameterTokens(SLogoCommand initCommand, Stack<SLogoToken> parameterTokens) throws SLogoException {
+  private void parseParameterTokens(SLogoCommand initCommand, Queue<SLogoToken> parameterTokens) throws SLogoException {
     while (! initCommand.isReady()) {
       if (parameterTokens.isEmpty()) {
         throw new SLogoException("Invalid syntax");
       }
-      SLogoToken nextToken = parameterTokens.pop();
+      SLogoToken nextToken = parameterTokens.poll();
       if (nextToken.isEqualTokenType(new SLogoConstant(0))) { // wrap constants inside a variable Token
         double tokenValue = nextToken.getValue();
         nextToken = new SLogoVariable("wrapper", tokenValue);
@@ -71,7 +61,7 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
       if (! initCommand.giveNextExpectedToken(nextToken)) {
         try {
           SLogoToken resultToken = new SLogoFunction((SLogoCommand) nextToken, parameterTokens).run();
-          parameterTokens.push(resultToken);
+          parameterTokens.add(resultToken);
         }
         catch (ClassCastException e) {
           throw new SLogoException("Invalid syntax"); // received a generic Token, List, or Function

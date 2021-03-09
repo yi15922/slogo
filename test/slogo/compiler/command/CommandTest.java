@@ -2,8 +2,10 @@ package slogo.compiler.command;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
@@ -15,13 +17,13 @@ import slogo.compiler.SLogoVariable;
 
 class CommandTest {
   //private Turtle myModel;
-  private List<SLogoToken> parameterTokens;
+  private Queue<SLogoToken> parameterTokens;
   private SLogoCommand command;
   private SLogoFunction function;
 
   @BeforeEach
   void setup() {
-    parameterTokens = new ArrayList<>();
+    parameterTokens = new ArrayDeque<>();
   }
 
   @Test
