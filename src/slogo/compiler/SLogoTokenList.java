@@ -2,8 +2,8 @@ package slogo.compiler;
 
 import java.util.List;
 
-public class TokenList extends Token {
-  List<Token> myTokens;
+public class SLogoTokenList extends SLogoToken {
+  List<SLogoToken> myTokens;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -12,11 +12,11 @@ public class TokenList extends Token {
    *
    * @param name - the specified name of the Token
    */
-  public TokenList(String name) {
+  public SLogoTokenList(String name) {
     super(name);
   }
 
-  public TokenList(List<Token> innerTokens) {
+  public SLogoTokenList(List<SLogoToken> innerTokens) {
     super("");
     myTokens = innerTokens;
   }

@@ -6,7 +6,7 @@ public class Parser {
   public Parser(){
   }
 
-  public Token getNextToken(){
+  public SLogoToken getNextToken(){
     return null;
   }
 

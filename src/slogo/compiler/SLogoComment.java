@@ -1,6 +1,6 @@
 package slogo.compiler;
 
-public class Comment extends Token {
+public class SLogoComment extends SLogoToken {
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -9,7 +9,7 @@ public class Comment extends Token {
    *
    * @param name - the specified name of the Token
    */
-  public Comment(String name) {
+  public SLogoComment(String name) {
     super(name);
   }
 

@@ -1,7 +1,5 @@
 package slogo.compiler;
 
-import slogo.compiler.Token;
-
 /**
  * An interface that marks an object as runnable and expects 0 or more parameters.
  *
@@ -30,7 +28,7 @@ public interface SLogoRunnable {
    *
    * @param token - a Token expected by the Command as a parameter
    */
-  public boolean giveNextExpectedToken(Token token);
+  public boolean giveNextExpectedToken(SLogoToken token);
 
   /**
    * Depending on the concrete implementation, this either performs a single action or is a
@@ -39,5 +37,5 @@ public interface SLogoRunnable {
    * @return the return value of the last {@code SLogoRunnable} object ran, wrapped in a {@code
    * Constant} token object.
    */
-  public Token run();
+  public SLogoToken run();
 }

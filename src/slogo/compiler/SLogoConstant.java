@@ -1,15 +1,15 @@
-package slogo.compiler.command;
+package slogo.compiler;
 
-import slogo.compiler.Token;
+import slogo.compiler.SLogoToken;
 
-public class Constant extends Token {
+public class SLogoConstant extends SLogoToken {
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
    * that is being converted into a Token. For a {@code Constant} object, the name is irrelevant.
    *
    */
-  public Constant(double value) {
+  public SLogoConstant(double value) {
     super("Constant");
     tokenValue = value;
   }

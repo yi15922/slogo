@@ -1,24 +1,22 @@
 package slogo.compiler.command;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import slogo.SLogoException;
-import slogo.compiler.Token;
-import slogo.compiler.Variable;
+import slogo.compiler.SLogoConstant;
+import slogo.compiler.SLogoToken;
+import slogo.compiler.SLogoVariable;
 
-public class ForwardCommand extends Command {
+public class ForwardCommand extends SLogoCommand {
 
     public ForwardCommand() {
         super("Forward");
-        expectedParameters.add(new Variable("pixels"));
+        expectedParameters.add(new SLogoVariable("pixels"));
     }
 
     @Override
-    public Token run() throws SLogoException {
+    public SLogoToken run() throws SLogoException {
         // todo: call Turtle move method
         System.out.println("Turtle has moved " + expectedParameters.get(0).getValue() + " pixels");
-        return new Constant(expectedParameters.get(0).getValue());
+        return new SLogoConstant(expectedParameters.get(0).getValue());
     }
 
 }

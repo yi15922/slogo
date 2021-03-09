@@ -2,14 +2,10 @@ package slogo.compiler;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Stack;
 import slogo.SLogoException;
-import slogo.compiler.SLogoRunnable;
-import slogo.compiler.Token;
-import slogo.compiler.command.Command;
-import slogo.compiler.command.Constant;
+import slogo.compiler.command.SLogoCommand;
 
 /**
  * A {@code Function} is a {@code Token} than extends {@code SLogoRunnable} and
@@ -21,8 +17,8 @@ import slogo.compiler.command.Constant;
  * @author Yi Chen
  * @author Patrick Liu
  */
-public class Function extends Token implements SLogoRunnable {
-  protected List<Command> commandList;
+public class SLogoFunction extends SLogoToken implements SLogoRunnable {
+  protected List<SLogoCommand> commandList;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -31,7 +27,7 @@ public class Function extends Token implements SLogoRunnable {
    *
    * @param name - the specified name of the Token
    */
-  public Function(String name) {
+  public SLogoFunction(String name) {
     super(name);
   }
 
@@ -42,10 +38,10 @@ public class Function extends Token implements SLogoRunnable {
    * @param parameterTokens - a list of all remaining tokens in the user-entered String
    * @throws SLogoException - if there is invalid syntax in the command
    */
-  public Function(Command initCommand, List<Token> parameterTokens) throws SLogoException  {
+  public SLogoFunction(SLogoCommand initCommand, List<SLogoToken> parameterTokens) throws SLogoException  {
     super("Function");
     commandList = new ArrayList<>();
-    Stack<Token> tokenStack = new Stack<>();
+    Stack<SLogoToken> tokenStack = new Stack<>();
     for (int i = parameterTokens.size() - 1; i >= 0; i--) {
       tokenStack.push(parameterTokens.get(i));
     }
@@ -53,7 +49,7 @@ public class Function extends Token implements SLogoRunnable {
   }
 
   // todo: clean up the competing constructors, finalize stack vs. list for parameters
-  public Function(Command initCommand, Stack<Token> parameterTokens) throws SLogoException {
+  public SLogoFunction(SLogoCommand initCommand, Stack<SLogoToken> parameterTokens) throws SLogoException {
     super("Function");
     commandList = new ArrayList<>();
     parseParameterTokens(initCommand, parameterTokens);
@@ -62,19 +58,19 @@ public class Function extends Token implements SLogoRunnable {
   // recursively assembles and runs a command
   // takes in Stack of all remaining Tokens in the user-entered String, pops off Tokens that it uses
   // to create parameters for the initial command and all nested commands
-  private void parseParameterTokens(Command initCommand, Stack<Token> parameterTokens) throws SLogoException {
+  private void parseParameterTokens(SLogoCommand initCommand, Stack<SLogoToken> parameterTokens) throws SLogoException {
     while (! initCommand.isReady()) {
       if (parameterTokens.isEmpty()) {
         throw new SLogoException("Invalid syntax");
       }
-      Token nextToken = parameterTokens.pop();
-      if (nextToken.isEqualTokenType(new Constant(0))) { // wrap constants inside a variable Token
+      SLogoToken nextToken = parameterTokens.pop();
+      if (nextToken.isEqualTokenType(new SLogoConstant(0))) { // wrap constants inside a variable Token
         double tokenValue = nextToken.getValue();
-        nextToken = new Variable("wrapper", tokenValue);
+        nextToken = new SLogoVariable("wrapper", tokenValue);
       }
       if (! initCommand.giveNextExpectedToken(nextToken)) {
         try {
-          Token resultToken = new Function((Command) nextToken, parameterTokens).run();
+          SLogoToken resultToken = new SLogoFunction((SLogoCommand) nextToken, parameterTokens).run();
           parameterTokens.push(resultToken);
         }
         catch (ClassCastException e) {
@@ -91,7 +87,7 @@ public class Function extends Token implements SLogoRunnable {
    * these {@code WorkspaceEntry} objects are set to the values that are passed to them.
    * @param params a {@code Collection} of parameter names.
    */
-  public void addParams(Collection<Token> params) {
+  public void addParams(Collection<SLogoToken> params) {
 
   }
 
@@ -102,7 +98,7 @@ public class Function extends Token implements SLogoRunnable {
   }
 
   @Override
-  public boolean giveNextExpectedToken(Token token) {
+  public boolean giveNextExpectedToken(SLogoToken token) {
     return false;
   }
 
@@ -122,9 +118,9 @@ public class Function extends Token implements SLogoRunnable {
    * @return the return value of the last runnable object, wrapped as a {@code Constant} token.
    */
   @Override
-  public Token run() {
-    Token resultToken = null;
-    for (Command command : commandList) {
+  public SLogoToken run() {
+    SLogoToken resultToken = null;
+    for (SLogoCommand command : commandList) {
       resultToken = command.run();
     }
     return resultToken;

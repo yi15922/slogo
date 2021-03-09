@@ -10,7 +10,7 @@ package slogo.compiler;
  *
  * @author Patrick Liu
  */
-public class Token {
+public class SLogoToken {
   protected String tokenName;
   protected double tokenValue;
 
@@ -20,7 +20,7 @@ public class Token {
    * as the name of the variable or function.
    * @param name - the specified name of the Token
    */
-  public Token(String name) {
+  public SLogoToken(String name) {
     tokenName = name;
   }
 
@@ -33,7 +33,7 @@ public class Token {
     return tokenName;
   }
 
-  public boolean isEqualTokenType(Token otherToken) {
+  public boolean isEqualTokenType(SLogoToken otherToken) {
     return this.getClass().getSimpleName().equals(otherToken.getClass().getSimpleName());
   }
 

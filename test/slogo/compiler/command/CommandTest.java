@@ -4,22 +4,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import slogo.SLogoException;
-import slogo.compiler.Comment;
-import slogo.compiler.Function;
-import slogo.compiler.SLogoRunnable;
-import slogo.compiler.Token;
-import slogo.compiler.Variable;
+import slogo.compiler.SLogoConstant;
+import slogo.compiler.SLogoComment;
+import slogo.compiler.SLogoFunction;
+import slogo.compiler.SLogoToken;
+import slogo.compiler.SLogoVariable;
 
 class CommandTest {
   //private Turtle myModel;
-  private List<Token> parameterTokens;
-  private Command command;
-  private Function function;
+  private List<SLogoToken> parameterTokens;
+  private SLogoCommand command;
+  private SLogoFunction function;
 
   @BeforeEach
   void setup() {
@@ -29,8 +27,8 @@ class CommandTest {
   @Test
   void testForwardCommand() {
     command = new ForwardCommand();
-    parameterTokens.add(new Variable("pixels", 50));
-    function = new Function(command, parameterTokens);
+    parameterTokens.add(new SLogoVariable("pixels", 50));
+    function = new SLogoFunction(command, parameterTokens);
     assertEquals(50.0, function.run().getValue());
   }
 
@@ -38,24 +36,24 @@ class CommandTest {
   void testRecursiveForwardCommand() {
     command = new ForwardCommand();
     parameterTokens.add(new ForwardCommand());
-    parameterTokens.add(new Constant(50));
-    function = new Function(command, parameterTokens);
+    parameterTokens.add(new SLogoConstant(50));
+    function = new SLogoFunction(command, parameterTokens);
     assertEquals(50.0, function.run().getValue());
   }
 
   @Test
   void testInvalidForwardCommand() {
     command = new ForwardCommand();
-    parameterTokens.add(new Comment(""));
-    assertThrows(SLogoException.class, () -> function = new Function(command, parameterTokens));
+    parameterTokens.add(new SLogoComment(""));
+    assertThrows(SLogoException.class, () -> function = new SLogoFunction(command, parameterTokens));
   }
 
   @Test
   void testTowardsCommand() {
     command = new TowardsCommand();
-    parameterTokens.add(new Constant(10));
-    parameterTokens.add(new Constant(20));
-    function = new Function(command, parameterTokens);
+    parameterTokens.add(new SLogoConstant(10));
+    parameterTokens.add(new SLogoConstant(20));
+    function = new SLogoFunction(command, parameterTokens);
     assertEquals(0.0, function.run().getValue()); // todo: replace with actual distance
   }
 
@@ -64,9 +62,9 @@ class CommandTest {
     command = new TowardsCommand();
     parameterTokens.add(new ForwardCommand());
     parameterTokens.add(new ForwardCommand());
-    parameterTokens.add(new Constant(20));
-    parameterTokens.add(new Constant(50));
-    function = new Function(command, parameterTokens);
+    parameterTokens.add(new SLogoConstant(20));
+    parameterTokens.add(new SLogoConstant(50));
+    function = new SLogoFunction(command, parameterTokens);
     assertEquals(0.0, function.run().getValue()); // todo: replace with actual distance
   }
 

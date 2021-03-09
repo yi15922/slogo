@@ -3,7 +3,7 @@ package slogo.compiler.command;
 import java.util.ArrayList;
 import java.util.List;
 import slogo.SLogoException;
-import slogo.compiler.Token;
+import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoRunnable;
 
 /**
@@ -15,18 +15,18 @@ import slogo.compiler.SLogoRunnable;
  *
  * @author Patrick Liu
  */
-public abstract class Command extends Token implements SLogoRunnable {
-    protected List<Token> expectedParameters; // contains the expected types: Variable, Token, or List
+public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
+    protected List<SLogoToken> expectedParameters; // contains the expected types: Variable, Token, or List
     protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
 
-    public Command(String name){
+    public SLogoCommand(String name){
         super(name);
         parameterIndex = 0;
         expectedParameters = new ArrayList<>();
     }
 
     @Override
-    public boolean giveNextExpectedToken(Token token) {
+    public boolean giveNextExpectedToken(SLogoToken token) {
         if (token.isEqualTokenType(expectedParameters.get(parameterIndex))) {
             expectedParameters.set(parameterIndex, token);
             parameterIndex++;
@@ -46,7 +46,7 @@ public abstract class Command extends Token implements SLogoRunnable {
      * @return - a {@code Constant} token containing the return value of the command.
      */
     @Override
-    public abstract Token run() throws SLogoException;
+    public abstract SLogoToken run() throws SLogoException;
 
 
     /**

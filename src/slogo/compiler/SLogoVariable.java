@@ -1,6 +1,6 @@
 package slogo.compiler;
 
-public class Variable extends Token {
+public class SLogoVariable extends SLogoToken {
   private double myValue;
 
   /**
@@ -10,7 +10,7 @@ public class Variable extends Token {
    *
    * @param name - the specified name of the variable
    */
-  public Variable(String name) {
+  public SLogoVariable(String name) {
     super(name);
   }
 
@@ -21,7 +21,7 @@ public class Variable extends Token {
    * @param name - the specified name of the variable
    * @param value - the specified numeric value of the variable
    */
-  public Variable(String name, double value) {
+  public SLogoVariable(String name, double value) {
     this(name);
     myValue = value;
   }
