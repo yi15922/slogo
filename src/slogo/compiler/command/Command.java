@@ -1,5 +1,6 @@
 package slogo.compiler.command;
 
+import java.util.ArrayList;
 import java.util.List;
 import slogo.SLogoException;
 import slogo.compiler.Token;
@@ -21,6 +22,17 @@ public abstract class Command extends Token implements SLogoRunnable {
     public Command(String name){
         super(name);
         parameterIndex = 0;
+        expectedParameters = new ArrayList<>();
+    }
+
+    @Override
+    public boolean giveNextExpectedToken(Token token) {
+        if (token.isEqualTokenType(expectedParameters.get(parameterIndex))) {
+            expectedParameters.set(parameterIndex, token);
+            parameterIndex++;
+            return true;
+        }
+        return false;
     }
 
     /**
