@@ -1,7 +1,9 @@
 package slogo.compiler.command;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import java.util.Queue;
 import slogo.SLogoException;
 import slogo.compiler.SLogoConstant;
@@ -31,11 +33,17 @@ public class ForCommand extends SLogoCommand {
     SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     // todo: check that first token is a command
-    SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+    List<SLogoFunction> functionList = new ArrayList<>();
+    while (! commandQueue.isEmpty()) { // todo: error checking
+      SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+      functionList.add(innerFunction);
+    }
+    // todo: generalize turning list of commands into function, will need to save commands for repeated runs
     SLogoToken returnToken = new SLogoConstant(0);
     for (int i = start; i < end; i += increment) {
-      System.out.println("running for loop for counter value " + i);
-      returnToken = innerFunction.run();
+      for (SLogoFunction function : functionList) {
+        returnToken = function.run();
+      }
       // todo: update counterVariable in the workspace
       // todo: figure out how Function accesses workspace
     }
