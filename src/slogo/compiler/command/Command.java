@@ -14,11 +14,13 @@ import slogo.compiler.SLogoRunnable;
  *
  * @author Patrick Liu
  */
-public abstract class Command implements SLogoRunnable {
-    private String commandName;
+public abstract class Command extends Token implements SLogoRunnable {
+    protected List<Token> expectedParameters; // contains the expected types: Variable, Token, or List
+    protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
+    protected boolean ready; // becomes true when the Command is ready to be run
 
     public Command(String name){
-        commandName = name;
+        super(name);
     }
 
     /**
@@ -32,7 +34,11 @@ public abstract class Command implements SLogoRunnable {
      * @return - a {@code Constant} token containing the return value of the command.
      */
     @Override
-    public abstract Token run() throws SLogoException;
+    public Token run() throws SLogoException {
+        if (! isReady()) {
+            throw new SLogoException("Trying to run a Command that is not ready");
+        }
+    }
 
 
     /**
@@ -41,11 +47,9 @@ public abstract class Command implements SLogoRunnable {
      * while each inner list contains all possible types of Tokens that can be taken for that parameter.
      * @return - List of parameters needed, specifying possible Token types for each parameter
      */
-//    public List<List<Token>> getExpectedTokens();
-
-    @Override
-    public String toString(){
-        return commandName;
+    public int getNumExpectedTokens() {
+        return expectedParameters.size();
     }
+
 
 }

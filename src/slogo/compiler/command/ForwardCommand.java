@@ -6,6 +6,7 @@ import slogo.compiler.Token;
 
 public class ForwardCommand extends Command {
 
+
     public ForwardCommand() {
         super("Forward");
     }
@@ -23,6 +24,11 @@ public class ForwardCommand extends Command {
     @Override
     public Token run() throws SLogoException {
         return null;
+    }
+
+    @Override
+    public int getNumExpectedTokens() {
+        return 0;
     }
 
 }

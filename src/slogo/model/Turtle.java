@@ -1,9 +1,9 @@
-package slogo;
+package slogo.model;
 
 /**
  * The Turtle Interface is an API that provides publically accessable methods.
  */
-public Interface Turtle{
+public interface Turtle{
 
   /**
   * The move method changes the turtles position by x in the x direction and y in y direction.
