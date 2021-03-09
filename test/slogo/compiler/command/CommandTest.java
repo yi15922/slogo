@@ -70,4 +70,31 @@ class CommandTest {
     assertEquals(0.0, function.run().getValue()); // todo: replace with actual distance
   }
 
+  @Test
+  void testPenDownCommand() {
+    command = new PenDownCommand();
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(1.0, function.run().getValue());
+  }
+
+  @Test
+  void testSumCommand() {
+    command = new SumCommand();
+    parameterTokens.add(new SLogoConstant(15));
+    parameterTokens.add(new SLogoConstant(25));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(40.0, function.run().getValue());
+  }
+
+  @Test
+  void testLessCommand() {
+    command = new LessCommand();
+    parameterTokens.add(new ForwardCommand());
+    parameterTokens.add(new SLogoConstant(20));
+    parameterTokens.add(new ForwardCommand());
+    parameterTokens.add(new SLogoConstant(50));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(1.0, function.run().getValue());
+  }
+
 }
