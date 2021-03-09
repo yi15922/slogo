@@ -1,4 +1,4 @@
-package slogo;
+package slogo.compiler;
 
 /**
  * This interface makes an object an addable object in a workspace. Calling {@code Workspace.add()}

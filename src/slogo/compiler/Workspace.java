@@ -1,7 +1,11 @@
-package slogo;
+package slogo.compiler;
+
+import slogo.compiler.Workspace;
+import slogo.compiler.WorkspaceEntry;
+
 
 /**
- * Keeps track of all objects that extend {@code WorkspaceEntry}.
+ * Keeps track of all objects that extend {@link WorkspaceEntry}.
  * Will notify the {@code WorkspaceViewController} of any changes. Internally keeps
  * the {@code WorkspaceEntry} objects in {@code Collection}s.
  *
