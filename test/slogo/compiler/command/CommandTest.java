@@ -119,4 +119,21 @@ class CommandTest {
     assertEquals(50.0, function.run().getValue());
   }
 
+  @Test
+  void testBasicDoTimesCommand() {
+    command = new DoTimesCommand();
+    List<SLogoToken> parameterList = new ArrayList<>();
+    parameterList.add(new SLogoToken("counter"));
+    parameterList.add(new SumCommand());
+    parameterList.add(new SLogoConstant(1));
+    parameterList.add(new SLogoConstant(2));
+    List<SLogoToken> commandList = new ArrayList<>();
+    commandList.add(new ForwardCommand());
+    commandList.add(new SLogoConstant(50));
+    parameterTokens.add(new SLogoTokenList(parameterList));
+    parameterTokens.add(new SLogoTokenList(commandList));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(50.0, function.run().getValue());
+  }
+
 }
