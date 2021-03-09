@@ -13,6 +13,7 @@ import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoComment;
 import slogo.compiler.SLogoFunction;
 import slogo.compiler.SLogoToken;
+import slogo.compiler.SLogoTokenList;
 import slogo.compiler.SLogoVariable;
 
 class CommandTest {
@@ -104,6 +105,18 @@ class CommandTest {
     parameterTokens.add(new SLogoConstant(10.0));
     function = new SLogoFunction(command, parameterTokens);
     assertEquals(10.0, function.run().getValue());
+  }
+
+  @Test
+  void testBasicRepeatCommand() {
+    command = new RepeatCommand();
+    parameterTokens.add(new SLogoConstant(3));
+    List<SLogoToken> commandList = new ArrayList<>();
+    commandList.add(new ForwardCommand());
+    commandList.add(new SLogoConstant(50));
+    parameterTokens.add(new SLogoTokenList(commandList));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(50.0, function.run().getValue());
   }
 
 }

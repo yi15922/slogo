@@ -1,5 +1,6 @@
 package slogo.compiler;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SLogoTokenList extends SLogoToken {
@@ -20,4 +21,9 @@ public class SLogoTokenList extends SLogoToken {
     super("");
     myTokens = innerTokens;
   }
+
+  public List<SLogoToken> getTokenList() {
+    return Collections.unmodifiableList(myTokens);
+  }
+
 }
