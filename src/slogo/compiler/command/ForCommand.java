@@ -10,13 +10,15 @@ import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoTokenList;
 import slogo.compiler.SLogoVariable;
 
-public class DoTimesCommand extends SLogoCommand {
+public class ForCommand extends SLogoCommand {
   private SLogoVariable counterVariable;
-  private int limit;
+  private int start;
+  private int end;
+  private int increment;
 
-  public DoTimesCommand() {
-    super("DoTimes");
-    expectedParameters.add(new SLogoTokenList("variable and limit"));
+  public ForCommand() {
+    super("For");
+    expectedParameters.add(new SLogoTokenList("parameters"));
     expectedParameters.add(new SLogoTokenList("commands"));
   }
 
@@ -31,7 +33,8 @@ public class DoTimesCommand extends SLogoCommand {
     // todo: check that first token is a command
     SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
     SLogoToken returnToken = new SLogoConstant(0);
-    for (int i = 1; i < limit; i++) { // runs numTimes-1 times, last time needs to return a value
+    for (int i = start; i < end; i += increment) {
+      System.out.println("running for loop for counter value " + i);
       returnToken = innerFunction.run();
       // todo: update counterVariable in the workspace
       // todo: figure out how Function accesses workspace
@@ -41,8 +44,12 @@ public class DoTimesCommand extends SLogoCommand {
 
   private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
     // todo: check that first token is generic token/valid variable name
-    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0);
+    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0); // todo: set counter value to start
     SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
-    limit = (int) helperFunction.run().getValue();
+    start = (int) helperFunction.run().getValue();
+    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
+    end = (int) helperFunction.run().getValue();
+    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
+    increment = (int) helperFunction.run().getValue();
   }
 }

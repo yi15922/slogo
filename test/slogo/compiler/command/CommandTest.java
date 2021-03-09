@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,7 @@ import slogo.compiler.SLogoVariable;
 
 class CommandTest {
   //private Turtle myModel;
-  private Queue<SLogoToken> parameterTokens;
+  private Deque<SLogoToken> parameterTokens;
   private SLogoCommand command;
   private SLogoFunction function;
 
@@ -127,6 +128,27 @@ class CommandTest {
     parameterList.add(new SumCommand());
     parameterList.add(new SLogoConstant(1));
     parameterList.add(new SLogoConstant(2));
+    List<SLogoToken> commandList = new ArrayList<>();
+    commandList.add(new ForwardCommand());
+    commandList.add(new SLogoConstant(50));
+    parameterTokens.add(new SLogoTokenList(parameterList));
+    parameterTokens.add(new SLogoTokenList(commandList));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(50.0, function.run().getValue());
+  }
+
+  @Test
+  void testBasicForCommand() {
+    command = new ForCommand();
+    List<SLogoToken> parameterList = new ArrayList<>();
+    parameterList.add(new SLogoToken("counter"));
+    parameterList.add(new SumCommand());
+    parameterList.add(new SLogoConstant(1));
+    parameterList.add(new SLogoConstant(2));
+    parameterList.add(new SLogoConstant(10));
+    parameterList.add(new SumCommand());
+    parameterList.add(new SLogoConstant(1));
+    parameterList.add(new SLogoConstant(1));
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
