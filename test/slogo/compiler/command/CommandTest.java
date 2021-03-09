@@ -158,4 +158,17 @@ class CommandTest {
     assertEquals(50.0, function.run().getValue());
   }
 
+  @Test
+  void testBasicIfCommand() {
+    command = new IfCommand();
+    parameterTokens.add(new SLogoConstant(1));
+    List<SLogoToken> commandList = new ArrayList<>();
+    commandList.add(new ForwardCommand());
+    commandList.add(new SLogoConstant(50));
+    commandList.add(new PenDownCommand());
+    parameterTokens.add(new SLogoTokenList(commandList));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(1.0, function.run().getValue());
+  }
+
 }
