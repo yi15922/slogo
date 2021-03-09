@@ -1,34 +1,33 @@
 package slogo.compiler.command;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import slogo.SLogoException;
 import slogo.compiler.Token;
+import slogo.compiler.Variable;
 
 public class ForwardCommand extends Command {
 
-
     public ForwardCommand() {
         super("Forward");
-    }
-
-    @Override
-    public boolean isReady() {
-        return false;
+        expectedParameters = new ArrayList<>();
+        expectedParameters.add(new Variable("pixels"));
     }
 
     @Override
     public boolean giveNextExpectedToken(Token token){
+        if (token.isEqualTokenType(expectedParameters.get(parameterIndex))) {
+            expectedParameters.set(parameterIndex, token);
+            parameterIndex++;
+            return true;
+        }
         return false;
     }
 
     @Override
     public Token run() throws SLogoException {
-        return null;
-    }
-
-    @Override
-    public int getNumExpectedTokens() {
-        return 0;
+        return new Constant(expectedParameters.get(0).getValue());
     }
 
 }

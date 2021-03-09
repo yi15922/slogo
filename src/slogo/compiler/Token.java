@@ -12,6 +12,7 @@ package slogo.compiler;
  */
 public class Token {
   protected String tokenName;
+  protected double tokenValue;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -30,6 +31,14 @@ public class Token {
    */
   public String toString() {
     return tokenName;
+  }
+
+  public boolean isEqualTokenType(Token otherToken) {
+    return this.getClass().getSimpleName().equals(otherToken.getClass().getSimpleName());
+  }
+
+  public double getValue() {
+    return tokenValue;
   }
 
 }
