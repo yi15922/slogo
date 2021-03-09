@@ -1,10 +1,15 @@
 package slogo.compiler;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Stack;
 import slogo.SLogoException;
 import slogo.compiler.SLogoRunnable;
 import slogo.compiler.Token;
 import slogo.compiler.command.Command;
+import slogo.compiler.command.Constant;
 
 /**
  * A {@code Function} is a {@code Token} than extends {@code SLogoRunnable} and
@@ -14,10 +19,10 @@ import slogo.compiler.command.Command;
  * This object is runnable and can recursively call other runnable types.
  *
  * @author Yi Chen
+ * @author Patrick Liu
  */
 public class Function extends Token implements SLogoRunnable {
-  protected Collection<Token> tokenList;
-  protected Collection<Command> commandList;
+  protected List<Command> commandList;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -37,13 +42,42 @@ public class Function extends Token implements SLogoRunnable {
    * @param parameterTokens
    * @throws SLogoException
    */
-  public Function(Command initCommand, Collection<Token> parameterTokens) throws SLogoException  {
+  public Function(Command initCommand, List<Token> parameterTokens) throws SLogoException  {
     super("Function");
-    tokenList = parameterTokens;
+    commandList = new ArrayList<>();
+    Stack<Token> tokenStack = new Stack<>();
+    for (int i = parameterTokens.size() - 1; i >= 0; i--) {
+      tokenStack.push(parameterTokens.get(i));
+    }
+    parseParameterTokens(initCommand, tokenStack);
   }
 
-  private void parseParameterTokens(Command initCommand, Collection<Token> parameterTokens) throws SLogoException {
+  // todo: clean up the competing constructors, finalize stack vs. list for parameters
+  public Function(Command initCommand, Stack<Token> parameterTokens) throws SLogoException {
+    super("Function");
+    commandList = new ArrayList<>();
+    parseParameterTokens(initCommand, parameterTokens);
+  }
 
+  // recursively assembles and runs a command
+  private void parseParameterTokens(Command initCommand, Stack<Token> parameterTokens) throws SLogoException {
+    while (! initCommand.isReady()) {
+      Token nextToken = parameterTokens.pop();
+      if (nextToken.isEqualTokenType(new Constant(0))) { // wrap constants inside a variable Token
+        double tokenValue = nextToken.getValue();
+        nextToken = new Variable("wrapper", tokenValue);
+      }
+      if (! initCommand.giveNextExpectedToken(nextToken)) {
+        try {
+          Token resultToken = new Function((Command) nextToken, parameterTokens).run();
+          parameterTokens.push(resultToken);
+        }
+        catch (InputMismatchException e) {
+          throw new SLogoException("Invalid syntax"); // received a generic Token, List, or Function
+        }
+      }
+    }
+    commandList.add(initCommand);
   }
 
   /**
@@ -84,6 +118,10 @@ public class Function extends Token implements SLogoRunnable {
    */
   @Override
   public Token run() {
-    return null;
+    Token resultToken = null;
+    for (Command command : commandList) {
+      resultToken = command.run();
+    }
+    return resultToken;
   }
 }
