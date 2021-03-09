@@ -1,5 +1,6 @@
 package slogo.compiler;
 
+import java.util.ResourceBundle;
 import slogo.compiler.command.*;
 
 /**
@@ -20,8 +21,19 @@ import slogo.compiler.command.*;
  */
 public class Parser {
 
+  private final ResourceBundle languageBundle;
+  // use Java's dot notation, like with import, for properties files
+  public static final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
+  // use file system notation, standard Unix slashes, for other kinds of files
+  public static final String DEFAULT_RESOURCE_FOLDER = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
 
-  public Parser(){
+
+  public Parser(String language){
+    languageBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+  }
+
+  public String getCommandName(String userInput){
+    return languageBundle.getString(userInput);
   }
 
   public SLogoToken getNextToken(){
