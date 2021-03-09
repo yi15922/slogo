@@ -97,4 +97,13 @@ class CommandTest {
     assertEquals(1.0, function.run().getValue());
   }
 
+  @Test
+  void testBasicMakeCommand() {
+    command = new MakeCommand();
+    parameterTokens.add(new SLogoToken("testVariable"));
+    parameterTokens.add(new SLogoConstant(10.0));
+    function = new SLogoFunction(command, parameterTokens);
+    assertEquals(10.0, function.run().getValue());
+  }
+
 }
