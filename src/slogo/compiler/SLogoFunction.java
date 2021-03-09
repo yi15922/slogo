@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
 import slogo.SLogoException;
 import slogo.compiler.command.SLogoCommand;
 
@@ -20,7 +18,7 @@ import slogo.compiler.command.SLogoCommand;
  * @author Patrick Liu
  */
 public class SLogoFunction extends SLogoToken implements SLogoRunnable {
-  protected List<SLogoCommand> commandList;
+  protected List<SLogoCommand> runnableCommandList;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -42,7 +40,7 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
    */
   public SLogoFunction(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens) throws SLogoException  {
     super("Function");
-    commandList = new ArrayList<>();
+    runnableCommandList = new ArrayList<>();
     parseParameterTokens(initCommand, parameterTokens);
   }
 
@@ -70,7 +68,7 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
         }
       }
     }
-    commandList.add(initCommand);
+    runnableCommandList.add(initCommand);
   }
 
   /**
@@ -112,7 +110,7 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
   @Override
   public SLogoToken run() {
     SLogoToken resultToken = null;
-    for (SLogoCommand command : commandList) {
+    for (SLogoCommand command : runnableCommandList) {
       resultToken = command.run();
     }
     return resultToken;
