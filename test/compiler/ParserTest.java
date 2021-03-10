@@ -38,15 +38,20 @@ public class ParserTest {
 
   @Test
   void testTokenCreation() {
+    // Testing variable creation
     SLogoToken token = tester.createTokenFromString(":something");
     assertEquals(":something", token.toString());
     assertEquals(SLogoVariable.class, token.getClass());
 
+    // Testing constant creation
     token = tester.createTokenFromString("5");
     assertEquals("Constant", token.toString());
     assertEquals(SLogoConstant.class, token.getClass());
     assertEquals(5, token.getValue());
 
+    // Testing gibberish
+    token = tester.createTokenFromString("flaksjdflkadjsf");
+    assertNull(token);
   }
 
 }
