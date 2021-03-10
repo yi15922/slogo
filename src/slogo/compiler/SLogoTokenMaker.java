@@ -18,12 +18,12 @@ public class SLogoTokenMaker {
    * {@link slogo.compiler.command.SLogoCommand}, {@link SLogoFunction}, or
    * {@link SLogoVariable}, the created objects will be named by the user input
    * string.
-   * @param tokenType - {@code String} description of the token type, obtained
+   * @param tokenType {@code String} description of the token type, obtained
    *                  from a {@code .properties} file.
-   * @param inputString - the user input {@code String} that is used to name the
+   * @param inputString the user input {@code String} that is used to name the
    *                    token.
    * @return a {@code SLogoToken} object, or {@code null} if no object could be
-   * created from the given strings. 
+   * created from the given strings.
    */
   public SLogoToken make(String tokenType, String inputString){
     try {

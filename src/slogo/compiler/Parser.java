@@ -36,6 +36,13 @@ public class Parser {
   private final HashMap<String, Pattern> builtinCommands;
   private final HashMap<String, Pattern> tokenTypes;
 
+  /**
+   * Constructs a parser with the specified language. This determines which
+   * {@code ResourceBundle} is loaded and which language the user can code in.
+   * This constructor also builds {@code Map}s of {@code String} and {@code Pattern}s
+   * that connect user input values to string descriptions of classes to generate.
+   * @param language the desired language of the compiler.
+   */
   public Parser(String language){
     languageBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
     syntaxBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SYNTAX_BUNDLE);
