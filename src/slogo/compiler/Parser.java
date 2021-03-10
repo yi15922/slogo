@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import slogo.compiler.command.*;
+import slogo.compiler.command.SLogoCommand;
 
 /**
  * The {@code Parser} class takes user inputs and converts them into {@link SLogoToken} objects
@@ -42,6 +42,13 @@ public class Parser {
     builtinCommands = createRegexMap(languageBundle);
     tokenTypes = createRegexMap(syntaxBundle);
   }
+
+  public SLogoToken createTokenFromString(String userInput){
+    String tokenType = determineTokenType(userInput);
+    SLogoTokenMaker tokenMaker= new SLogoTokenMaker();
+    return tokenMaker.make(tokenType, userInput);
+  }
+
 
   public String determineTokenType(String userInput){
     return getKeyFromRegex(tokenTypes, userInput);

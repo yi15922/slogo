@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 import slogo.SLogoException;
 import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoFunction;
