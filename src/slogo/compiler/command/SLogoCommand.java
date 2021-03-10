@@ -64,5 +64,9 @@ public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
         return parameterIndex >= expectedParameters.size();
     }
 
+    public void resetCommand() {
+        parameterIndex = 0;
+    }
+
 
 }

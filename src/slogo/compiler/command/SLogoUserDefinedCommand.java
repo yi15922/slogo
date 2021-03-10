@@ -3,6 +3,7 @@ package slogo.compiler.command;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import slogo.SLogoException;
@@ -17,14 +18,19 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   private List<SLogoFunction> functionList;
   private Map<String, Integer> variableMap;
 
-  public SLogoUserDefinedCommand(String name, SLogoTokenList variables, SLogoTokenList commands) {
+  public SLogoUserDefinedCommand(String name, SLogoTokenList variables, SLogoTokenList commands) throws SLogoException {
     super(name);
+    functionList = new ArrayList<>();
+    variableMap = new HashMap<>();
     for (SLogoToken token : variables.getTokenList()) {
       expectedParameters.add(new SLogoVariable(token.toString()));
       // map variable name to location in expectedParameters
       variableMap.put(token.toString(), expectedParameters.size() - 1);
     }
     commandQueue = new ArrayDeque<>(commands.getTokenList());
+    if (! verifyCommandDefinition()) {
+      throw new SLogoException("Invalid command definition");
+    }
   }
 
   @Override
@@ -36,13 +42,14 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
           token = expectedParameters.get(variableMap.get(token.toString()));
         }
         else {
-          throw new SLogoException("Variable name not recognized"); // todo: check workspace
+          throw new SLogoException("Variable name not recognized");
         }
       }
       replacedCommandQueue.add(token);
     }
     while (! replacedCommandQueue.isEmpty()) {
-      SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) replacedCommandQueue.poll(), replacedCommandQueue);
+      SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
+      SLogoFunction innerFunction = new SLogoFunction(command, replacedCommandQueue);
       functionList.add(innerFunction);
     }
     SLogoToken returnToken = new SLogoConstant(0);
@@ -61,14 +68,16 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
           token = new SLogoConstant(1);
         }
         else {
-          throw new SLogoException("Variable name not recognized"); // todo: check workspace
+          return false;
         }
       }
       dummyCommandQueue.add(token);
     }
     while (! dummyCommandQueue.isEmpty()) {
-      SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) dummyCommandQueue.poll(), dummyCommandQueue);
+      SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll(); // todo: check for command
+      SLogoFunction innerFunction = new SLogoFunction(command, dummyCommandQueue);
       dummyFunctionList.add(innerFunction);
+      command.resetCommand();
     }
     return true;
   }

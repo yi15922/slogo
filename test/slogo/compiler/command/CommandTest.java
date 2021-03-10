@@ -186,4 +186,23 @@ class CommandTest {
     assertEquals(50.0, function.run().getValue());
   }
 
+  @Test
+  void testBasicToCommand() {
+    command = new ToCommand();
+    parameterTokens.add(new SLogoToken("testCommand"));
+    List<SLogoToken> variableList = new ArrayList<>();
+    variableList.add(new SLogoVariable("testVariable"));
+    List<SLogoToken> commandList = new ArrayList<>();
+    commandList.add(new ForwardCommand());
+    commandList.add(new SLogoVariable("testVariable"));
+    parameterTokens.add(new SLogoTokenList(variableList));
+    parameterTokens.add(new SLogoTokenList(commandList));
+    function = new SLogoFunction(command, parameterTokens);
+    SLogoCommand testCommand = (SLogoCommand) function.run();
+    parameterTokens = new ArrayDeque<>();
+    parameterTokens.add(new SLogoConstant(20));
+    function = new SLogoFunction(testCommand, parameterTokens);
+    assertEquals(20.0, function.run().getValue());
+  }
+
 }

@@ -53,7 +53,6 @@ public class SLogoFunction extends SLogoToken implements SLogoRunnable {
         throw new SLogoException("Invalid syntax");
       }
       SLogoToken nextToken = parameterTokens.poll();
-      //System.out.println("Grabbing token = " + nextToken.getValue());
       if (nextToken.isEqualTokenType(new SLogoConstant(0))) { // wrap constants inside a variable Token
         double tokenValue = nextToken.getValue();
         nextToken = new SLogoVariable("wrapper", tokenValue);
