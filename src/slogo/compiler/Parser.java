@@ -1,6 +1,11 @@
 package slogo.compiler;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import slogo.compiler.command.*;
 
 /**
@@ -22,18 +27,67 @@ import slogo.compiler.command.*;
 public class Parser {
 
   private final ResourceBundle languageBundle;
+  private final ResourceBundle syntaxBundle;
   // use Java's dot notation, like with import, for properties files
-  public static final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
+  private final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
+  private final String SYNTAX_BUNDLE = "Syntax";
   // use file system notation, standard Unix slashes, for other kinds of files
-  public static final String DEFAULT_RESOURCE_FOLDER = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-
+  private final String DEFAULT_RESOURCE_FOLDER = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+  private final HashMap<String, Pattern> builtinCommands;
+  private final HashMap<String, Pattern> tokenTypes;
 
   public Parser(String language){
     languageBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+    syntaxBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SYNTAX_BUNDLE);
+    builtinCommands = createRegexMap(languageBundle);
+    tokenTypes = createRegexMap(syntaxBundle);
   }
 
-  public String getCommandName(String userInput){
-    return languageBundle.getString(userInput);
+  public String determineTokenType(String userInput){
+    return getKeyFromRegex(tokenTypes, userInput);
+  }
+
+  public String determineCommandType(String userInput){
+    return getKeyFromRegex(builtinCommands, userInput);
+  }
+
+
+  /**
+   * Searches the given {@code Map} for any value {@code Pattern}s that has a
+   * regex match with {@code userInput} string. If there is a match, returns the
+   * {@code String} key of the corresponding pattern. If not, returns null.
+   * @param regexMap a map containing {@code String} and {@code Pattern} pairs
+   * @param userInput the {@code String} to search for in the map
+   * @return returns {@code String} match from the map, or null if none is found.
+   */
+  public String getKeyFromRegex(Map<String, Pattern> regexMap, String userInput){
+    for (String commandName : regexMap.keySet()) {
+      Pattern p = regexMap.get(commandName);
+      Matcher m = p.matcher(userInput);
+
+      if (m.find()) {
+        return commandName;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Creates a {@code HashMap} of {@code String} and {@code Pattern} pairs so that
+   * the a used input string can be searched against the list of keys.
+   * @param bundle {@code ResourceBundle} object to use to create the map
+   * @return A {@code HashMap} containing {@code String} and {@code Pattern} pairs.
+   */
+  private HashMap<String, Pattern> createRegexMap(ResourceBundle bundle){
+    HashMap<String, Pattern> ret = new HashMap<>();
+    Enumeration<String> keys = bundle.getKeys();
+    while (keys.hasMoreElements()) {
+      String commandName = keys.nextElement();
+      String commandRegex = bundle.getString(commandName);
+      Pattern p = Pattern.compile(commandRegex);
+      ret.put(commandName, p);
+    }
+    return ret;
   }
 
   public SLogoToken getNextToken(){
