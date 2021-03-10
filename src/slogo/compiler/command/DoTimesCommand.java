@@ -18,7 +18,7 @@ public class DoTimesCommand extends SLogoCommand {
 
   public DoTimesCommand() {
     super("DoTimes");
-    expectedParameters.add(new SLogoTokenList("variable and limit"));
+    expectedParameters.add(new SLogoTokenList("parameters"));
     expectedParameters.add(new SLogoTokenList("commands"));
   }
 
