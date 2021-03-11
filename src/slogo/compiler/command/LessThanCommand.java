@@ -5,9 +5,9 @@ import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoVariable;
 
-public class LessCommand extends SLogoCommand {
+public class LessThanCommand extends SLogoCommand {
 
-  public LessCommand() {
+  public LessThanCommand() {
     super("Less");
     expectedParameters.add(new SLogoVariable("expr1"));
     expectedParameters.add(new SLogoVariable("expr2"));

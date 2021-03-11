@@ -17,7 +17,7 @@ import slogo.compiler.command.SLogoCommand;
  * @author Yi Chen
  * @author Patrick Liu
  */
-public class SLogoFunction extends SLogoToken implements SLogoRunnable {
+public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   protected List<SLogoCommand> runnableCommandList;
 
   /**

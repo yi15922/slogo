@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"slogo"},{"l":"slogo.compiler"},{"l":"slogo.compiler.command"},{"l":"slogo.controller"},{"l":"slogo.model"},{"l":"slogo.view"}];updateSearchResults();

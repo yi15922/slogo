@@ -4,9 +4,9 @@ import slogo.SLogoException;
 import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
 
-public class XCorCommand extends SLogoCommand {
+public class XCoordinateCommand extends SLogoCommand {
 
-  public XCorCommand() {
+  public XCoordinateCommand() {
     super("XCor");
   }
 

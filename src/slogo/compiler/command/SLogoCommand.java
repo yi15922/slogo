@@ -5,6 +5,7 @@ import java.util.List;
 import slogo.SLogoException;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoRunnable;
+import slogo.compiler.WorkspaceEntry;
 
 /**
  * An interface that provides methods to completely define an SLogo supported command.
