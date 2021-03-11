@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
@@ -79,7 +80,8 @@ public class Parser {
   public void parseInput(String input){
     ArrayList<String> allStrings = new ArrayList<>(Arrays.asList(input.split(" ")));
     for (String string : allStrings) {
-      tokenQueue.add(createTokenFromString(string));
+      SLogoToken newToken = createTokenFromString(string);
+      if (newToken != null) tokenQueue.add(newToken);
     }
     System.out.println(tokenQueue);
   }
@@ -98,6 +100,8 @@ public class Parser {
    */
   public SLogoToken createTokenFromString(String userInput){
     String tokenType = determineTokenType(userInput);
+    if (tokenType == null) return null;
+
     SLogoTokenMaker tokenMaker= new SLogoTokenMaker(workspace);
     if (tokenType.equals(COMMAND_TOKENTYPE)) {
       String commandType = determineCommandType(userInput);
@@ -108,9 +112,20 @@ public class Parser {
 
   }
 
-
+  /**
+   * Determines the proper name describing the {@link SLogoToken} from a user
+   * input string. Returns {@code null} if the user input doesn't match any existing
+   * pattern.
+   * @param userInput a string that does not contain any blank space.
+   * @return a {@code String} of the proper name of a {@code SLogoToken} or null
+   */
   public String determineTokenType(String userInput){
-    return getKeyFromRegex(tokenTypes, userInput);
+    String ret = getKeyFromRegex(tokenTypes, userInput);
+    if (ret == null) {
+      System.err.println("Not a valid token");
+      return null;
+    }
+    return ret;
   }
 
   /**
@@ -175,12 +190,25 @@ public class Parser {
     return ret;
   }
 
+  /**
+   * Returns the next {@link SLogoToken} from the queue of parsed tokens.
+   * Returns null if no more tokens are available.
+   * @return a {@code SLogoToken} object or {@code null}.
+   */
   public SLogoToken getNextToken(){
-    return null;
+    try {
+      return tokenQueue.remove();
+    } catch (NoSuchElementException exception) {
+      return null;
+    }
   }
 
+  /**
+   * Determines whether there are more tokens left in this compile session.
+   * @return {@code boolean} whether there are more parsed {@code SLogoToken}s.
+   */
   public boolean hasNextToken(){
-    return false;
+    return (tokenQueue.size() != 0);
   }
 
 

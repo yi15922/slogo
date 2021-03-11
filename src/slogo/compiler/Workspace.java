@@ -22,6 +22,9 @@ import slogo.compiler.command.SLogoCommand;
  * a generic {@code Token} type with no specific subclass, it will search through the workspace
  * for a {@code Variable} or {@code Function} that matches its {@code toString()}.
  *
+ * At most one {@code Workspace} instance should be created per session of SLogo, and the
+ * instance should be created at startup.
+ *
  * @author Yi Chen
  */
 public class Workspace {

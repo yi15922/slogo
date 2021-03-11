@@ -94,9 +94,35 @@ public class ParserTest {
 
   @Test
   void testParseInput(){
-    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld"));
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld # falskdjf"));
     assertNotNull(workspace.search(":variable"));
     assertNotNull(workspace.search("flaksdfjld"));
+  }
+
+  @Test
+  void testEmptyParser(){
+    tester.parseInput("");
+    assertFalse(tester.hasNextToken());
+  }
+
+  @Test
+  void testParserAccess(){
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 :variable flaksdfjld"));
+    SLogoToken token = tester.getNextToken();
+    assertEquals("Forward", token.toString());
+
+    token = tester.getNextToken();
+    assertEquals("Constant", token.toString());
+
+    token = tester.getNextToken();
+    assertEquals(":variable", token.toString());
+
+    assertTrue(tester.hasNextToken());
+    token = tester.getNextToken();
+    assertEquals("flaksdfjld", token.toString());
+
+    assertNull(tester.getNextToken());
+    assertFalse(tester.hasNextToken());
   }
 
 

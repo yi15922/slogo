@@ -10,7 +10,7 @@ public class SLogoComment extends SLogoToken {
    * @param name - the specified name of the Token
    */
   public SLogoComment(String name) {
-    super(name);
+    super("Comment");
   }
 
 }
