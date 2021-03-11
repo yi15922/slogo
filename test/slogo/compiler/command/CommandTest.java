@@ -15,8 +15,18 @@ import slogo.compiler.SLogoFunction;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoTokenList;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.command.advanced.DoTimesCommand;
+import slogo.compiler.command.advanced.ForCommand;
+import slogo.compiler.command.advanced.IfCommand;
+import slogo.compiler.command.advanced.IfElseCommand;
+import slogo.compiler.command.advanced.MakeUserInstruction;
+import slogo.compiler.command.advanced.MakeVariableCommand;
+import slogo.compiler.command.advanced.RepeatCommand;
 import slogo.compiler.command.math.LessThanCommand;
 import slogo.compiler.command.math.SumCommand;
+import slogo.compiler.command.turtle.ForwardCommand;
+import slogo.compiler.command.turtle.PenDownCommand;
+import slogo.compiler.command.turtle.SetTowardsCommand;
 
 class CommandTest {
   //private Turtle myModel;

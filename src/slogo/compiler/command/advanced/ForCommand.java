@@ -1,4 +1,4 @@
-package slogo.compiler.command;
+package slogo.compiler.command.advanced;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -10,13 +10,17 @@ import slogo.compiler.SLogoFunction;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoTokenList;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.command.EvaluateNumberCommand;
+import slogo.compiler.command.SLogoCommand;
 
-public class DoTimesCommand extends SLogoCommand {
+public class ForCommand extends SLogoCommand {
   private SLogoVariable counterVariable;
-  private int limit;
+  private int start;
+  private int end;
+  private int increment;
 
-  public DoTimesCommand() {
-    super("DoTimes");
+  public ForCommand() {
+    super("For");
     expectedParameters.add(new SLogoTokenList("parameters"));
     expectedParameters.add(new SLogoTokenList("commands"));
   }
@@ -35,13 +39,13 @@ public class DoTimesCommand extends SLogoCommand {
       SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
       functionList.add(innerFunction);
     }
-    SLogoToken returnToken = new SLogoConstant(0);
     // todo: generalize turning list of commands into function, will need to save commands for repeated runs
-    for (int i = 1; i <= limit; i++) {
+    SLogoToken returnToken = new SLogoConstant(0);
+    for (int i = start; i < end; i += increment) {
       for (SLogoFunction function : functionList) {
         returnToken = function.run();
       }
-      // todo: update variable in the workspace
+      // todo: update counterVariable in the workspace
       // todo: figure out how Function accesses workspace
     }
     return returnToken;
@@ -49,8 +53,12 @@ public class DoTimesCommand extends SLogoCommand {
 
   private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
     // todo: check that first token is generic token/valid variable name
-    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0);
+    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0); // todo: set counter value to start
     SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
-    limit = (int) helperFunction.run().getValue();
+    start = (int) helperFunction.run().getValue();
+    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
+    end = (int) helperFunction.run().getValue();
+    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
+    increment = (int) helperFunction.run().getValue();
   }
 }

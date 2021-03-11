@@ -1,8 +1,9 @@
-package slogo.compiler.command;
+package slogo.compiler.command.turtle;
 
 import slogo.SLogoException;
 import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
+import slogo.compiler.command.SLogoCommand;
 
 public class PenDownCommand extends SLogoCommand {
 

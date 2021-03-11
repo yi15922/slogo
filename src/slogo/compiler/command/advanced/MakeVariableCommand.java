@@ -1,9 +1,10 @@
-package slogo.compiler.command;
+package slogo.compiler.command.advanced;
 
 import slogo.SLogoException;
 import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.command.SLogoCommand;
 
 public class MakeVariableCommand extends SLogoCommand {
 

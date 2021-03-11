@@ -1,11 +1,9 @@
 package slogo.compiler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import slogo.compiler.Workspace;
-import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.command.SLogoCommand;
+import slogo.compiler.command.advanced.MakeUserInstruction;
 
 
 /**
@@ -14,7 +12,7 @@ import slogo.compiler.command.SLogoCommand;
  * the {@code WorkspaceEntry} objects in {@code Collection}s.
  *
  * {@link SLogoCommand} objects have direct access to this class because they frequently create or
- * use objects in the workspace. For example, a {@link slogo.compiler.command.MakeUserInstruction},
+ * use objects in the workspace. For example, a {@link MakeUserInstruction},
  * once performed, would place all the function's required parameters as variables in the workspace,
  * as well as the {@code Function} object it creates.
  *

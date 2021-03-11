@@ -1,4 +1,4 @@
-package slogo.compiler.command;
+package slogo.compiler.command.advanced;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import slogo.compiler.SLogoFunction;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoTokenList;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.command.SLogoCommand;
 
 public class RepeatCommand extends SLogoCommand {
 
