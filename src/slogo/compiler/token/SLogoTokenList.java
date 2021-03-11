@@ -1,4 +1,4 @@
-package slogo.compiler;
+package slogo.compiler.token;
 
 import java.util.Collections;
 import java.util.List;

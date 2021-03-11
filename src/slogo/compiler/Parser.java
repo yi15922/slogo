@@ -2,24 +2,20 @@ package slogo.compiler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import slogo.compiler.command.SLogoCommand;
+import slogo.compiler.token.SLogoRunnable;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoTokenList;
 
 /**
  * The {@code Parser} class takes user inputs and converts them into {@link SLogoToken} objects

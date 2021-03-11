@@ -1,6 +1,6 @@
-package slogo.compiler;
+package slogo.compiler.token;
 
-import slogo.compiler.SLogoToken;
+import slogo.compiler.Parser;
 
 public class SLogoConstant extends SLogoToken {
 

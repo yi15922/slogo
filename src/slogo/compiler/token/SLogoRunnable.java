@@ -1,4 +1,4 @@
-package slogo.compiler;
+package slogo.compiler.token;
 
 /**
  * An interface that marks an object as runnable and expects 0 or more parameters.

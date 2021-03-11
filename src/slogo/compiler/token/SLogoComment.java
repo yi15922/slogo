@@ -1,4 +1,4 @@
-package slogo.compiler;
+package slogo.compiler.token;
 
 public class SLogoComment extends SLogoToken {
 

@@ -3,9 +3,8 @@ package slogo.compiler.command;
 import java.util.ArrayList;
 import java.util.List;
 import slogo.SLogoException;
-import slogo.compiler.SLogoToken;
-import slogo.compiler.SLogoRunnable;
-import slogo.compiler.WorkspaceEntry;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoRunnable;
 
 /**
  * An interface that provides methods to completely define an SLogo supported command.

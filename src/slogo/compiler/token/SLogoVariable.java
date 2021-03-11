@@ -1,4 +1,6 @@
-package slogo.compiler;
+package slogo.compiler.token;
+
+import slogo.compiler.WorkspaceEntry;
 
 public class SLogoVariable extends WorkspaceEntry {
   private double myValue;

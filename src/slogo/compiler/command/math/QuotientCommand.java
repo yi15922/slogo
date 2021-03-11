@@ -1,9 +1,9 @@
 package slogo.compiler.command.math;
 
 import slogo.SLogoException;
-import slogo.compiler.SLogoConstant;
-import slogo.compiler.SLogoToken;
-import slogo.compiler.SLogoVariable;
+import slogo.compiler.token.SLogoConstant;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoVariable;
 import slogo.compiler.command.SLogoCommand;
 
 public class QuotientCommand extends SLogoCommand {

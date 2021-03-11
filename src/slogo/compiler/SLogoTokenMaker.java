@@ -1,6 +1,9 @@
 package slogo.compiler;
 
 import java.lang.reflect.*;
+import slogo.compiler.token.SLogoFunction;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoVariable;
 
 /**
  * The {@code SLogoTokenMaker} class creates {@link SLogoToken} objects of the

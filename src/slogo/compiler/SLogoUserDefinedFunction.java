@@ -1,6 +1,10 @@
 package slogo.compiler;
 
 import java.util.List;
+import slogo.compiler.token.SLogoFunction;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoVariable;
 
 // todo: either clean up or delete this entire class, might be negated by SLogoUserDefinedCommand
 public class SLogoUserDefinedFunction extends SLogoFunction {

@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import slogo.SLogoException;
-import slogo.compiler.SLogoConstant;
-import slogo.compiler.SLogoFunction;
-import slogo.compiler.SLogoToken;
-import slogo.compiler.SLogoTokenList;
-import slogo.compiler.SLogoVariable;
+import slogo.compiler.token.SLogoConstant;
+import slogo.compiler.token.SLogoFunction;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoVariable;
 
 public class SLogoUserDefinedCommand extends SLogoCommand {
   private Deque<SLogoToken> commandQueue;

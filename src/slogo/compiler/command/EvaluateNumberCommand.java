@@ -1,9 +1,9 @@
 package slogo.compiler.command;
 
 import slogo.SLogoException;
-import slogo.compiler.SLogoConstant;
-import slogo.compiler.SLogoToken;
-import slogo.compiler.SLogoVariable;
+import slogo.compiler.token.SLogoConstant;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoVariable;
 
 /**
  * Helper class that evaluates the given tokens into a number but does not affect the model

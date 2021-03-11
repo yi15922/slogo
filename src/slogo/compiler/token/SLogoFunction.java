@@ -1,10 +1,11 @@
-package slogo.compiler;
+package slogo.compiler.token;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
+import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.command.SLogoCommand;
 
 /**
