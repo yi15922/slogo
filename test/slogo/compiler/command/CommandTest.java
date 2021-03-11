@@ -15,6 +15,8 @@ import slogo.compiler.SLogoFunction;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoTokenList;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.command.math.LessThanCommand;
+import slogo.compiler.command.math.SumCommand;
 
 class CommandTest {
   //private Turtle myModel;

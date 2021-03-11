@@ -45,7 +45,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   }
 
   // recursively assembles and runs a command
-  // takes in Stack of all remaining Tokens in the user-entered String, pops off Tokens that it uses
+  // takes in Deque of all remaining Tokens in the user-entered String, polls Tokens that it uses
   // to create parameters for the initial command and all nested commands
   private void parseParameterTokens(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens) throws SLogoException {
     while (! initCommand.isReady()) {

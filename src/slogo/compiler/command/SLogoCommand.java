@@ -20,7 +20,7 @@ public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
     protected List<SLogoToken> expectedParameters; // contains the expected types: Variable, Token, or List
     protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
 
-    public SLogoCommand(String name){
+    public SLogoCommand(String name) {
         super(name);
         parameterIndex = 0;
         expectedParameters = new ArrayList<>();
