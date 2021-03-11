@@ -7,6 +7,8 @@ import java.lang.reflect.*;
  * correct type given a user input. Calling {@code make()} will return an instance
  * of the desired token, constructed with only a name as the "bare minimum". Tokens
  * that require more parameters will later be filled in by the {@link Compiler}.
+ *
+ * @author Yi Chen
  */
 public class SLogoTokenMaker {
 

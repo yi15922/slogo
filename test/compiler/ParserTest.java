@@ -27,22 +27,22 @@ public class ParserTest {
     workspace = new Workspace();
     tester = new Parser(LANGUAGE, workspace);
   }
-
-  @Test
-  void testResourceBundleValidity() {
-    assertDoesNotThrow(() -> tester.determineTokenType("fd"));
-  }
-
-  @Test
-  void testTokenTypeIdentification() {
-    assertEquals("Variable", tester.determineTokenType(":something"));
-  }
-
-  @Test
-  void testCommandTypeIdentification() {
-    assertEquals("NotEqual", tester.determineCommandType("notequalp"));
-    assertEquals("fladskjfalksdfj", tester.determineCommandType("fladskjfalksdfj"));
-  }
+//
+//  @Test
+//  void testResourceBundleValidity() {
+//    assertDoesNotThrow(() -> tester.determineTokenType("fd"));
+//  }
+//
+//  @Test
+//  void testTokenTypeIdentification() {
+//    assertEquals("Variable", tester.determineTokenType(":something"));
+//  }
+//
+//  @Test
+//  void testCommandTypeIdentification() {
+//    assertEquals("NotEqual", tester.determineCommandType("notequalp"));
+//    assertEquals("fladskjfalksdfj", tester.determineCommandType("fladskjfalksdfj"));
+//  }
 
   @Test
   void testTokenCreation() {

@@ -36,6 +36,8 @@ import slogo.compiler.command.SLogoCommand;
  *
  * The parser is initialized with the language it has to interpret in. This language is read from a
  * {@code .properties} file in the {@code src.resources.languages} folder.
+ *
+ * @author Yi Chen
  */
 public class Parser {
 
@@ -119,7 +121,7 @@ public class Parser {
    * @param userInput a string that does not contain any blank space.
    * @return a {@code String} of the proper name of a {@code SLogoToken} or null
    */
-  public String determineTokenType(String userInput){
+  private String determineTokenType(String userInput){
     String ret = getKeyFromRegex(tokenTypes, userInput);
     if (ret == null) {
       System.err.println("Not a valid token");
@@ -135,7 +137,7 @@ public class Parser {
    * @param userInput {@code String} user typed text
    * @return either the proper {@link SLogoCommand} name or the user input as is.
    */
-  public String determineCommandType(String userInput){
+  private String determineCommandType(String userInput){
     String ret = getKeyFromRegex(builtinCommands, userInput);
     if (ret == null) {
       return userInput;
@@ -158,7 +160,7 @@ public class Parser {
    * @param userInput the {@code String} to search for in the map
    * @return returns {@code String} match from the map, or null if none is found.
    */
-  public String getKeyFromRegex(Map<String, Pattern> regexMap, String userInput){
+  private String getKeyFromRegex(Map<String, Pattern> regexMap, String userInput){
     ArrayList<String> reversedKeys = new ArrayList<>(regexMap.keySet());
     reversedKeys.sort(Comparator.comparing(String::length)
         .reversed());
