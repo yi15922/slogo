@@ -7,13 +7,11 @@ package slogo.compiler;
  *
  * @author Yi Chen
  */
-public interface WorkspaceEntry {
+public class WorkspaceEntry extends SLogoToken{
 
-  /**
-   * Sets the name of the entry
-   * @param name {@code String} name of the entry
-   */
-  public void setName(String name);
+  public WorkspaceEntry(String name){
+    super(name);
+  }
 
 
 

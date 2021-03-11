@@ -5,9 +5,9 @@ import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoVariable;
 
-public class TowardsCommand extends SLogoCommand {
+public class SetTowardsCommand extends SLogoCommand {
 
-  public TowardsCommand() {
+  public SetTowardsCommand() {
     super("Towards");
     expectedParameters.add(new SLogoVariable("x"));
     expectedParameters.add(new SLogoVariable("y"));

@@ -20,7 +20,7 @@ import slogo.compiler.WorkspaceEntry;
  *
  * @author Yi Chen
  */
-public interface Workspace {
+public class Workspace {
 
   /**
    * Adds the passed {@code WorkspaceEntry} to the workspace. This also notifies the

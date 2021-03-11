@@ -53,7 +53,7 @@ class CommandTest {
 
   @Test
   void testTowardsCommand() {
-    command = new TowardsCommand();
+    command = new SetTowardsCommand();
     parameterTokens.add(new SLogoConstant(10));
     parameterTokens.add(new SLogoConstant(20));
     function = new SLogoFunction(command, parameterTokens);
@@ -62,7 +62,7 @@ class CommandTest {
 
   @Test
   void testRecursiveTowardsCommand() {
-    command = new TowardsCommand();
+    command = new SetTowardsCommand();
     parameterTokens.add(new ForwardCommand());
     parameterTokens.add(new ForwardCommand());
     parameterTokens.add(new SLogoConstant(20));
@@ -89,7 +89,7 @@ class CommandTest {
 
   @Test
   void testLessCommand() {
-    command = new LessCommand();
+    command = new LessThanCommand();
     parameterTokens.add(new ForwardCommand());
     parameterTokens.add(new SLogoConstant(20));
     parameterTokens.add(new ForwardCommand());
@@ -100,7 +100,7 @@ class CommandTest {
 
   @Test
   void testBasicMakeCommand() {
-    command = new MakeCommand();
+    command = new MakeVariableCommand();
     parameterTokens.add(new SLogoToken("testVariable"));
     parameterTokens.add(new SLogoConstant(10.0));
     function = new SLogoFunction(command, parameterTokens);
@@ -187,7 +187,7 @@ class CommandTest {
 
   @Test
   void testBasicToCommand() {
-    command = new ToCommand();
+    command = new MakeUserInstruction();
     parameterTokens.add(new SLogoToken("testCommand"));
     List<SLogoToken> variableList = new ArrayList<>();
     variableList.add(new SLogoVariable("testVariable"));

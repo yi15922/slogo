@@ -6,6 +6,9 @@ import slogo.compiler.Parser;
 import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.command.ForCommand;
+import slogo.compiler.command.ForwardCommand;
+import slogo.compiler.command.IfElseCommand;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +35,7 @@ public class ParserTest {
 
   @Test
   void testCommandTypeIdentification() {
-    assertEquals("Backward", tester.determineCommandType("bk"));
+    assertEquals("NotEqual", tester.determineCommandType("notequalp"));
     assertNull(tester.determineCommandType("fladskjfalksdfj"));
   }
 
@@ -53,5 +56,21 @@ public class ParserTest {
     token = tester.createTokenFromString("flaksjdflkadjsf");
     assertNull(token);
   }
+
+  @Test
+  void testCommandObjectCreation() {
+    SLogoToken token = tester.createTokenFromString("ifelse");
+    assertEquals(IfElseCommand.class, token.getClass());
+    assertEquals("IfElse", token.toString());
+
+    token = tester.createTokenFromString("for");
+    assertEquals(ForCommand.class, token.getClass());
+    assertEquals("For", token.toString());
+
+    token = tester.createTokenFromString("fd");
+    assertEquals(ForwardCommand.class, token.getClass());
+    assertEquals("Forward", token.toString());
+  }
+
 
 }

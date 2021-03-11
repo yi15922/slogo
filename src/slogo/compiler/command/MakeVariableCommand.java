@@ -5,9 +5,9 @@ import slogo.compiler.SLogoConstant;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoVariable;
 
-public class MakeCommand extends SLogoCommand {
+public class MakeVariableCommand extends SLogoCommand {
 
-  public MakeCommand() {
+  public MakeVariableCommand() {
     super("Make");
     expectedParameters.add(new SLogoToken("variable name"));
     expectedParameters.add(new SLogoVariable("expr"));

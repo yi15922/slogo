@@ -11,6 +11,11 @@ import java.lang.reflect.*;
 public class SLogoTokenMaker {
 
   private final String CLASSPATH = "slogo.compiler.";
+  private Workspace workspace;
+
+  public SLogoTokenMaker(Workspace workspace){
+    this.workspace = workspace;
+  }
 
   /**
    * Creates a {@link SLogoToken} object from a {@code String} describing the
@@ -27,8 +32,17 @@ public class SLogoTokenMaker {
    */
   public SLogoToken make(String tokenType, String inputString){
     try {
-      Object obj = getTokenConstructor(tokenType).newInstance(inputString);
+      Object obj;
+      if (tokenType.equals("Command")) {
+        obj = getCommandConstructor(inputString).newInstance();
+      } else {
+        if (tokenType.equals("Variable")) {
+
+        }
+        obj = getTokenConstructor(tokenType).newInstance(inputString);
+      }
       return (SLogoToken) obj;
+
     } catch (Throwable exception) {
       System.err.println(exception);
       return null;
@@ -45,6 +59,17 @@ public class SLogoTokenMaker {
       return null;
     }
 
+  }
+
+  private Constructor getCommandConstructor(String inputString){
+    try {
+      Class commandClass = Class.forName(CLASSPATH + "command." + inputString + "Command");
+      return commandClass.getConstructor();
+
+    } catch (Throwable exception) {
+      System.err.println(exception);
+      return null;
+    }
   }
 
 }

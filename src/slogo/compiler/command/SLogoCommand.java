@@ -5,6 +5,7 @@ import java.util.List;
 import slogo.SLogoException;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoRunnable;
+import slogo.compiler.WorkspaceEntry;
 
 /**
  * An interface that provides methods to completely define an SLogo supported command.
@@ -15,7 +16,7 @@ import slogo.compiler.SLogoRunnable;
  *
  * @author Patrick Liu
  */
-public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
+public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnable {
     protected List<SLogoToken> expectedParameters; // contains the expected types: Variable, Token, or List
     protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
 
