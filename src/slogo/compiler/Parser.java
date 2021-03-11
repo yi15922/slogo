@@ -1,14 +1,18 @@
 package slogo.compiler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -44,6 +48,7 @@ public class Parser {
   private final String DEFAULT_RESOURCE_FOLDER = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private final Map<String, Pattern> builtinCommands;
   private final Map<String, Pattern> tokenTypes;
+  private Queue<SLogoToken> tokenQueue;
 
   private Workspace workspace;
 
@@ -59,7 +64,24 @@ public class Parser {
     syntaxBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SYNTAX_BUNDLE);
     builtinCommands = createRegexMap(languageBundle);
     tokenTypes = createRegexMap(syntaxBundle);
+    tokenQueue = new LinkedList<>();
     this.workspace = workspace;
+  }
+
+  /**
+   * Parses all the user input strings and creates the corresponding {@link SLogoToken},
+   * placing them in a {@code Queue}. The input format is space delimited,
+   * containing whitespace and newline characters @param input the user entered
+   * SLogo code.
+   *
+   * @param input the user input SLogo code
+   */
+  public void parseInput(String input){
+    ArrayList<String> allStrings = new ArrayList<>(Arrays.asList(input.split(" ")));
+    for (String string : allStrings) {
+      tokenQueue.add(createTokenFromString(string));
+    }
+    System.out.println(tokenQueue);
   }
 
   /**
@@ -91,8 +113,19 @@ public class Parser {
     return getKeyFromRegex(tokenTypes, userInput);
   }
 
+  /**
+   * Attempts to find the {@code String} command name matching the user input.
+   * If not found, the input might be a user defined function, therefore return
+   * the user input as is.
+   * @param userInput {@code String} user typed text
+   * @return either the proper {@link SLogoCommand} name or the user input as is.
+   */
   public String determineCommandType(String userInput){
-    return getKeyFromRegex(builtinCommands, userInput);
+    String ret = getKeyFromRegex(builtinCommands, userInput);
+    if (ret == null) {
+      return userInput;
+    }
+    return ret;
   }
 
 

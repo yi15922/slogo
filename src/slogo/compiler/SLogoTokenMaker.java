@@ -20,9 +20,12 @@ public class SLogoTokenMaker {
   /**
    * Creates a {@link SLogoToken} object from a {@code String} describing the
    * type of token, and the user input string. In the case of
-   * {@link slogo.compiler.command.SLogoCommand}, {@link SLogoFunction}, or
-   * {@link SLogoVariable}, the created objects will be named by the user input
-   * string.
+   * {@link SLogoFunction} or {@link SLogoVariable}, the method will first search
+   * the {@link Workspace} for the a matching {@link WorkspaceEntry}. If none are
+   * found, the method creates a new entry of the correct subclass, adds it to the
+   * workspace, and returns it.
+   *
+   *
    * @param tokenType {@code String} description of the token type, obtained
    *                  from a {@code .properties} file.
    * @param inputString the user input {@code String} that is used to name the
@@ -31,22 +34,26 @@ public class SLogoTokenMaker {
    * created from the given strings.
    */
   public SLogoToken make(String tokenType, String inputString){
-    try {
-      Object obj;
-      if (tokenType.equals("Command")) {
+    Object obj = null;
+    if (tokenType.equals("Command")) {
+      try {
         obj = getCommandConstructor(inputString).newInstance();
-      } else {
-        if (tokenType.equals("Variable")) {
-
-        }
-        obj = getTokenConstructor(tokenType).newInstance(inputString);
+      } catch (Throwable exception) {
+        System.out.printf("Searching workspace for function %s\n", inputString);
+        return workspace.searchAndAddIfAbsent("Function", inputString);
       }
-      return (SLogoToken) obj;
-
-    } catch (Throwable exception) {
-      System.err.println(exception);
-      return null;
+    } else if (tokenType.equals("Variable")) {
+      System.out.printf("Searching workspace for variable %s\n", inputString);
+      return workspace.searchAndAddIfAbsent(tokenType, inputString);
+    } else {
+      try {
+        obj = getTokenConstructor(tokenType).newInstance(inputString);
+      } catch (Throwable exception) {
+        System.err.printf("Cannot create token from string \"%s\"\n", inputString);
+        return null;
+      }
     }
+    return (SLogoToken) obj;
   }
 
   private Constructor getTokenConstructor(String tokenType){

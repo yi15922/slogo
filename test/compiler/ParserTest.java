@@ -4,8 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.compiler.Parser;
 import slogo.compiler.SLogoConstant;
+import slogo.compiler.SLogoFunction;
 import slogo.compiler.SLogoToken;
 import slogo.compiler.SLogoVariable;
+import slogo.compiler.Workspace;
+import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.command.ForCommand;
 import slogo.compiler.command.ForwardCommand;
 import slogo.compiler.command.IfElseCommand;
@@ -16,11 +19,13 @@ public class ParserTest {
 
   static final String LANGUAGE = "English";
   Parser tester;
+  Workspace workspace;
 
 
   @BeforeEach
   void createParser() {
-    tester = new Parser(LANGUAGE);
+    workspace = new Workspace();
+    tester = new Parser(LANGUAGE, workspace);
   }
 
   @Test
@@ -36,7 +41,7 @@ public class ParserTest {
   @Test
   void testCommandTypeIdentification() {
     assertEquals("NotEqual", tester.determineCommandType("notequalp"));
-    assertNull(tester.determineCommandType("fladskjfalksdfj"));
+    assertEquals("fladskjfalksdfj", tester.determineCommandType("fladskjfalksdfj"));
   }
 
   @Test
@@ -54,7 +59,8 @@ public class ParserTest {
 
     // Testing gibberish
     token = tester.createTokenFromString("flaksjdflkadjsf");
-    assertNull(token);
+    assertEquals(SLogoFunction.class, token.getClass());
+    assertEquals("flaksjdflkadjsf", token.toString());
   }
 
   @Test
@@ -70,6 +76,27 @@ public class ParserTest {
     token = tester.createTokenFromString("fd");
     assertEquals(ForwardCommand.class, token.getClass());
     assertEquals("Forward", token.toString());
+  }
+
+  @Test
+  void testGettingExistingWorkspaceEntries(){
+    SLogoToken token = tester.createTokenFromString(":something");
+
+    token = tester.createTokenFromString(":something");
+    assertEquals(":something", token.toString());
+    assertEquals(SLogoVariable.class, token.getClass());
+
+    token = tester.createTokenFromString("newUserFunction");
+    assertEquals(SLogoFunction.class, token.getClass());
+    assertEquals("newUserFunction", token.toString());
+    assertNotNull(workspace.search("newUserFunction"));
+  }
+
+  @Test
+  void testParseInput(){
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld"));
+    assertNotNull(workspace.search(":variable"));
+    assertNotNull(workspace.search("flaksdfjld"));
   }
 
 

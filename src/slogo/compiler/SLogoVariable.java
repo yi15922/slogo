@@ -1,6 +1,6 @@
 package slogo.compiler;
 
-public class SLogoVariable extends SLogoToken {
+public class SLogoVariable extends WorkspaceEntry {
   private double myValue;
 
   /**

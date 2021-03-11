@@ -16,7 +16,7 @@ import slogo.compiler.WorkspaceEntry;
  *
  * @author Patrick Liu
  */
-public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnable {
+public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
     protected List<SLogoToken> expectedParameters; // contains the expected types: Variable, Token, or List
     protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
 
