@@ -16,7 +16,7 @@ public class SetTowardsCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
+    // todo: call slogo.Turtle method
     System.out.println("Moving " + expectedParameters.get(0).getValue() + " x and " +
         expectedParameters.get(1).getValue() + " y");
     return new SLogoConstant(0); // todo: return degrees turtle turned

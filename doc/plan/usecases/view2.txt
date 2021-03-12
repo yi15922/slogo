@@ -1,6 +1,6 @@
 User sets image to use for the turtle
 
-- User presses "Turtle Image" button on ButtonPanel
+- User presses "slogo.Turtle Image" button on ButtonPanel
 - ButtonPanelController handles the click event, and calls ButtonPanel.showAvailableTurtleImages()
 - ButtonPanel displays drop-down menu of available images
 - User selects an image from the menu

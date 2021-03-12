@@ -13,4 +13,4 @@
 * `Function` calls `run()` on the `makeL` function and eventually passes it the `Constant` 50. 
 * Once 50 is passed to `makeL`, it creates a new `WorkspaceEntry` object with the `:distance` variable passed to it earlier and the 50. 
 * `makeL` then runs, which recursively calls `run()` on all its inner methods, searching the `Workspace` for the value of `:distance` when needed. 
-* `Command`s inside `makeL` update the `Turtle`'s location. 
+* `Command`s inside `makeL` update the `slogo.Turtle`'s location. 

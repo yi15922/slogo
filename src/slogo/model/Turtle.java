@@ -1,7 +1,7 @@
 package slogo.model;
 
 /**
- * The Turtle Interface is an API that provides publically accessable methods.
+ * The slogo.Turtle Interface is an API that provides publically accessable methods.
  */
 public interface Turtle{
 

@@ -15,8 +15,7 @@ public class ForwardCommand extends SLogoCommand {
 
     @Override
     public SLogoToken run() throws SLogoException {
-        // todo: call Turtle move method
-        System.out.println("Turtle has moved " + expectedParameters.get(0).getValue() + " pixels");
+        modelTurtle.forward(expectedParameters.get(0).getValue());
         return new SLogoConstant(expectedParameters.get(0).getValue());
     }
 
