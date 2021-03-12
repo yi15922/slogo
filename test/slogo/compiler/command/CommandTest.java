@@ -29,7 +29,7 @@ import slogo.compiler.command.turtle.PenDownCommand;
 import slogo.compiler.command.turtle.SetTowardsCommand;
 
 class CommandTest {
-  //private Turtle myModel;
+  //private slogo.Turtle myModel;
   private Deque<SLogoToken> parameterTokens;
   private SLogoCommand command;
   private SLogoFunction function;

@@ -13,7 +13,7 @@ public class XCoordinateCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
+    // todo: call slogo.Turtle method
     System.out.println("Returning turtle's x coordinate");
     return new SLogoConstant(1.0); // todo: replace with x coordinate
   }

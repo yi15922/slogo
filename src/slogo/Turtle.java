@@ -1,6 +1,5 @@
-/**
- * @author Kenneth Moore III
- */
+package slogo;
+
 public class Turtle {
 
   private double myX;

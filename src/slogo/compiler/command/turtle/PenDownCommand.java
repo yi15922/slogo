@@ -13,7 +13,7 @@ public class PenDownCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
+    // todo: call slogo.Turtle method
     System.out.println("Putting pen down");
     return new SLogoConstant(1);
   }

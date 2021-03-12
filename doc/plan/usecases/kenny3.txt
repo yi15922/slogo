@@ -1,4 +1,4 @@
-The user enters command to run Turtle out of bounds
+The user enters command to run slogo.Turtle out of bounds
 
 - User presses run button
 - Controller for console panel takes the text
