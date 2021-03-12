@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.SLogoException;
 import slogo.compiler.Compiler;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
@@ -51,6 +53,18 @@ public class CompilerTest {
 
     assertNull(compiler.getNextToken());
     assertFalse(compiler.hasNextToken());
+  }
+
+  @Test
+  void testListCreation(){
+    compiler.getAllTokens("fd 50 flaskdfj :variable ]");
+    compiler.makeList();
+  }
+
+  @Test
+  void testIncompleteList(){
+    compiler.getAllTokens("fd 50 flaskdfj :variable lkjlkj");
+    assertThrows(SLogoException.class, () -> compiler.makeList());
   }
 
 }
