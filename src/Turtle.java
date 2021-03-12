@@ -1,3 +1,6 @@
+/**
+ * @author Kenneth Moore III
+ */
 public class Turtle {
 
   private double myX;
@@ -47,10 +50,26 @@ public class Turtle {
     return degrees - myAngle;
   }
 
-  //TODO
+  //TODO: tests
   public double towards(double x, double y) {
-    
-    return 0;
+    double hypotenuse = calculate2PointDistance(myX, myY, x, y);
+    double dX = x - myX;
+    double dY = y - myY;
+    double angle = Math.acos(dX / hypotenuse);
+    if (dX > 0) {
+      if (dY > 0) {
+        angle = 90 - angle;
+      } else {
+        angle = 90 + angle;
+      }
+    } else {
+      if (dY > 0) {
+        angle = 270 + angle;
+      } else {
+        angle = 270 - angle;
+      }
+    }
+    return setHeading(angle);
   }
 
   //TODO: tests
