@@ -24,29 +24,4 @@ public class LessThanCommand extends SLogoCommand {
     }
   }
 
-  public static class MinusCommand extends SLogoCommand {
-
-    public MinusCommand() {
-      super("Minus");
-      expectedParameters.add(new SLogoVariable("expr"));
-    }
-
-    @Override
-    public SLogoToken run() throws SLogoException {
-      return new SLogoConstant(-1 * expectedParameters.get(0).getValue());
-    }
-  }
-
-  public static class NaturalLogCommand extends SLogoCommand {
-
-    public NaturalLogCommand() {
-      super("NaturalLog");
-      expectedParameters.add(new SLogoVariable("expr"));
-    }
-
-    @Override
-    public SLogoToken run() throws SLogoException {
-      return new SLogoConstant(Math.log(expectedParameters.get(0).getValue()));
-    }
-  }
 }
