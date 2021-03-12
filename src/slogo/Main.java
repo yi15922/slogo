@@ -1,6 +1,8 @@
 package slogo;
 
 
+import slogo.view.View;
+
 /**
  * Feel free to completely change this code or delete it entirely. 
  */
@@ -16,6 +18,7 @@ public class Main {
      * Start of the program.
      */
     public static void main (String[] args) {
-        System.out.println("Hello world");
+        View view = new View();
+        view.runApplication(args);
     }
 }
