@@ -15,8 +15,7 @@ public class ForwardCommand extends SLogoCommand {
 
     @Override
     public SLogoToken run() throws SLogoException {
-        modelTurtle.forward(expectedParameters.get(0).getValue());
-        return new SLogoConstant(expectedParameters.get(0).getValue());
+        return new SLogoConstant(modelTurtle.forward(expectedParameters.get(0).getValue()));
     }
 
 }

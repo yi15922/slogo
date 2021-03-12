@@ -5,14 +5,14 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class PenDownCommand extends SLogoCommand {
+public class HomeCommand extends SLogoCommand {
 
-  public PenDownCommand() {
-    super("Pen Down");
+  public HomeCommand() {
+    super("Home");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.penDown());
+    return new SLogoConstant(modelTurtle.home());
   }
 }
