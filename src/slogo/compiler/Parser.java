@@ -47,7 +47,6 @@ public class Parser {
   private final String DEFAULT_RESOURCE_FOLDER = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private final Map<String, Pattern> builtinCommands;
   private final Map<String, Pattern> tokenTypes;
-  private Queue<SLogoToken> tokenQueue;
 
   private Workspace workspace;
 
@@ -63,7 +62,6 @@ public class Parser {
     syntaxBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + SYNTAX_BUNDLE);
     builtinCommands = createRegexMap(languageBundle);
     tokenTypes = createRegexMap(syntaxBundle);
-    tokenQueue = new LinkedList<>();
     this.workspace = workspace;
   }
 
@@ -75,13 +73,16 @@ public class Parser {
    *
    * @param input the user input SLogo code
    */
-  public void parseInput(String input){
+  public Queue<SLogoToken> parseInput(String input){
     ArrayList<String> allStrings = new ArrayList<>(Arrays.asList(input.split(" ")));
+    Queue<SLogoToken> tokenQueue = new LinkedList<>();
+
     for (String string : allStrings) {
       SLogoToken newToken = createTokenFromString(string);
       if (newToken != null) tokenQueue.add(newToken);
     }
     System.out.println(tokenQueue);
+    return tokenQueue;
   }
 
   /**
@@ -187,28 +188,6 @@ public class Parser {
     }
     return ret;
   }
-
-  /**
-   * Returns the next {@link SLogoToken} from the queue of parsed tokens.
-   * Returns null if no more tokens are available.
-   * @return a {@code SLogoToken} object or {@code null}.
-   */
-  public SLogoToken getNextToken(){
-    try {
-      return tokenQueue.remove();
-    } catch (NoSuchElementException exception) {
-      return null;
-    }
-  }
-
-  /**
-   * Determines whether there are more tokens left in this compile session.
-   * @return {@code boolean} whether there are more parsed {@code SLogoToken}s.
-   */
-  public boolean hasNextToken(){
-    return (tokenQueue.size() != 0);
-  }
-
 
 
 
