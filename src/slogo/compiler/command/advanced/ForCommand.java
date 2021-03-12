@@ -30,30 +30,35 @@ public class ForCommand extends SLogoCommand {
     SLogoTokenList parameterList = (SLogoTokenList) expectedParameters.get(0);
     Deque<SLogoToken> parameterQueue = new ArrayDeque<>(parameterList.getTokenList());
     parseParameterQueue(parameterQueue);
-    // todo: add counterVariable to the workspace
     SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-    // todo: check that first token is a command
     List<SLogoFunction> functionList = new ArrayList<>();
-    while (! commandQueue.isEmpty()) { // todo: error checking
-      SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
-      functionList.add(innerFunction);
+    while (! commandQueue.isEmpty()) {
+      try {
+        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+        functionList.add(innerFunction);
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command list syntax");
+      }
     }
-    // todo: generalize turning list of commands into function, will need to save commands for repeated runs
     SLogoToken returnToken = new SLogoConstant(0);
-    for (int i = start; i < end; i += increment) {
+    for (int i = start; i <= end; i += increment) {
+      counterVariable.setValue(i);
       for (SLogoFunction function : functionList) {
         returnToken = function.run();
       }
-      // todo: update counterVariable in the workspace
-      // todo: figure out how Function accesses workspace
     }
     return returnToken;
   }
 
   private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
-    // todo: check that first token is generic token/valid variable name
-    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0); // todo: set counter value to start
+    try {
+      counterVariable = (SLogoVariable) tokenQueue.poll();
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid parameter list syntax");
+    }
     SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
     start = (int) helperFunction.run().getValue();
     helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);

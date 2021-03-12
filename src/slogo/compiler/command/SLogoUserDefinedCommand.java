@@ -18,10 +18,14 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   private List<SLogoFunction> functionList;
   private Map<String, Integer> variableMap;
 
-  public SLogoUserDefinedCommand(String name, SLogoTokenList variables, SLogoTokenList commands) throws SLogoException {
+  public SLogoUserDefinedCommand(String name) throws SLogoException {
     super(name);
     functionList = new ArrayList<>();
     variableMap = new HashMap<>();
+    commandQueue = new ArrayDeque<>();
+  }
+
+  public void giveParameters(SLogoTokenList variables, SLogoTokenList commands) throws SLogoException {
     for (SLogoToken token : variables.getTokenList()) {
       expectedParameters.add(new SLogoVariable(token.toString()));
       // map variable name to location in expectedParameters
@@ -48,9 +52,14 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       replacedCommandQueue.add(token);
     }
     while (! replacedCommandQueue.isEmpty()) {
-      SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
-      SLogoFunction innerFunction = new SLogoFunction(command, replacedCommandQueue);
-      functionList.add(innerFunction);
+      try {
+        SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
+        SLogoFunction innerFunction = new SLogoFunction(command, replacedCommandQueue);
+        functionList.add(innerFunction);
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command syntax");
+      }
     }
     SLogoToken returnToken = new SLogoConstant(0);
     for (SLogoFunction function : functionList) {
@@ -74,10 +83,15 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       dummyCommandQueue.add(token);
     }
     while (! dummyCommandQueue.isEmpty()) {
-      SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll(); // todo: check for command
-      SLogoFunction innerFunction = new SLogoFunction(command, dummyCommandQueue);
-      dummyFunctionList.add(innerFunction);
-      command.resetCommand();
+      try {
+        SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll();
+        SLogoFunction innerFunction = new SLogoFunction(command, dummyCommandQueue);
+        dummyFunctionList.add(innerFunction);
+        command.resetCommand();
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command syntax");
+      }
     }
     return true;
   }
