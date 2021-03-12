@@ -1,96 +1,143 @@
 public class Turtle {
+
   private double myX;
   private double myY;
-  private double myDirection;
+  private double myAngle;
+  private boolean myPen;
+  private boolean myShow;
 
-  public Turtle(){
-    myX=0;
-    myY=0;
-    myDirection=0;
+  public Turtle() {
+    myX = 0;
+    myY = 0;
+    myAngle = 0;
+    myPen = true;
+    myShow = true;
+  }
+
+  //TODO: test
+  public double forward(double pixels) {
+    myX += Math.sin(myAngle) * pixels;
+    myY += Math.cos(myAngle) * pixels;
+    return pixels;
+  }
+
+  //TODO: tests
+  public double back(double pixels) {
+    adjustAngle(180);
+    forward(pixels);
+    adjustAngle(-180);
+    return pixels;
+  }
+
+  //TODO: tests
+  public double left(double degrees) {
+    adjustAngle(-degrees);
+    return degrees;
+  }
+
+  //TODO: tests
+  public double right(double degrees) {
+    adjustAngle(degrees);
+    return degrees;
+  }
+
+  //TODO: tests
+  public double setHeading(double degrees) {
+    adjustAngle(degrees - myAngle);
+    return degrees - myAngle;
   }
 
   //TODO
-  public double forward(double pixels){
+  public double towards(double x, double y) {
+    
     return 0;
   }
-  //TODO
-  public double back(double pixels){
-    return 0;
+
+  //TODO: tests
+  public double setXY(double x, double y) {
+    double distance = calculate2PointDistance(myX, myY, x, y);
+    myX = x;
+    myY = y;
+    return distance;
   }
-  //TODO
-  public double left(double degrees){
-    return 0;
-  }
-  //TODO
-  public double right(double degrees){
-    return 0;
-  }
-  //TODO
-  public double setHeading(double degrees){
-    return 0;
-  }
-  //TODO
-  public double towards(double x, double y){
-    return 0;
-  }
-  //TODO
-  public double setXY(double x, double y){
-    return 0;
-  }
-  //TODO
-  public double penDown(){
+
+  //TODO: tests
+  public double penDown() {
+    myPen = true;
     return 1;
   }
-  //TODO
-  public double penUp(){
+
+  //TODO: tests
+  public double penUp() {
+    myPen = false;
     return 0;
   }
-  //TODO
-  public double showTurtle(){
+
+  //TODO: tests
+  public double showTurtle() {
+    myShow = true;
     return 1;
   }
-  //TODO
-  public double hideTurtle(){
-    return 0;
-  }
-  //TODO
-  public double home(){
-    return 1;
-  }
-  //TODO
-  public double clearScreen(){
+
+  //TODO: tests
+  public double hideTurtle() {
+    myShow = false;
     return 0;
   }
 
-
-
-  /**
-   * The move method changes the turtles position by x in the x direction and y in y direction.
-   * It throws an exception if the move puts the turtle out of bounds
-   * It returns how much it has moved.
-   */
-  public double move(double x, double y) throws Exception {
-    return -1;
+  //TODO: tests
+  public double home() {
+    double distance = calculate2PointDistance(myX, myY, 0, 0);
+    myX = 0;
+    myY = 0;
+    return distance;
   }
 
-  /**
-   * The turn method turns the turtle a degrees amount.  It returns the amount moved.
-   */
-  public double turn(int degrees) {
-    return -1;
+  //TODO: do we need this one here?
+  public double clearScreen() {
+    //need to clear screen
+    return home();
   }
 
-  /**
-   * The method toggles the value of the pen to be either up or down.
-   */
-  public void togglePen() {
+  public double xcor() {
+    return myX;
   }
 
-  /**
-   * The method toggles the booleann visible to be either visible or not.
-   */
-  public void toggleVisibility(){
+  public double ycor() {
+    return myY;
+  }
 
+  public double heading() {
+    return myAngle;
+  }
+
+  public int penDownP() {
+    if (myPen) {
+      return 1;
+    }
+    return 0;
+  }
+
+  public int showingP() {
+    if (myShow) {
+      return 1;
+    }
+    return 0;
+  }
+
+
+  private void adjustAngle(double angle) {
+    myAngle += angle;
+    while (myAngle < 0) {
+      myAngle += 360;
+    }
+    while (myAngle > 360) {
+      myAngle -= 360;
+    }
+  }
+
+  private double calculate2PointDistance(double x1, double y1, double x2, double y2) {
+    return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   }
 
 }
