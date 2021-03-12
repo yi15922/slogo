@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -30,7 +31,8 @@ public class View extends Application {
         output.setMinHeight(50);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        TextField input = new TextField();
+        TextArea input = new TextArea();
+        input.setMaxHeight(50);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         StackPane workspace = new StackPane();
@@ -42,9 +44,14 @@ public class View extends Application {
         log.setBackground(new Background(new BackgroundFill(Color.SPRINGGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         VBox outputAndInput = new VBox(output, input);
+        outputAndInput.setVgrow(output, Priority.ALWAYS);
+        outputAndInput.setVgrow(input, Priority.ALWAYS);
         HBox mainContent = new HBox(outputAndInput, workspace, log);
+        mainContent.setHgrow(outputAndInput, Priority.ALWAYS);
+        mainContent.setHgrow(workspace, Priority.ALWAYS);
+        mainContent.setHgrow(log, Priority.ALWAYS);
         VBox everything = new VBox(menuBar, mainContent);
-        everything.setPadding(new Insets(10));
+        outputAndInput.setVgrow(mainContent, Priority.ALWAYS);
 
         Scene scene = new Scene(everything);
 
