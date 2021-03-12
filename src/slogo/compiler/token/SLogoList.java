@@ -3,7 +3,7 @@ package slogo.compiler.token;
 import java.util.Collections;
 import java.util.List;
 
-public class SLogoTokenList extends SLogoToken {
+public class SLogoList extends SLogoToken {
   List<SLogoToken> myTokens;
 
   /**
@@ -13,11 +13,11 @@ public class SLogoTokenList extends SLogoToken {
    *
    * @param name - the specified name of the Token
    */
-  public SLogoTokenList(String name) {
+  public SLogoList(String name) {
     super(name);
   }
 
-  public SLogoTokenList(List<SLogoToken> innerTokens) {
+  public SLogoList(List<SLogoToken> innerTokens) {
     super("");
     myTokens = innerTokens;
   }

@@ -8,16 +8,15 @@ import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
-import slogo.compiler.command.SLogoCommand;
 
 public class RepeatCommand extends SLogoCommand {
 
   public RepeatCommand() {
     super("Repeat");
     expectedParameters.add(new SLogoVariable("expr"));
-    expectedParameters.add(new SLogoTokenList("commands"));
+    expectedParameters.add(new SLogoList("commands"));
   }
 
   @Override
@@ -25,7 +24,7 @@ public class RepeatCommand extends SLogoCommand {
     int numTimesToRepeat = (int) expectedParameters.get(0).getValue();
     SLogoVariable repcount = new SLogoVariable("repcount", 1.0);
     // todo: add repcount to the workspace
-    SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
+    SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     // todo: check that first token is a command
     List<SLogoFunction> functionList = new ArrayList<>();

@@ -15,14 +15,14 @@ import java.util.regex.Pattern;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 
 /**
  * The {@code Parser} class takes user inputs and converts them into {@link SLogoToken} objects
  * of the correct type. This class simply splits {@code String} inputs by blank spaces and
  * performs no syntax related error checking.
  *
- * While parsing, if the beginning of a {@link SLogoTokenList} is encountered, the corresponding
+ * While parsing, if the beginning of a {@link SLogoList} is encountered, the corresponding
  * token will be created and all tokens until the list closing token is found.
  *
  * While parsing, any {@code String} matching {@code [a-zA-Z_]+(\?)?} will be used to search
