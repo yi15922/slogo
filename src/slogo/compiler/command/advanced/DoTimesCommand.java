@@ -28,30 +28,36 @@ public class DoTimesCommand extends SLogoCommand {
     SLogoTokenList parameterList = (SLogoTokenList) expectedParameters.get(0);
     Deque<SLogoToken> parameterQueue = new ArrayDeque<>(parameterList.getTokenList());
     parseParameterQueue(parameterQueue);
-    // todo: add counterVariable to the workspace
     SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-    // todo: check that first token is a command
     List<SLogoFunction> functionList = new ArrayList<>();
-    while (! commandQueue.isEmpty()) { // todo: error checking
-      SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
-      functionList.add(innerFunction);
+    while (! commandQueue.isEmpty()) {
+      try {
+        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+        functionList.add(innerFunction);
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command list syntax");
+      }
     }
     SLogoToken returnToken = new SLogoConstant(0);
-    // todo: generalize turning list of commands into function, will need to save commands for repeated runs
     for (int i = 1; i <= limit; i++) {
       for (SLogoFunction function : functionList) {
         returnToken = function.run();
       }
-      // todo: update variable in the workspace
-      // todo: figure out how Function accesses workspace
+      counterVariable.setValue(counterVariable.getValue() + 1);
     }
     return returnToken;
   }
 
   private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
-    // todo: check that first token is generic token/valid variable name
-    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0);
+    try {
+      counterVariable = (SLogoVariable) tokenQueue.poll();
+      counterVariable.setValue(1);
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid parameter list syntax");
+    }
     SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
     limit = (int) helperFunction.run().getValue();
   }

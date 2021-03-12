@@ -24,11 +24,15 @@ public class IfCommand extends SLogoCommand {
       // todo: refactor code to extract method that creates inner function from token list
       SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
       Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-      // todo: check that first token is a command
       SLogoToken returnToken = new SLogoConstant(0);
       while (! commandQueue.isEmpty()) {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
-        returnToken = innerFunction.run();
+        try {
+          SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+          returnToken = innerFunction.run();
+        }
+        catch (ClassCastException e) {
+          throw new SLogoException("Invalid command list syntax");
+        }
       }
       return returnToken;
     }
