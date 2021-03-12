@@ -1,4 +1,4 @@
-package slogo.compiler.command.advanced;
+package slogo.compiler.command;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

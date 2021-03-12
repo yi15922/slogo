@@ -8,9 +8,9 @@ import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 import slogo.compiler.Workspace;
-import slogo.compiler.command.advanced.ForCommand;
-import slogo.compiler.command.turtle.ForwardCommand;
-import slogo.compiler.command.advanced.IfElseCommand;
+import slogo.compiler.command.ForCommand;
+import slogo.compiler.command.ForwardCommand;
+import slogo.compiler.command.IfElseCommand;
 
 import static org.junit.jupiter.api.Assertions.*;
 
