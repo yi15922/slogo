@@ -15,7 +15,7 @@ class TurtleTest {
   }
 
   @Test
-  void testXYCor(){
+  void testXandYCor(){
     assertEquals(0, turtle.xCor());
     assertEquals(0, turtle.yCor());
     turtle.forward(10);
@@ -103,6 +103,26 @@ class TurtleTest {
 
     turtle.towards(-10,10);
     assertEquals(315, turtle.heading());
+  }
+
+  @Test
+  void testSetXY(){
+    assertEquals(14.142, turtle.setXY(10,10));
+    assertEquals(10, turtle.xCor());
+    assertEquals(10, turtle.yCor());
+
+    turtle.home();
+    turtle.setXY(1.0000001, 1.0000001);
+    assertEquals(1, turtle.xCor());
+    assertEquals(1, turtle.yCor());
+  }
+
+  @Test
+  void testHome(){
+    turtle.setXY(100,100);
+    assertEquals(141.421,turtle.home());
+    assertEquals(0, turtle.xCor());
+    assertEquals(0, turtle.yCor());
   }
 
   @Test
