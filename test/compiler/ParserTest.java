@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import slogo.compiler.Parser;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
+import slogo.compiler.token.SLogoListEnd;
+import slogo.compiler.token.SLogoListStart;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 import slogo.compiler.Workspace;
-import slogo.compiler.command.advanced.ForCommand;
-import slogo.compiler.command.turtle.ForwardCommand;
-import slogo.compiler.command.advanced.IfElseCommand;
+import slogo.compiler.command.ForCommand;
+import slogo.compiler.command.ForwardCommand;
+import slogo.compiler.command.IfElseCommand;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,6 +62,17 @@ public class ParserTest {
     token = tester.createTokenFromString("flaksjdflkadjsf");
     assertEquals(SLogoFunction.class, token.getClass());
     assertEquals("flaksjdflkadjsf", token.toString());
+
+    // Testing list start and end
+    token = tester.createTokenFromString("[");
+    assertEquals(SLogoListStart.class, token.getClass());
+    assertEquals("ListStart", token.toString());
+    token = tester.createTokenFromString("]");
+    assertEquals(SLogoListEnd.class, token.getClass());
+    assertEquals("ListEnd", token.toString());
+
+
+
   }
 
   @Test
@@ -96,32 +109,6 @@ public class ParserTest {
     assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld # falskdjf"));
     assertNotNull(workspace.search(":variable"));
     assertNotNull(workspace.search("flaksdfjld"));
-  }
-
-  @Test
-  void testEmptyParser(){
-    tester.parseInput("");
-    assertFalse(tester.hasNextToken());
-  }
-
-  @Test
-  void testParserAccess(){
-    assertDoesNotThrow(() -> tester.parseInput("fd 50 :variable flaksdfjld"));
-    SLogoToken token = tester.getNextToken();
-    assertEquals("Forward", token.toString());
-
-    token = tester.getNextToken();
-    assertEquals("Constant", token.toString());
-
-    token = tester.getNextToken();
-    assertEquals(":variable", token.toString());
-
-    assertTrue(tester.hasNextToken());
-    token = tester.getNextToken();
-    assertEquals("flaksdfjld", token.toString());
-
-    assertNull(tester.getNextToken());
-    assertFalse(tester.hasNextToken());
   }
 
 

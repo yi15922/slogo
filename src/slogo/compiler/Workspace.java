@@ -3,7 +3,7 @@ package slogo.compiler;
 import java.util.HashMap;
 import java.util.Map;
 import slogo.compiler.command.SLogoCommand;
-import slogo.compiler.command.advanced.MakeUserInstruction;
+import slogo.compiler.command.MakeUserInstruction;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoVariable;
 

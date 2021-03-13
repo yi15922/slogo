@@ -10,15 +10,15 @@ import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
 
 public class SLogoUserDefinedCommand extends SLogoCommand {
-  private Deque<SLogoToken> commandQueue;
+  private Deque<SLogoToken> tokenQueue;
   private List<SLogoFunction> functionList;
   private Map<String, Integer> variableMap;
 
-  public SLogoUserDefinedCommand(String name, SLogoTokenList variables, SLogoTokenList commands) throws SLogoException {
+  public SLogoUserDefinedCommand(String name, SLogoList variables, SLogoList inputTokens) throws SLogoException {
     super(name);
     functionList = new ArrayList<>();
     variableMap = new HashMap<>();
@@ -27,7 +27,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       // map variable name to location in expectedParameters
       variableMap.put(token.toString(), expectedParameters.size() - 1);
     }
-    commandQueue = new ArrayDeque<>(commands.getTokenList());
+    tokenQueue = new ArrayDeque<>(inputTokens.getTokenList());
     if (! verifyCommandDefinition()) {
       throw new SLogoException("Invalid command definition");
     }
@@ -36,7 +36,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   @Override
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> replacedCommandQueue = new ArrayDeque<>();
-    for (SLogoToken token : commandQueue) {
+    for (SLogoToken token : tokenQueue) {
       if (token.isEqualTokenType(new SLogoVariable("dummy"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
           token = expectedParameters.get(variableMap.get(token.toString()));
@@ -62,7 +62,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   private boolean verifyCommandDefinition() throws SLogoException {
     Deque<SLogoToken> dummyCommandQueue = new ArrayDeque<>();
     List<SLogoFunction> dummyFunctionList = new ArrayList<>();
-    for (SLogoToken token : commandQueue) {
+    for (SLogoToken token : tokenQueue) {
       if (token.isEqualTokenType(new SLogoVariable("dummy"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
           token = new SLogoConstant(1);

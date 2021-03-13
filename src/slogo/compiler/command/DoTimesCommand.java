@@ -1,4 +1,4 @@
-package slogo.compiler.command.advanced;
+package slogo.compiler.command;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -8,30 +8,26 @@ import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
-import slogo.compiler.command.EvaluateNumberCommand;
-import slogo.compiler.command.SLogoCommand;
 
-public class ForCommand extends SLogoCommand {
+public class DoTimesCommand extends SLogoCommand {
   private SLogoVariable counterVariable;
-  private int start;
-  private int end;
-  private int increment;
+  private int limit;
 
-  public ForCommand() {
-    super("For");
-    expectedParameters.add(new SLogoTokenList("parameters"));
-    expectedParameters.add(new SLogoTokenList("commands"));
+  public DoTimesCommand() {
+    super("DoTimes");
+    expectedParameters.add(new SLogoList("parameters"));
+    expectedParameters.add(new SLogoList("commands"));
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    SLogoTokenList parameterList = (SLogoTokenList) expectedParameters.get(0);
+    SLogoList parameterList = (SLogoList) expectedParameters.get(0);
     Deque<SLogoToken> parameterQueue = new ArrayDeque<>(parameterList.getTokenList());
     parseParameterQueue(parameterQueue);
     // todo: add counterVariable to the workspace
-    SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
+    SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     // todo: check that first token is a command
     List<SLogoFunction> functionList = new ArrayList<>();
@@ -39,13 +35,13 @@ public class ForCommand extends SLogoCommand {
       SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
       functionList.add(innerFunction);
     }
-    // todo: generalize turning list of commands into function, will need to save commands for repeated runs
     SLogoToken returnToken = new SLogoConstant(0);
-    for (int i = start; i < end; i += increment) {
+    // todo: generalize turning list of commands into function, will need to save commands for repeated runs
+    for (int i = 1; i <= limit; i++) {
       for (SLogoFunction function : functionList) {
         returnToken = function.run();
       }
-      // todo: update counterVariable in the workspace
+      // todo: update variable in the workspace
       // todo: figure out how Function accesses workspace
     }
     return returnToken;
@@ -53,12 +49,8 @@ public class ForCommand extends SLogoCommand {
 
   private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
     // todo: check that first token is generic token/valid variable name
-    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0); // todo: set counter value to start
+    counterVariable = new SLogoVariable(tokenQueue.poll().toString(), 1.0);
     SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
-    start = (int) helperFunction.run().getValue();
-    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
-    end = (int) helperFunction.run().getValue();
-    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue);
-    increment = (int) helperFunction.run().getValue();
+    limit = (int) helperFunction.run().getValue();
   }
 }
