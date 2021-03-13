@@ -41,8 +41,6 @@ public class Compiler {
   }
 
 
-
-
   /**
    * Returns the next {@link SLogoToken} from the queue of parsed tokens.
    * Returns null if no more tokens are available.
@@ -51,7 +49,7 @@ public class Compiler {
   public SLogoToken getNextToken(){
     try {
       return tokenQueue.remove();
-    } catch (NoSuchElementException exception) {
+    } catch (NoSuchElementException | NullPointerException exception) {
       return null;
     }
   }

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import slogo.SLogoException;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
 import slogo.compiler.token.SLogoToken;
@@ -106,9 +107,9 @@ public class Parser {
    * {@link Workspace} that has a name matching the user input. If none is found
    * in the workspace, an exception will be thrown.
    * @param userInput
-   * @return
+   * @return the {@code SLogoToken} of the correct type.
    */
-  public SLogoToken createTokenFromString(String userInput){
+  public SLogoToken createTokenFromString(String userInput) throws SLogoException {
     String tokenType = determineTokenType(userInput);
     if (tokenType == null) return null;
 
@@ -129,11 +130,12 @@ public class Parser {
    * @param userInput a string that does not contain any blank space.
    * @return a {@code String} of the proper name of a {@code SLogoToken} or null
    */
-  private String determineTokenType(String userInput){
+  private String determineTokenType(String userInput) throws SLogoException{
+    if (userInput.equals("")) { return null; }
+
     String ret = getKeyFromRegex(tokenTypes, userInput);
     if (ret == null) {
-      System.err.println("Not a valid token");
-      return null;
+      throw new SLogoException("Not a valid token: %s", userInput);
     }
     return ret;
   }
