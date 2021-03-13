@@ -33,7 +33,8 @@ public class RepeatCommand extends SLogoCommand {
       throw new SLogoException("Invalid command syntax");
     }
     for (SLogoToken token : commandQueue) {
-      if (token.isEqualTokenType(new SLogoVariable("")) && token.toString().equals("repcount")) {
+      if (token.isEqualTokenType(new SLogoVariable("")) && token.toString().equals(":repcount")) {
+        System.out.println("Found repcount variable");
         repcountVariable = (SLogoVariable) token;
       }
     }
