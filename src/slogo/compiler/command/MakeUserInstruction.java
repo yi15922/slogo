@@ -9,7 +9,7 @@ public class MakeUserInstruction extends SLogoCommand {
 
   public MakeUserInstruction() {
     super("To");
-    expectedParameters.add(new SLogoToken("command name"));
+    expectedParameters.add(new SLogoUserDefinedCommand("command name"));
     expectedParameters.add(new SLogoList("variables"));
     expectedParameters.add(new SLogoList("commands"));
   }
@@ -20,7 +20,7 @@ public class MakeUserInstruction extends SLogoCommand {
       userDefinedCommand.giveParameters((SLogoList) expectedParameters.get(1), (SLogoList) expectedParameters.get(2));
       return new SLogoConstant(1);
     }
-    catch (SLogoException e) {
+    catch (ClassCastException | SLogoException e) {
       return new SLogoConstant(0);
     }
   }

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import slogo.SLogoException;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
 import slogo.compiler.token.SLogoToken;
@@ -66,20 +67,31 @@ public class Parser {
   }
 
   /**
-   * Parses all the user input strings and creates the corresponding {@link SLogoToken},
-   * placing them in a {@code Queue}. The input format is space delimited,
-   * containing whitespace and newline characters @param input the user entered
-   * SLogo code.
+   * Parses all user input and creates the corresponding {@link SLogoToken}s,
+   * placing them in a {@code Queue}. The input can contain whitespace and newline characters.
+   * The method first breaks the strings into lines, then into individual space delimited
+   * strings.
    *
-   * @param input the user input SLogo code
+   * If a "#" character is encountered, the entire line is ignored.
+   *
+   * @param inputString a user input SLogo code
+   * @return a {@code Queue} of {@code SLogoToken} objects.
    */
-  public Queue<SLogoToken> parseInput(String input){
-    ArrayList<String> allStrings = new ArrayList<>(Arrays.asList(input.split(" ")));
+  public Queue<SLogoToken> parseInput(String inputString){
+    ArrayList<String> allLines = new ArrayList<>(Arrays.asList(inputString.split("\n")));
     Queue<SLogoToken> tokenQueue = new LinkedList<>();
 
-    for (String string : allStrings) {
-      SLogoToken newToken = createTokenFromString(string);
-      if (newToken != null) tokenQueue.add(newToken);
+    for (String line : allLines) {
+      System.out.println(line);
+      ArrayList<String> strings = new ArrayList<>(Arrays.asList(line.split(" ")));
+      if (strings.get(0).equals("#")) {
+        continue;
+      }
+      for (String s : strings) {
+        SLogoToken newToken = createTokenFromString(s);
+        if (newToken != null)
+          tokenQueue.add(newToken);
+      }
     }
     System.out.println(tokenQueue);
     return tokenQueue;
@@ -95,9 +107,9 @@ public class Parser {
    * {@link Workspace} that has a name matching the user input. If none is found
    * in the workspace, an exception will be thrown.
    * @param userInput
-   * @return
+   * @return the {@code SLogoToken} of the correct type.
    */
-  public SLogoToken createTokenFromString(String userInput){
+  public SLogoToken createTokenFromString(String userInput) throws SLogoException {
     String tokenType = determineTokenType(userInput);
     if (tokenType == null) return null;
 
@@ -118,11 +130,12 @@ public class Parser {
    * @param userInput a string that does not contain any blank space.
    * @return a {@code String} of the proper name of a {@code SLogoToken} or null
    */
-  private String determineTokenType(String userInput){
+  private String determineTokenType(String userInput) throws SLogoException{
+    if (userInput.equals("")) { return null; }
+
     String ret = getKeyFromRegex(tokenTypes, userInput);
     if (ret == null) {
-      System.err.println("Not a valid token");
-      return null;
+      throw new SLogoException("Not a valid token: %s", userInput);
     }
     return ret;
   }

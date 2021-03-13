@@ -2,9 +2,10 @@ package compiler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.SLogoException;
 import slogo.compiler.Parser;
+import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoConstant;
-import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoListEnd;
 import slogo.compiler.token.SLogoListStart;
 import slogo.compiler.token.SLogoToken;
@@ -59,9 +60,7 @@ public class ParserTest {
     assertEquals(5, token.getValue());
 
     // Testing gibberish
-    token = tester.createTokenFromString("flaksjdflkadjsf");
-    assertEquals(SLogoFunction.class, token.getClass());
-    assertEquals("flaksjdflkadjsf", token.toString());
+    assertThrows(SLogoException.class, () -> tester.createTokenFromString("flaksjdflkadjsf"));
 
     // Testing list start and end
     token = tester.createTokenFromString("[");
@@ -98,17 +97,18 @@ public class ParserTest {
     assertEquals(":something", token.toString());
     assertEquals(SLogoVariable.class, token.getClass());
 
-    token = tester.createTokenFromString("newUserFunction");
-    assertEquals(SLogoFunction.class, token.getClass());
-    assertEquals("newUserFunction", token.toString());
-    assertNotNull(workspace.search("newUserFunction"));
+    workspace.add(new SLogoUserDefinedCommand("NewCommand"));
+    token = workspace.search("NewCommand");
+    assertEquals(SLogoUserDefinedCommand.class, token.getClass());
+    assertEquals("NewCommand", token.toString());
   }
 
   @Test
   void testParseInput(){
-    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld # falskdjf"));
+    assertThrows(SLogoException.class, () -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld \n# falskdjf"));
     assertNotNull(workspace.search(":variable"));
-    assertNotNull(workspace.search("flaksdfjld"));
+
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable \n# falskdjf hello this is a comment \n :anotherVariable"));
   }
 
 

@@ -33,7 +33,8 @@ public class ForCommand extends SLogoCommand {
     List<SLogoFunction> functionList = new ArrayList<>();
     while (! commandQueue.isEmpty()) {
       try {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
+        SLogoCommand innerCommand = (SLogoCommand) commandQueue.poll();
+        SLogoFunction innerFunction = new SLogoFunction(innerCommand, commandQueue,
             modelTurtle);
         functionList.add(innerFunction);
       }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.command.MakeUserInstruction;
+import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoVariable;
 
@@ -76,9 +77,9 @@ public class Workspace {
     WorkspaceEntry ret = search(name);
     WorkspaceEntry newEntry;
     if (ret == null) {
-      if (entryType.equals("Function")) {
-        System.out.printf("Creating function %s in workspace\n", name);
-        newEntry = new SLogoFunction(name);
+      if (entryType.equals("UserDefinedCommand")) {
+        System.out.printf("Creating user defined command %s in workspace\n", name);
+        newEntry = new SLogoUserDefinedCommand(name);
         add(newEntry);
       } else if (entryType.equals("Variable")) {
         System.out.printf("Creating variable %s in workspace\n", name);

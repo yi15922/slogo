@@ -1,6 +1,7 @@
 package slogo.compiler;
 
 import java.lang.reflect.*;
+import slogo.SLogoException;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
@@ -26,8 +27,8 @@ public class SLogoTokenMaker {
   /**
    * Creates a {@link SLogoToken} object from a {@code String} describing the
    * type of token, and the user input string. In the case of
-   * {@link SLogoFunction} or {@link SLogoVariable}, the method will first search
-   * the {@link Workspace} for the a matching {@link WorkspaceEntry}. If none are
+   * {@link slogo.compiler.command.SLogoUserDefinedCommand} or {@link SLogoVariable}, the method
+   * will first search the {@link Workspace} for the a matching {@link WorkspaceEntry}. If none are
    * found, the method creates a new entry of the correct subclass, adds it to the
    * workspace, and returns it.
    *
@@ -36,10 +37,10 @@ public class SLogoTokenMaker {
    *                  from a {@code .properties} file.
    * @param inputString the user input {@code String} that is used to name the
    *                    token.
-   * @return a {@code SLogoToken} object, or {@code null} if no object could be
+   * @return a {@code SLogoToken} object, or {@code null} if no object can be
    * created from the given strings.
    */
-  public SLogoToken make(String tokenType, String inputString){
+  public SLogoToken make(String tokenType, String inputString) throws SLogoException{
     Object obj = null;
     if (tokenType.equals("Command")) {
       try {
@@ -47,7 +48,10 @@ public class SLogoTokenMaker {
       } catch (ClassNotFoundException | NoSuchMethodException |
           InstantiationException | IllegalAccessException | InvocationTargetException exception) {
         System.out.printf("Searching workspace for function %s\n", inputString);
-        return workspace.searchAndAddIfAbsent("Function", inputString);
+        obj = workspace.search(inputString);
+        if (obj == null) {
+          throw new SLogoException("Undefined command %s", inputString);
+        }
       }
     } else if (tokenType.equals("Variable")) {
       System.out.printf("Searching workspace for variable %s\n", inputString);
