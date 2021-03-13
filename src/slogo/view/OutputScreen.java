@@ -16,11 +16,13 @@ import javafx.scene.shape.Rectangle;
 public class OutputScreen extends Region {
 
     private ImageView myObject;
+    private double myWidth;
+    private double myHeight;
 
-    public OutputScreen(Image displayObject) {
+    public OutputScreen(Image displayObject, double width, double height) {
         myObject = makeDisplayObject("displayObject", 20, displayObject);
-        setX(0);
-        setY(0);
+        myWidth = width;
+        myHeight = height;
         this.getChildren().addAll(myObject);
 
         // disallows displayed object from appearing outside of output screen
@@ -33,11 +35,11 @@ public class OutputScreen extends Region {
     }
 
     public void setX(double x) {
-        myObject.setX(x + this.getWidth());
+        myObject.setX(x + myWidth/2);
     }
 
     public void setY(double y) {
-        myObject.setY(y + this.getWidth());
+        myObject.setY(myHeight/2 - y);
     }
 
     // make object to be displayed
