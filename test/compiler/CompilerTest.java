@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
+import slogo.Turtle;
 import slogo.compiler.Compiler;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
@@ -20,13 +21,15 @@ public class CompilerTest {
   Parser parser;
   Workspace workspace;
   Compiler compiler;
+  Turtle turtle;
 
 
   @BeforeEach
   void createParser() {
     workspace = new Workspace();
     parser = new Parser(LANGUAGE, workspace);
-    compiler = new Compiler(parser);
+    turtle = new Turtle();
+    compiler = new Compiler(parser, turtle);
   }
 
   @Test

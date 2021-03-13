@@ -1,11 +1,17 @@
 package slogo.compiler;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import slogo.SLogoException;
+import slogo.Turtle;
+import slogo.compiler.command.SLogoCommand;
+import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoListEnd;
+import slogo.compiler.token.SLogoListStart;
 import slogo.compiler.token.SLogoToken;
 
 /**
@@ -21,13 +27,15 @@ public class Compiler {
 
   private Parser parser;
   private Queue<SLogoToken> tokenQueue;
+  private Turtle turtle;
 
   /**
    * Creates an instance of a compiler. The instance takes an instance of {@link Parser}.
    * @param parser the {@code Parser} instance for this parsing session.
    */
-  public Compiler(Parser parser) {
+  public Compiler(Parser parser, Turtle turtle) {
     this.parser = parser;
+    this.turtle = turtle;
   }
 
 
@@ -49,6 +57,18 @@ public class Compiler {
    * the function's {@code run()} method.
    */
   public void compileAndRun(){
+    if (!hasNextToken()) return;
+    SLogoCommand initialCommand = (SLogoCommand) getNextToken();
+    Deque<SLogoToken> parameterTokens = new LinkedList<>();
+    while (hasNextToken()) {
+      SLogoToken tokenToAdd = getNextToken();
+      if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
+        tokenToAdd = makeList();
+      }
+      parameterTokens.add(tokenToAdd);
+    }
+
+    new SLogoFunction(initialCommand, parameterTokens, turtle).run();
 
   }
 
