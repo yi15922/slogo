@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import slogo.compiler.Parser;
 import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoConstant;
-import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoListEnd;
 import slogo.compiler.token.SLogoListStart;
 import slogo.compiler.token.SLogoToken;
@@ -107,7 +106,7 @@ public class ParserTest {
 
   @Test
   void testParseInput(){
-    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld # falskdjf"));
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld \n# falskdjf"));
     assertNotNull(workspace.search(":variable"));
     assertNotNull(workspace.search("flaksdfjld"));
   }

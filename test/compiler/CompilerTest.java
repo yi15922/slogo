@@ -31,13 +31,13 @@ public class CompilerTest {
 
   @Test
   void testEmptyCompile(){
-    compiler.getAllTokens("");
+    compiler.makeTokenQueue("");
     assertFalse(compiler.hasNextToken());
   }
 
   @Test
   void testParserAccess(){
-    assertDoesNotThrow(() -> compiler.getAllTokens("fd 50 :variable flaksdfjld"));
+    assertDoesNotThrow(() -> compiler.makeTokenQueue("fd 50 :variable \nflaksdfjld"));
     SLogoToken token = compiler.getNextToken();
     assertEquals("Forward", token.toString());
 
@@ -57,13 +57,13 @@ public class CompilerTest {
 
   @Test
   void testListCreation(){
-    compiler.getAllTokens("fd 50 flaskdfj :variable ]");
+    compiler.makeTokenQueue("fd 50 flaskdfj :variable ]");
     compiler.makeList();
   }
 
   @Test
   void testIncompleteList(){
-    compiler.getAllTokens("fd 50 flaskdfj :variable lkjlkj");
+    compiler.makeTokenQueue("fd 50 flaskdfj :variable lkjlkj");
     assertThrows(SLogoException.class, () -> compiler.makeList());
   }
 
