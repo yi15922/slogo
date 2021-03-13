@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.Stack;
 
 public class View extends Application {
+
+    private static final String OBJECT_IMAGE = "turtle.png";
 
     private Turtle myTurtle;
     private List<PropertyChangeListener> myListeners;
@@ -49,7 +52,7 @@ public class View extends Application {
 //        output.setMinHeight(50);
 //        output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        OutputScreen output = new OutputScreen();
+        OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)));
         output.setMinHeight(50);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
