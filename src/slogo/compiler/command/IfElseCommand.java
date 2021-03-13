@@ -21,20 +21,25 @@ public class IfElseCommand extends SLogoCommand {
   @Override
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> commandQueue;
+    SLogoList commandTokens;
     if (expectedParameters.get(0).getValue() != 0.0) {
       // todo: refactor code to extract method that creates inner function from token list
-      SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
+      commandTokens = (SLogoList) expectedParameters.get(1);
       commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     }
     else {
-      SLogoList commandTokens = (SLogoList) expectedParameters.get(2);
+      commandTokens = (SLogoList) expectedParameters.get(2);
       commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     }
-    // todo: check that first token is a command
     SLogoToken returnToken = new SLogoConstant(0);
     while (! commandQueue.isEmpty()) {
-      SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
-      returnToken = innerFunction.run();
+      try {
+        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+        returnToken = innerFunction.run();
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command list syntax");
+      }
     }
     return returnToken;
   }

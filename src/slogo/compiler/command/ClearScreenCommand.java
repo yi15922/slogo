@@ -5,14 +5,14 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class XCoordinateCommand extends SLogoCommand {
+public class ClearScreenCommand extends SLogoCommand {
 
-  public XCoordinateCommand() {
-    super("XCor");
+  public ClearScreenCommand() {
+    super("Clear Screen");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.xcor());
+    return new SLogoConstant(modelTurtle.clearScreen());
   }
 }

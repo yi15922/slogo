@@ -16,8 +16,14 @@ public class MakeVariableCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: add variable to workspace
-    SLogoVariable var = new SLogoVariable(expectedParameters.get(0).toString(), expectedParameters.get(1).getValue());
-    return new SLogoConstant(var.getValue());
+    try {
+      SLogoVariable var = (SLogoVariable) expectedParameters.get(0);
+      var.setValue(expectedParameters.get(1).getValue());
+      return new SLogoConstant(var.getValue());
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid command syntax");
+    }
+
   }
 }

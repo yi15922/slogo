@@ -5,14 +5,14 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class XCoordinateCommand extends SLogoCommand {
+public class PenUpCommand extends SLogoCommand {
 
-  public XCoordinateCommand() {
-    super("XCor");
+  public PenUpCommand() {
+    super("Pen Up");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.xcor());
+    return new SLogoConstant(modelTurtle.penUp());
   }
 }

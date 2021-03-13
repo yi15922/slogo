@@ -15,9 +15,10 @@ public class MakeUserInstruction extends SLogoCommand {
   }
   @Override
   public SLogoToken run() throws SLogoException {
-    try { // todo: replace with returning 1, command should place itself in the workspace
-      return new SLogoUserDefinedCommand(expectedParameters.get(0).toString(),
-          (SLogoList) expectedParameters.get(1), (SLogoList) expectedParameters.get(2));
+    try {
+      SLogoUserDefinedCommand userDefinedCommand = (SLogoUserDefinedCommand) expectedParameters.get(0);
+      userDefinedCommand.giveParameters((SLogoList) expectedParameters.get(1), (SLogoList) expectedParameters.get(2));
+      return new SLogoConstant(1);
     }
     catch (SLogoException e) {
       return new SLogoConstant(0);
