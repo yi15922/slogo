@@ -22,6 +22,8 @@ import slogo.compiler.token.SLogoToken;
  *
  * Upon encountering a {@link slogo.compiler.token.SLogoComment} token, the compiler
  * will ignore all subsequent tokens until the next new line character.
+ *
+ * @author Yi Chen
  */
 public class Compiler {
 
@@ -56,7 +58,8 @@ public class Compiler {
    * Upon successful creation of the {@code SLogoFunction} object, this method will call
    * the function's {@code run()} method.
    */
-  public void compileAndRun(){
+  public void compileAndRun(String input){
+    makeTokenQueue(input);
     if (!hasNextToken()) return;
     SLogoCommand initialCommand = (SLogoCommand) getNextToken();
     Deque<SLogoToken> parameterTokens = new LinkedList<>();

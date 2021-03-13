@@ -81,7 +81,7 @@ public class View extends Application {
 
     private void setListeners(List<PropertyChangeListener> listeners) {
         for (PropertyChangeListener l : myListeners) {
-            myTurtle.addListener(l);
+            //myTurtle.addListener(l);
         }
     }
 }

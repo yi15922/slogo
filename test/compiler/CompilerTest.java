@@ -7,6 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Scanner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
@@ -67,6 +73,13 @@ public class CompilerTest {
   void testIncompleteList(){
     compiler.makeTokenQueue("fd 50 :variable");
     assertThrows(SLogoException.class, () -> compiler.makeList());
+  }
+
+  @Test
+  void testCompilingWholeFiles() throws FileNotFoundException {
+    String inputString = new Scanner(new File("data/examples/simple/random_fun.slogo"))
+        .useDelimiter("\\Z").next();
+    compiler.compileAndRun(inputString);
   }
 
 }
