@@ -15,6 +15,9 @@ public class NaturalLogCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
+    if (expectedParameters.get(0).getValue() <= 0) {
+      throw new SLogoException("Invalid arithmetic: log of non-positive number");
+    }
     return new SLogoConstant(Math.log(expectedParameters.get(0).getValue()));
   }
 }

@@ -13,7 +13,6 @@ public class XCoordinateCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    //return new SLogoConstant(modelTurtle.xcor());
-    return null;
+    return new SLogoConstant(modelTurtle.xCor());
   }
 }

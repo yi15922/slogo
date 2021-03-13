@@ -15,6 +15,6 @@ public class RandomCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(Math.random() * expectedParameters.get(0).getValue());
+    return new SLogoConstant(Math.max(Math.random() * expectedParameters.get(0).getValue(), 0));
   }
 }

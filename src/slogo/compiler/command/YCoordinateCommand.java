@@ -13,7 +13,6 @@ public class YCoordinateCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    //return new SLogoConstant(modelTurtle.ycor());
-    return null;
+    return new SLogoConstant(modelTurtle.yCor());
   }
 }

@@ -16,11 +16,9 @@ public class RemainderCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    try {
-      return new SLogoConstant(expectedParameters.get(0).getValue() % expectedParameters.get(1).getValue());
-    }
-    catch (ArithmeticException e) { // division by 0
+    if (expectedParameters.get(1).getValue() == 0) {
       throw new SLogoException("Invalid arithmetic: division by zero");
     }
+    return new SLogoConstant(expectedParameters.get(0).getValue() % expectedParameters.get(1).getValue());
   }
 }

@@ -16,11 +16,11 @@ public class OrCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    if (expectedParameters.get(0).getValue() * expectedParameters.get(1).getValue() == 0) {
-      return new SLogoConstant(1.0);
+    if (expectedParameters.get(0).getValue() == 0 && expectedParameters.get(1).getValue() == 0) {
+      return new SLogoConstant(0.0);
     }
     else {
-      return new SLogoConstant(0.0);
+      return new SLogoConstant(1.0);
     }
   }
 

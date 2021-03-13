@@ -16,6 +16,6 @@ public class SetPositionCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.setXY(expectedParameters.get(0).getValue(), expectedParameters.get(0).getValue()));
+    return new SLogoConstant(modelTurtle.setXY(expectedParameters.get(0).getValue(), expectedParameters.get(1).getValue()));
   }
 }
