@@ -71,9 +71,38 @@ class TurtleTest {
   }
 
   @Test
-  void testTowards() {
+  void testTowardsAtOrigin() {
     turtle.towards(10,10);
     assertEquals(45, turtle.heading());
+
+    turtle.home();
+    turtle.towards(-10,-10);
+    assertEquals(225, turtle.heading());
+
+    turtle.home();
+    turtle.towards(10,-10);
+    assertEquals(135, turtle.heading());
+
+    turtle.home();
+    turtle.towards(-10,10);
+    assertEquals(315, turtle.heading());
+  }
+
+  @Test
+  void testTowardsAt5s() {
+    turtle.setXY(5,5);
+    turtle.towards(10,10);
+    assertEquals(45, turtle.heading());
+
+    turtle.towards(-10,-10);
+    assertEquals(225, turtle.heading());
+
+    turtle.setXY(5, -5);
+    turtle.towards(10,-10);
+    assertEquals(135, turtle.heading());
+
+    turtle.towards(-10,10);
+    assertEquals(315, turtle.heading());
   }
 
   @Test
