@@ -60,8 +60,7 @@ public class Turtle {
     double hypotenuse = calculate2PointDistance(myX, myY, x, y);
     double dX = x - myX;
     double dY = y - myY;
-    double angle = Math.toDegrees(Math.acos((dX / hypotenuse)));
-    System.out.println(hypotenuse+" "+dX+" "+dY+" "+angle);
+    double angle = Math.toDegrees(Math.acos((Math.abs(dX / hypotenuse))));
     if (dX > 0) {
       if (dY > 0) {
         angle = 90 - angle;
