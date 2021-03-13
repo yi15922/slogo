@@ -82,7 +82,7 @@ public class Parser {
     Queue<SLogoToken> tokenQueue = new LinkedList<>();
 
     for (String line : allLines) {
-      System.out.println(line);
+      //System.out.println(line);
       ArrayList<String> strings = new ArrayList<>(Arrays.asList(line.split(" ")));
       if (strings.get(0).equals("#")) {
         continue;
