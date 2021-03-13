@@ -1,5 +1,8 @@
 package slogo;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Turtle {
 
   private double myX;
@@ -8,6 +11,7 @@ public class Turtle {
   private boolean myPen;
   private boolean myShow;
   private static final double THRESHOLD = 0.0001;
+  private static final int ROUND_DECIMAL_PLACES = 3;
 
   public Turtle() {
     myX = 0;
@@ -19,44 +23,40 @@ public class Turtle {
 
   //TODO: test
   public double forward(double pixels) {
-    setX(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
-    setY(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
-    return pixels;
+    myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
+    myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
+    return round(pixels);
   }
 
   //TODO: tests
   public double back(double pixels) {
-    adjustAngle(180);
+    myAngle = standardizeAngle(myAngle+180);
     forward(pixels);
-    adjustAngle(-180);
-    return pixels;
+    myAngle = standardizeAngle(myAngle-180);
+    return round(pixels);
   }
 
-  //TODO: tests
   public double left(double degrees) {
-    adjustAngle(-degrees);
-    return degrees;
+    myAngle = standardizeAngle(myAngle-degrees);
+    return round(degrees);
   }
 
-  //TODO: tests
   public double right(double degrees) {
-    adjustAngle(degrees);
-    return degrees;
+    myAngle = standardizeAngle(myAngle+degrees);
+    return round(degrees);
   }
 
-  //TODO: tests
   public double setHeading(double degrees) {
-    double move = degrees - myAngle;
-    adjustAngle(move);
-    return move;
+    double oldMyAngle = myAngle;
+    myAngle = standardizeAngle(degrees);
+    return standardizeAngle(degrees - oldMyAngle);
   }
 
-  //TODO: tests
   public double towards(double x, double y) {
     double hypotenuse = calculate2PointDistance(myX, myY, x, y);
     double dX = x - myX;
     double dY = y - myY;
-    double angle = Math.acos(dX / hypotenuse);
+    double angle = Math.toDegrees(Math.acos((Math.abs(dX / hypotenuse))));
     if (dX > 0) {
       if (dY > 0) {
         angle = 90 - angle;
@@ -73,12 +73,11 @@ public class Turtle {
     return setHeading(angle);
   }
 
-  //TODO: tests
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    setX(x);
-    setY(y);
-    return distance;
+    myX = round(x);
+    myY = round(y);
+    return round(distance);
   }
 
   //TODO: tests
@@ -105,12 +104,11 @@ public class Turtle {
     return 0;
   }
 
-  //TODO: tests
   public double home() {
     double distance = calculate2PointDistance(myX, myY, 0, 0);
     myX = 0;
     myY = 0;
-    return distance;
+    return round(distance);
   }
 
   //TODO: do we need this one here?
@@ -146,34 +144,23 @@ public class Turtle {
   }
 
 
-  private void adjustAngle(double angle) {
-    myAngle += angle;
-    while (myAngle < 0) {
-      myAngle += 360;
+  private double standardizeAngle(double angle) {
+    double returned = angle;
+    while (returned < 0) {
+      returned += 360;
     }
-    if(myAngle > 360) {
-      myAngle %= 360;
+    if(returned > 360) {
+      returned %= 360;
     }
+    return round(returned);
   }
 
-  private void setX(double pixels) {
-    double rounded = Math.round(pixels);
-    double difference = Math.abs(pixels-rounded);
-    if(difference < THRESHOLD) {
-      myX = rounded;
-    } else {
-      myX = pixels;
-    }
-  }
-
-  private void setY(double pixels) {
-    double rounded = Math.round(pixels);
-    double difference = Math.abs(pixels-rounded);
-    if(difference < THRESHOLD) {
-      myY = rounded;
-    } else {
-      myY = pixels;
-    }
+  //https://www.baeldung.com/java-round-decimal-number
+  //#4
+  private static double round(double value) {
+    BigDecimal bd = new BigDecimal(Double.toString(value));
+    bd = bd.setScale(ROUND_DECIMAL_PLACES, RoundingMode.HALF_UP);
+    return bd.doubleValue();
   }
 
   private double calculate2PointDistance(double x1, double y1, double x2, double y2) {
