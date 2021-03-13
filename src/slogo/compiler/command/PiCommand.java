@@ -1,18 +1,18 @@
-package slogo.compiler.command.turtle;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class PenDownCommand extends SLogoCommand {
+public class PiCommand extends SLogoCommand {
 
-  public PenDownCommand() {
-    super("Pen Down");
+  public PiCommand() {
+    super("Pi");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.penDown());
+    return new SLogoConstant(Math.PI);
   }
 }

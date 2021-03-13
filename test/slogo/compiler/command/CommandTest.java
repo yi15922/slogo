@@ -13,20 +13,8 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoComment;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
-import slogo.compiler.command.advanced.DoTimesCommand;
-import slogo.compiler.command.advanced.ForCommand;
-import slogo.compiler.command.advanced.IfCommand;
-import slogo.compiler.command.advanced.IfElseCommand;
-import slogo.compiler.command.advanced.MakeUserInstruction;
-import slogo.compiler.command.advanced.MakeVariableCommand;
-import slogo.compiler.command.advanced.RepeatCommand;
-import slogo.compiler.command.math.LessThanCommand;
-import slogo.compiler.command.math.SumCommand;
-import slogo.compiler.command.turtle.ForwardCommand;
-import slogo.compiler.command.turtle.PenDownCommand;
-import slogo.compiler.command.turtle.SetTowardsCommand;
 
 class CommandTest {
   //private slogo.Turtle myModel;
@@ -126,7 +114,7 @@ class CommandTest {
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
-    parameterTokens.add(new SLogoTokenList(commandList));
+    parameterTokens.add(new SLogoList(commandList));
     function = new SLogoFunction(command, parameterTokens);
     assertEquals(50.0, function.run().getValue());
   }
@@ -142,8 +130,8 @@ class CommandTest {
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
-    parameterTokens.add(new SLogoTokenList(parameterList));
-    parameterTokens.add(new SLogoTokenList(commandList));
+    parameterTokens.add(new SLogoList(parameterList));
+    parameterTokens.add(new SLogoList(commandList));
     function = new SLogoFunction(command, parameterTokens);
     assertEquals(50.0, function.run().getValue());
   }
@@ -163,8 +151,8 @@ class CommandTest {
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
-    parameterTokens.add(new SLogoTokenList(parameterList));
-    parameterTokens.add(new SLogoTokenList(commandList));
+    parameterTokens.add(new SLogoList(parameterList));
+    parameterTokens.add(new SLogoList(commandList));
     function = new SLogoFunction(command, parameterTokens);
     assertEquals(50.0, function.run().getValue());
   }
@@ -177,7 +165,7 @@ class CommandTest {
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
     commandList.add(new PenDownCommand());
-    parameterTokens.add(new SLogoTokenList(commandList));
+    parameterTokens.add(new SLogoList(commandList));
     function = new SLogoFunction(command, parameterTokens);
     assertEquals(1.0, function.run().getValue());
   }
@@ -191,8 +179,8 @@ class CommandTest {
     List<SLogoToken> falseCommandList = new ArrayList<>();
     falseCommandList.add(new ForwardCommand());
     falseCommandList.add(new SLogoConstant(50));
-    parameterTokens.add(new SLogoTokenList(trueCommandList));
-    parameterTokens.add(new SLogoTokenList(falseCommandList));
+    parameterTokens.add(new SLogoList(trueCommandList));
+    parameterTokens.add(new SLogoList(falseCommandList));
     function = new SLogoFunction(command, parameterTokens);
     assertEquals(50.0, function.run().getValue());
   }
@@ -206,8 +194,8 @@ class CommandTest {
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoVariable("testVariable"));
-    parameterTokens.add(new SLogoTokenList(variableList));
-    parameterTokens.add(new SLogoTokenList(commandList));
+    parameterTokens.add(new SLogoList(variableList));
+    parameterTokens.add(new SLogoList(commandList));
     function = new SLogoFunction(command, parameterTokens);
     SLogoCommand testCommand = (SLogoCommand) function.run();
     parameterTokens = new ArrayDeque<>();

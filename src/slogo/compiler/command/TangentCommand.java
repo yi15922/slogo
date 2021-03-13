@@ -1,4 +1,4 @@
-package slogo.compiler.command.math;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;

@@ -1,4 +1,4 @@
-package slogo.compiler.command.advanced;
+package slogo.compiler.command;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -8,10 +8,8 @@ import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
-import slogo.compiler.command.EvaluateNumberCommand;
-import slogo.compiler.command.SLogoCommand;
 
 public class ForCommand extends SLogoCommand {
   private SLogoVariable counterVariable;
@@ -21,16 +19,16 @@ public class ForCommand extends SLogoCommand {
 
   public ForCommand() {
     super("For");
-    expectedParameters.add(new SLogoTokenList("parameters"));
-    expectedParameters.add(new SLogoTokenList("commands"));
+    expectedParameters.add(new SLogoList("parameters"));
+    expectedParameters.add(new SLogoList("commands"));
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    SLogoTokenList parameterList = (SLogoTokenList) expectedParameters.get(0);
+    SLogoList parameterList = (SLogoList) expectedParameters.get(0);
     Deque<SLogoToken> parameterQueue = new ArrayDeque<>(parameterList.getTokenList());
     parseParameterQueue(parameterQueue);
-    SLogoTokenList commandTokens = (SLogoTokenList) expectedParameters.get(1);
+    SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     List<SLogoFunction> functionList = new ArrayList<>();
     while (! commandQueue.isEmpty()) {
