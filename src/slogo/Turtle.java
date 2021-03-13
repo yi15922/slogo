@@ -18,8 +18,8 @@ public class Turtle {
 
   //TODO: test
   public double forward(double pixels) {
-    myX += Math.sin(myAngle) * pixels;
-    myY += Math.cos(myAngle) * pixels;
+    myX += Math.sin(Math.toRadians(myAngle)) * pixels;
+    myY += Math.cos(Math.toRadians(myAngle)) * pixels;
     return pixels;
   }
 
@@ -117,11 +117,11 @@ public class Turtle {
     return home();
   }
 
-  public double xcor() {
+  public double xCor() {
     return myX;
   }
 
-  public double ycor() {
+  public double yCor() {
     return myY;
   }
 
@@ -149,8 +149,8 @@ public class Turtle {
     while (myAngle < 0) {
       myAngle += 360;
     }
-    while (myAngle > 360) {
-      myAngle -= 360;
+    if(myAngle > 360) {
+      myAngle %= 360;
     }
   }
 
