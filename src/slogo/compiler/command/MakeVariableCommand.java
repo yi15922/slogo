@@ -10,7 +10,7 @@ public class MakeVariableCommand extends SLogoCommand {
 
   public MakeVariableCommand() {
     super("Make");
-    expectedParameters.add(new SLogoToken("variable name"));
+    expectedParameters.add(new SLogoVariable("variable name"));
     expectedParameters.add(new SLogoVariable("expr"));
   }
 
