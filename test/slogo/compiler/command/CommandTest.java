@@ -70,6 +70,7 @@ class CommandTest {
     parameterTokens.add(new SLogoConstant(50));
     function = new SLogoFunction(command, parameterTokens, modelTurtle);
     function.run();
+
     assertEquals(100.0, modelTurtle.yCor());
   }
 

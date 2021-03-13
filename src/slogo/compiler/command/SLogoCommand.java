@@ -100,7 +100,7 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
      * it to receive all parameters over again. Needed for {@link SLogoUserDefinedCommand}, which
      * has to create ready-to-run commands to test that the command can be defined. This method
      * should be called after creating the commands the first time, such that they can be run with
-     * actual parameters when the user-defined command is called. 
+     * actual parameters when the user-defined command is called.
      */
     public void resetCommand() {
         parameterIndex = 0;

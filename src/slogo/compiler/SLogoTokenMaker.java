@@ -40,7 +40,7 @@ public class SLogoTokenMaker {
    * @return a {@code SLogoToken} object, or {@code null} if no object can be
    * created from the given strings.
    */
-  public SLogoToken make(String tokenType, String inputString){
+  public SLogoToken make(String tokenType, String inputString) throws SLogoException{
     Object obj = null;
     if (tokenType.equals("Command")) {
       try {
@@ -49,7 +49,9 @@ public class SLogoTokenMaker {
           InstantiationException | IllegalAccessException | InvocationTargetException exception) {
         System.out.printf("Searching workspace for function %s\n", inputString);
         obj = workspace.search(inputString);
-        if (obj == null) throw new SLogoException("Undefined command %s", inputString);
+        if (obj == null) {
+          throw new SLogoException("Undefined command %s", inputString);
+        }
       }
     } else if (tokenType.equals("Variable")) {
       System.out.printf("Searching workspace for variable %s\n", inputString);

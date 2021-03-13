@@ -37,8 +37,11 @@ public class CompilerTest {
 
   @Test
   void testParserAccess(){
-    assertDoesNotThrow(() -> compiler.makeTokenQueue("fd 50 :variable \nflaksdfjld"));
-    SLogoToken token = compiler.getNextToken();
+    assertThrows(SLogoException.class, () -> compiler.makeTokenQueue("fd 50 :variable \nflaksdfjld"));
+
+    SLogoToken token;
+    assertDoesNotThrow(() -> compiler.makeTokenQueue("fd 50 :variable"));
+    token = compiler.getNextToken();
     assertEquals("Forward", token.toString());
 
     token = compiler.getNextToken();
@@ -47,23 +50,19 @@ public class CompilerTest {
     token = compiler.getNextToken();
     assertEquals(":variable", token.toString());
 
-    assertTrue(compiler.hasNextToken());
-    token = compiler.getNextToken();
-    assertEquals("flaksdfjld", token.toString());
-
-    assertNull(compiler.getNextToken());
     assertFalse(compiler.hasNextToken());
+
   }
 
   @Test
   void testListCreation(){
-    compiler.makeTokenQueue("fd 50 flaskdfj :variable ]");
+    compiler.makeTokenQueue("fd 50 :variable ]");
     compiler.makeList();
   }
 
   @Test
   void testIncompleteList(){
-    compiler.makeTokenQueue("fd 50 flaskdfj :variable lkjlkj");
+    compiler.makeTokenQueue("fd 50 :variable");
     assertThrows(SLogoException.class, () -> compiler.makeList());
   }
 
