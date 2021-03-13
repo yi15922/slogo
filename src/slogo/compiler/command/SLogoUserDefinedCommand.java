@@ -18,19 +18,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   private List<SLogoFunction> functionList;
   private Map<String, Integer> variableMap;
 
-<<<<<<< HEAD
   public SLogoUserDefinedCommand(String name) throws SLogoException {
-=======
-  /**
-   * Default constructor, used for instantiation by reflection
-   * @param name Name of a defined command.
-   */
-  public SLogoUserDefinedCommand(String name){
-    super(name);
-  }
-
-  public SLogoUserDefinedCommand(String name, SLogoList variables, SLogoList inputTokens) throws SLogoException {
->>>>>>> yi-compiler
     super(name);
     functionList = new ArrayList<>();
     variableMap = new HashMap<>();
