@@ -40,6 +40,18 @@ public class Compiler {
     tokenQueue = parser.parseInput(input);
   }
 
+  /**
+   * Creates a {@link slogo.compiler.token.SLogoFunction} object containing all compiled
+   * {@link SLogoToken} objects. This will add lists as {@link SLogoList} objects rather
+   * than as individual tokens, therefore these lists should be treated link single tokens.
+   *
+   * Upon successful creation of the {@code SLogoFunction} object, this method will call
+   * the function's {@code run()} method.
+   */
+  public void compileAndRun(){
+
+  }
+
 
   /**
    * Returns the next {@link SLogoToken} from the queue of parsed tokens.
@@ -59,7 +71,7 @@ public class Compiler {
    * @return {@code boolean} whether there are more parsed {@code SLogoToken}s.
    */
   public boolean hasNextToken(){
-    return (tokenQueue.size() != 0);
+    return (tokenQueue != null && tokenQueue.size() != 0);
   }
 
   /**
