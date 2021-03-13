@@ -7,6 +7,7 @@ public class Turtle {
   private double myAngle;
   private boolean myPen;
   private boolean myShow;
+  private static final double THRESHOLD = 0.0001;
 
   public Turtle() {
     myX = 0;
@@ -18,8 +19,8 @@ public class Turtle {
 
   //TODO: test
   public double forward(double pixels) {
-    myX += Math.sin(myAngle) * pixels;
-    myY += Math.cos(myAngle) * pixels;
+    setX(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
+    setY(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
     return pixels;
   }
 
@@ -45,8 +46,9 @@ public class Turtle {
 
   //TODO: tests
   public double setHeading(double degrees) {
-    adjustAngle(degrees - myAngle);
-    return degrees - myAngle;
+    double move = degrees - myAngle;
+    adjustAngle(move);
+    return move;
   }
 
   //TODO: tests
@@ -74,8 +76,8 @@ public class Turtle {
   //TODO: tests
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    myX = x;
-    myY = y;
+    setX(x);
+    setY(y);
     return distance;
   }
 
@@ -117,11 +119,11 @@ public class Turtle {
     return home();
   }
 
-  public double xcor() {
+  public double xCor() {
     return myX;
   }
 
-  public double ycor() {
+  public double yCor() {
     return myY;
   }
 
@@ -149,8 +151,28 @@ public class Turtle {
     while (myAngle < 0) {
       myAngle += 360;
     }
-    while (myAngle > 360) {
-      myAngle -= 360;
+    if(myAngle > 360) {
+      myAngle %= 360;
+    }
+  }
+
+  private void setX(double pixels) {
+    double rounded = Math.round(pixels);
+    double difference = Math.abs(pixels-rounded);
+    if(difference < THRESHOLD) {
+      myX = rounded;
+    } else {
+      myX = pixels;
+    }
+  }
+
+  private void setY(double pixels) {
+    double rounded = Math.round(pixels);
+    double difference = Math.abs(pixels-rounded);
+    if(difference < THRESHOLD) {
+      myY = rounded;
+    } else {
+      myY = pixels;
     }
   }
 
