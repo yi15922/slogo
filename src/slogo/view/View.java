@@ -20,8 +20,10 @@ import java.util.Stack;
 
 public class View extends Application {
 
-    Turtle myTurtle;
+    private Turtle myTurtle;
     private List<PropertyChangeListener> myListeners;
+
+    public View() {}
 
     public View(Turtle turtle) {
         myTurtle = turtle;
@@ -42,8 +44,12 @@ public class View extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinHeight(10);
         menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+//
+//        StackPane output = new StackPane();
+//        output.setMinHeight(50);
+//        output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        StackPane output = new StackPane();
+        OutputScreen output = new OutputScreen();
         output.setMinHeight(50);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -81,7 +87,7 @@ public class View extends Application {
 
     private void setListeners(List<PropertyChangeListener> listeners) {
         for (PropertyChangeListener l : myListeners) {
-            //myTurtle.addListener(l);
+            myTurtle.addListener(l);
         }
     }
 }

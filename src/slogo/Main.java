@@ -22,16 +22,19 @@ public class Main {
      * Start of the program.
      */
     public static void main(String[] args) {
-        //View view = new View(turtle);
-        //view.runApplication(args);
-        startConsoleSLogo();
+        Turtle modelTurtle = new Turtle();
+        View view = new View(modelTurtle);
+        view.runApplication(args);
+        startConsoleSLogo(args);
     }
 
     // in lieu of a view, this method is a proof of concept that our Model works
     // users can type in SLogo commands. after each line, the method will print out
     // the updated status of the turtle.
-    private static void startConsoleSLogo() {
+    private static void startConsoleSLogo(String[] args) {
         Turtle modelTurtle = new Turtle();
+//        View view = new View(modelTurtle);
+//        view.runApplication(args);
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
         Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
