@@ -3,14 +3,13 @@ package slogo;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Turtle {
+public class Turtle extends Observable {
 
   private double myX;
   private double myY;
   private double myAngle;
   private boolean myPen;
   private boolean myShow;
-  private static final double THRESHOLD = 0.0001;
   private static final int ROUND_DECIMAL_PLACES = 3;
 
   public Turtle() {
@@ -21,14 +20,12 @@ public class Turtle {
     myShow = true;
   }
 
-  //TODO: test
   public double forward(double pixels) {
-    myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
-    myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
+    setX(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
+    setY(myY + Math.cos(Math.toRadians(myAngle)) * pixels);
     return round(pixels);
   }
 
-  //TODO: tests
   public double back(double pixels) {
     myAngle = standardizeAngle(myAngle+180);
     forward(pixels);
@@ -75,30 +72,30 @@ public class Turtle {
 
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    myX = round(x);
-    myY = round(y);
+    setX(x);
+    setY(y);
     return round(distance);
   }
 
-  //TODO: tests
+  //no tests
   public double penDown() {
     myPen = true;
     return 1;
   }
 
-  //TODO: tests
+  //no tests
   public double penUp() {
     myPen = false;
     return 0;
   }
 
-  //TODO: tests
+  //no tests
   public double showTurtle() {
     myShow = true;
     return 1;
   }
 
-  //TODO: tests
+  //no tests
   public double hideTurtle() {
     myShow = false;
     return 0;
@@ -106,12 +103,13 @@ public class Turtle {
 
   public double home() {
     double distance = calculate2PointDistance(myX, myY, 0, 0);
-    myX = 0;
-    myY = 0;
+    setX(0);
+    setY(0);
     return round(distance);
   }
 
-  //TODO: do we need this one here?
+  //TODO: complete
+  //no tests
   public double clearScreen() {
     //need to clear screen
     return home();
@@ -143,6 +141,15 @@ public class Turtle {
     return 0;
   }
 
+  private void setX(double x) {
+    notifyListeners("X", myX, x);
+    myX = round(x);
+  }
+
+  private void setY(double y) {
+    notifyListeners("Y", myY, y);
+    myY = round(y);
+  }
 
   private double standardizeAngle(double angle) {
     double returned = angle;
