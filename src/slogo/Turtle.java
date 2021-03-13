@@ -1,6 +1,6 @@
 package slogo;
 
-public class Turtle {
+public class Turtle extends Observable<Double>{
 
   private double myX;
   private double myY;
@@ -149,10 +149,10 @@ public class Turtle {
   private void adjustAngle(double angle) {
     myAngle += angle;
     while (myAngle < 0) {
-      myAngle += 360;
+      notifyListeners("HEADING", myAngle, myAngle += 360);
     }
     if(myAngle > 360) {
-      myAngle %= 360;
+      notifyListeners("HEADING", myAngle, myAngle %= 360);
     }
   }
 
@@ -160,9 +160,10 @@ public class Turtle {
     double rounded = Math.round(pixels);
     double difference = Math.abs(pixels-rounded);
     if(difference < THRESHOLD) {
-      myX = rounded;
+      notifyListeners("X", myX, myX = rounded);
+
     } else {
-      myX = pixels;
+      notifyListeners("X", myX, myX = pixels);
     }
   }
 
@@ -170,9 +171,9 @@ public class Turtle {
     double rounded = Math.round(pixels);
     double difference = Math.abs(pixels-rounded);
     if(difference < THRESHOLD) {
-      myY = rounded;
+      notifyListeners("Y", myY, myY = rounded);
     } else {
-      myY = pixels;
+      notifyListeners("Y", myY, myY = pixels);
     }
   }
 

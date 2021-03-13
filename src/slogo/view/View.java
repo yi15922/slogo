@@ -58,4 +58,8 @@ public class View extends Application {
         window.setScene(scene);
         window.show();
     }
+
+    public void setTurtleX(double x) {}
+    public void setTurtleY(double y) {}
+    public void setTurtleHeading(double angle) {}
 }
