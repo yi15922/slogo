@@ -10,10 +10,26 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import slogo.Turtle;
+import slogo.TurtleObserver;
 
+import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 public class View extends Application {
+
+    Turtle myTurtle;
+    private List<PropertyChangeListener> myListeners;
+
+    public View(Turtle turtle) {
+        myTurtle = turtle;
+        myListeners = Arrays.asList(new TurtleObserver(this));
+        setListeners(myListeners);
+    }
+
+
 
     public void runApplication(String[] args) {
         launch( args );
@@ -62,4 +78,10 @@ public class View extends Application {
     public void setTurtleX(double x) {}
     public void setTurtleY(double y) {}
     public void setTurtleHeading(double angle) {}
+
+    private void setListeners(List<PropertyChangeListener> listeners) {
+        for (PropertyChangeListener l : myListeners) {
+            myTurtle.addListener(l);
+        }
+    }
 }

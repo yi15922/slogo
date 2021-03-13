@@ -18,7 +18,8 @@ public class Main {
      * Start of the program.
      */
     public static void main (String[] args) {
-        View view = new View();
+        Turtle turtle = new Turtle();
+        View view = new View(turtle);
         view.runApplication(args);
     }
 }
