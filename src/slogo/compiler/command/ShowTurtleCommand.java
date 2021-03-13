@@ -1,18 +1,18 @@
-package slogo.compiler.command.turtle;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class IsShowingCommand extends SLogoCommand {
+public class ShowTurtleCommand extends SLogoCommand {
 
-  public IsShowingCommand() {
-    super("Showing P");
+  public ShowTurtleCommand() {
+    super("Show Turtle");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.showingP());
+    return new SLogoConstant(modelTurtle.showTurtle());
   }
 }

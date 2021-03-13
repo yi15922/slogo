@@ -1,18 +1,18 @@
-package slogo.compiler.command.turtle;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class HideTurtleCommand extends SLogoCommand {
+public class YCoordinateCommand extends SLogoCommand {
 
-  public HideTurtleCommand() {
-    super("Hide Turtle");
+  public YCoordinateCommand() {
+    super("YCor");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.hideTurtle());
+    return new SLogoConstant(modelTurtle.ycor());
   }
 }

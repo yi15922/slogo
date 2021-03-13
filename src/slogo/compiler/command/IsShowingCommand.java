@@ -1,18 +1,18 @@
-package slogo.compiler.command.turtle;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class ClearScreenCommand extends SLogoCommand {
+public class IsShowingCommand extends SLogoCommand {
 
-  public ClearScreenCommand() {
-    super("Clear Screen");
+  public IsShowingCommand() {
+    super("Showing P");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.clearScreen());
+    return new SLogoConstant(modelTurtle.showingP());
   }
 }

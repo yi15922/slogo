@@ -1,4 +1,4 @@
-package slogo.compiler.command.math;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
@@ -6,17 +6,17 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 import slogo.compiler.command.SLogoCommand;
 
-public class OrCommand extends SLogoCommand {
+public class EqualCommand extends SLogoCommand {
 
-  public OrCommand() {
-    super("Or");
-    expectedParameters.add(new SLogoVariable("test1"));
-    expectedParameters.add(new SLogoVariable("test2"));
+  public EqualCommand() {
+    super("Equal");
+    expectedParameters.add(new SLogoVariable("expr1"));
+    expectedParameters.add(new SLogoVariable("expr2"));
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    if (expectedParameters.get(0).getValue() * expectedParameters.get(1).getValue() == 0) {
+    if (expectedParameters.get(0).getValue() == expectedParameters.get(1).getValue()) {
       return new SLogoConstant(1.0);
     }
     else {

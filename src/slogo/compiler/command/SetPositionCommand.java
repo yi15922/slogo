@@ -1,4 +1,4 @@
-package slogo.compiler.command.turtle;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;

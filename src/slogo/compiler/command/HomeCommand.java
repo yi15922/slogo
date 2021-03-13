@@ -1,18 +1,18 @@
-package slogo.compiler.command.turtle;
+package slogo.compiler.command;
 
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.command.SLogoCommand;
 
-public class HeadingCommand extends SLogoCommand {
+public class HomeCommand extends SLogoCommand {
 
-  public HeadingCommand() {
-    super("Heading");
+  public HomeCommand() {
+    super("Home");
   }
 
   @Override
   public SLogoToken run() throws SLogoException {
-    return new SLogoConstant(modelTurtle.heading());
+    return new SLogoConstant(modelTurtle.home());
   }
 }
