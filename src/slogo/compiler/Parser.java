@@ -111,6 +111,7 @@ public class Parser {
    */
   public SLogoToken createTokenFromString(String userInput) throws SLogoException {
     String tokenType = determineTokenType(userInput);
+    System.out.printf("Token type: %s\n", tokenType);
     if (tokenType == null) return null;
 
     SLogoTokenMaker tokenMaker= new SLogoTokenMaker(workspace);
@@ -171,13 +172,18 @@ public class Parser {
    * @return returns {@code String} match from the map, or null if none is found.
    */
   private String getKeyFromRegex(Map<String, Pattern> regexMap, String userInput){
+    //FIXME: Order by descending regex string length rather than command name length
+    //FIXME: Maybe flip the key:value order for easier access?
     ArrayList<String> reversedKeys = new ArrayList<>(regexMap.keySet());
     reversedKeys.sort(Comparator.comparing(String::length)
         .reversed());
+    System.out.println(reversedKeys);
     for (String commandName : reversedKeys) {
       Pattern p = regexMap.get(commandName);
       Matcher m = p.matcher(userInput);
+      System.out.printf("Matching %s with %s\n", userInput, p);
       if (m.find()) {
+        System.out.printf("Command type determined: %s\n", commandName);
         return commandName;
       }
     }
