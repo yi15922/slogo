@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
+import slogo.Turtle;
 import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.command.SLogoCommand;
 
@@ -20,6 +21,7 @@ import slogo.compiler.command.SLogoCommand;
  */
 public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   protected List<SLogoCommand> runnableCommandList;
+  protected Turtle modelTurtle;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -37,11 +39,14 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
    * is a {@code Command} since SLogo syntax dictates that all user interactions are in the form of commands
    * @param initCommand - the first command intended to be run
    * @param parameterTokens - a list of all remaining tokens in the user-entered String
+   * @param modelTurtle
    * @throws SLogoException - if there is invalid syntax in the command
    */
-  public SLogoFunction(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens) throws SLogoException  {
+  public SLogoFunction(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens,
+      Turtle modelTurtle) throws SLogoException  {
     super("Function");
     runnableCommandList = new ArrayList<>();
+    this.modelTurtle = modelTurtle;
     parseParameterTokens(initCommand, parameterTokens);
   }
 
@@ -49,6 +54,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   // takes in Deque of all remaining Tokens in the user-entered String, polls Tokens that it uses
   // to create parameters for the initial command and all nested commands
   private void parseParameterTokens(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens) throws SLogoException {
+    initCommand.attachTurtle(modelTurtle);
     while (! initCommand.isReady()) {
       if (parameterTokens.isEmpty()) {
         throw new SLogoException("Invalid syntax");
@@ -60,7 +66,9 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
       }
       if (! initCommand.giveNextExpectedToken(nextToken)) {
         try {
-          SLogoToken resultToken = new SLogoFunction((SLogoCommand) nextToken, parameterTokens).run();
+          SLogoCommand nextCommand = (SLogoCommand) nextToken;
+          nextCommand.attachTurtle(modelTurtle);
+          SLogoToken resultToken = new SLogoFunction(nextCommand, parameterTokens, modelTurtle).run();
           parameterTokens.addFirst(resultToken);
         }
         catch (ClassCastException e) {

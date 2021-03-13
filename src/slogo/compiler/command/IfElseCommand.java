@@ -34,7 +34,8 @@ public class IfElseCommand extends SLogoCommand {
     SLogoToken returnToken = new SLogoConstant(0);
     while (! commandQueue.isEmpty()) {
       try {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue);
+        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
+            modelTurtle);
         returnToken = innerFunction.run();
       }
       catch (ClassCastException e) {
