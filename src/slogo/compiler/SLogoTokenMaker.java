@@ -5,6 +5,7 @@ import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 
+
 /**
  * The {@code SLogoTokenMaker} class creates {@link SLogoToken} objects of the
  * correct type given a user input. Calling {@code make()} will return an instance
@@ -43,7 +44,8 @@ public class SLogoTokenMaker {
     if (tokenType.equals("Command")) {
       try {
         obj = getCommandConstructor(inputString).newInstance();
-      } catch (Throwable exception) {
+      } catch (ClassNotFoundException | NoSuchMethodException |
+          InstantiationException | IllegalAccessException | InvocationTargetException exception) {
         System.out.printf("Searching workspace for function %s\n", inputString);
         return workspace.searchAndAddIfAbsent("Function", inputString);
       }
@@ -53,35 +55,28 @@ public class SLogoTokenMaker {
     } else {
       try {
         obj = getTokenConstructor(tokenType).newInstance(inputString);
-      } catch (Throwable exception) {
+      } catch (IllegalAccessException | IllegalArgumentException | InstantiationException
+          | InvocationTargetException | ClassNotFoundException | NoSuchMethodException exception) {
         System.err.printf("Cannot create token from string \"%s\"\n", inputString);
+        exception.printStackTrace();
         return null;
       }
     }
     return (SLogoToken) obj;
   }
 
-  private Constructor getTokenConstructor(String tokenType){
-    try {
-      Class tokenClass = Class.forName(CLASSPATH + "SLogo" + tokenType);
-      return tokenClass.getConstructor(String.class);
-
-    } catch (Throwable exception) {
-      System.err.println(exception);
-      return null;
-    }
+  private Constructor getTokenConstructor(String tokenType)
+      throws ClassNotFoundException, NoSuchMethodException {
+    Class tokenClass = Class.forName(CLASSPATH + "token.SLogo" + tokenType);
+    return tokenClass.getConstructor(String.class);
 
   }
 
-  private Constructor getCommandConstructor(String inputString){
-    try {
-      Class commandClass = Class.forName(CLASSPATH + "command." + inputString + "Command");
-      return commandClass.getConstructor();
+  private Constructor getCommandConstructor(String inputString)
+      throws ClassNotFoundException, NoSuchMethodException {
 
-    } catch (Throwable exception) {
-      System.err.println(exception);
-      return null;
-    }
+    Class commandClass = Class.forName(CLASSPATH + "command." + inputString + "Command");
+    return commandClass.getConstructor();
   }
 
 }

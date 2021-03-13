@@ -25,6 +25,7 @@ public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
         super(name);
         parameterIndex = 0;
         expectedParameters = new ArrayList<>();
+        modelTurtle = new Turtle();
     }
 
     public void attachTurtle(Turtle attachedTurtle) {

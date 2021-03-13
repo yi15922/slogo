@@ -10,24 +10,28 @@ import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoTokenList;
+import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
 
 public class SLogoUserDefinedCommand extends SLogoCommand {
-  private Deque<SLogoToken> commandQueue;
+  private Deque<SLogoToken> tokenQueue;
   private List<SLogoFunction> functionList;
   private Map<String, Integer> variableMap;
 
-  public SLogoUserDefinedCommand(String name, SLogoTokenList variables, SLogoTokenList commands) throws SLogoException {
+  public SLogoUserDefinedCommand(String name) throws SLogoException {
     super(name);
     functionList = new ArrayList<>();
     variableMap = new HashMap<>();
+    tokenQueue = new ArrayDeque<>();
+  }
+
+  public void giveParameters(SLogoList variables, SLogoList commands) throws SLogoException {
     for (SLogoToken token : variables.getTokenList()) {
       expectedParameters.add(new SLogoVariable(token.toString()));
       // map variable name to location in expectedParameters
       variableMap.put(token.toString(), expectedParameters.size() - 1);
     }
-    commandQueue = new ArrayDeque<>(commands.getTokenList());
+    tokenQueue = new ArrayDeque<>(commands.getTokenList());
     if (! verifyCommandDefinition()) {
       throw new SLogoException("Invalid command definition");
     }
@@ -36,7 +40,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   @Override
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> replacedCommandQueue = new ArrayDeque<>();
-    for (SLogoToken token : commandQueue) {
+    for (SLogoToken token : tokenQueue) {
       if (token.isEqualTokenType(new SLogoVariable("dummy"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
           token = expectedParameters.get(variableMap.get(token.toString()));
@@ -48,9 +52,14 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       replacedCommandQueue.add(token);
     }
     while (! replacedCommandQueue.isEmpty()) {
-      SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
-      SLogoFunction innerFunction = new SLogoFunction(command, replacedCommandQueue);
-      functionList.add(innerFunction);
+      try {
+        SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
+        SLogoFunction innerFunction = new SLogoFunction(command, replacedCommandQueue, modelTurtle);
+        functionList.add(innerFunction);
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command syntax");
+      }
     }
     SLogoToken returnToken = new SLogoConstant(0);
     for (SLogoFunction function : functionList) {
@@ -62,7 +71,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   private boolean verifyCommandDefinition() throws SLogoException {
     Deque<SLogoToken> dummyCommandQueue = new ArrayDeque<>();
     List<SLogoFunction> dummyFunctionList = new ArrayList<>();
-    for (SLogoToken token : commandQueue) {
+    for (SLogoToken token : tokenQueue) {
       if (token.isEqualTokenType(new SLogoVariable("dummy"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
           token = new SLogoConstant(1);
@@ -74,10 +83,15 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       dummyCommandQueue.add(token);
     }
     while (! dummyCommandQueue.isEmpty()) {
-      SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll(); // todo: check for command
-      SLogoFunction innerFunction = new SLogoFunction(command, dummyCommandQueue);
-      dummyFunctionList.add(innerFunction);
-      command.resetCommand();
+      try {
+        SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll();
+        SLogoFunction innerFunction = new SLogoFunction(command, dummyCommandQueue, modelTurtle);
+        dummyFunctionList.add(innerFunction);
+        command.resetCommand();
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid command syntax");
+      }
     }
     return true;
   }
