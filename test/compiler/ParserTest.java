@@ -3,6 +3,7 @@ package compiler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.compiler.Parser;
+import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoListEnd;
@@ -60,7 +61,7 @@ public class ParserTest {
 
     // Testing gibberish
     token = tester.createTokenFromString("flaksjdflkadjsf");
-    assertEquals(SLogoFunction.class, token.getClass());
+    assertEquals(SLogoUserDefinedCommand.class, token.getClass());
     assertEquals("flaksjdflkadjsf", token.toString());
 
     // Testing list start and end
@@ -99,7 +100,7 @@ public class ParserTest {
     assertEquals(SLogoVariable.class, token.getClass());
 
     token = tester.createTokenFromString("newUserFunction");
-    assertEquals(SLogoFunction.class, token.getClass());
+    assertEquals(SLogoUserDefinedCommand.class, token.getClass());
     assertEquals("newUserFunction", token.toString());
     assertNotNull(workspace.search("newUserFunction"));
   }
