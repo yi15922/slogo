@@ -25,7 +25,7 @@ public class Turtle {
   public double forward(double pixels) {
     myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
     myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
-    return pixels;
+    return round(pixels);
   }
 
   //TODO: tests
@@ -33,29 +33,25 @@ public class Turtle {
     myAngle = standardizeAngle(myAngle+180);
     forward(pixels);
     myAngle = standardizeAngle(myAngle-180);
-    return pixels;
+    return round(pixels);
   }
 
-  //TODO: tests
   public double left(double degrees) {
     myAngle = standardizeAngle(myAngle-degrees);
-    return degrees;
+    return round(degrees);
   }
 
-  //TODO: tests
   public double right(double degrees) {
     myAngle = standardizeAngle(myAngle+degrees);
-    return degrees;
+    return round(degrees);
   }
 
-  //TODO: tests
   public double setHeading(double degrees) {
     double oldMyAngle = myAngle;
     myAngle = standardizeAngle(degrees);
     return standardizeAngle(degrees - oldMyAngle);
   }
 
-  //TODO: tests
   public double towards(double x, double y) {
     double hypotenuse = calculate2PointDistance(myX, myY, x, y);
     double dX = x - myX;
@@ -74,15 +70,14 @@ public class Turtle {
         angle = 270 - angle;
       }
     }
-    return setHeading(round(angle));
+    return setHeading(angle);
   }
 
-  //TODO: tests
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
     myX = round(x);
     myY = round(y);
-    return distance;
+    return round(distance);
   }
 
   //TODO: tests
@@ -109,12 +104,11 @@ public class Turtle {
     return 0;
   }
 
-  //TODO: tests
   public double home() {
     double distance = calculate2PointDistance(myX, myY, 0, 0);
     myX = 0;
     myY = 0;
-    return distance;
+    return round(distance);
   }
 
   //TODO: do we need this one here?
@@ -158,7 +152,7 @@ public class Turtle {
     if(returned > 360) {
       returned %= 360;
     }
-    return returned;
+    return round(returned);
   }
 
   //https://www.baeldung.com/java-round-decimal-number
