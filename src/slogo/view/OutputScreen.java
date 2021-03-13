@@ -1,17 +1,27 @@
 package slogo.view;
 
+import javafx.scene.Node;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 
 public class OutputScreen extends Region {
 
-    private Circle myObject = new Circle(0, 0, 20, Color.PURPLE);
+    private Circle myObject = new Circle(0, 0, 20, Color.BLUE);
 
     public OutputScreen() {
-        this.getChildren().add(myObject);
+        this.getChildren().addAll(myObject);
+
+        // disallows displayed object from appearing outside of output screen
+        Rectangle outputClip = new Rectangle();
+        this.setClip(outputClip);
+        this.layoutBoundsProperty().addListener((observableValue, oldValue, newValue) -> {
+            outputClip.setWidth(newValue.getWidth());
+            outputClip.setHeight(newValue.getHeight());
+        });
     }
 
     public void setX(double x) {
