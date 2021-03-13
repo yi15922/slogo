@@ -6,7 +6,8 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
 
-// todo: either clean up or delete this entire class, might be negated by SLogoUserDefinedCommand
+// todo: either clean up or delete this entire class, might be negated by
+@Deprecated
 public class SLogoUserDefinedFunction extends SLogoFunction {
   private List<SLogoToken> expectedParameters;
   private List<SLogoToken> commandList;

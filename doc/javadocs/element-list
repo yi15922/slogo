@@ -1,6 +1,6 @@
 slogo
 slogo.compiler
 slogo.compiler.command
+slogo.compiler.token
 slogo.controller
-slogo.model
 slogo.view
