@@ -22,6 +22,12 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
     protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
     protected Turtle modelTurtle;
 
+    /**
+     * All {@link SLogoToken} objects have a name property. For subclasses of {@code SLogoCommand},
+     * the default constructor takes in no parameters, and calls the superclass parameter with the
+     * name of the command.
+     * @param name - the name of the command
+     */
     public SLogoCommand(String name) {
         super(name);
         parameterIndex = 0;
@@ -29,10 +35,21 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
         modelTurtle = new Turtle();
     }
 
+    /**
+     * Takes in the instance of the {@link Turtle} class that all {@link SLogoCommand} objects share.
+     * @param attachedTurtle - the common instance of the model
+     */
     public void attachTurtle(Turtle attachedTurtle) {
         modelTurtle = attachedTurtle;
     }
 
+    /**
+     * Takes in a {@link SLogoToken} object and attempts to add it to the list of parameters. If the
+     * given token is the correct type, this method places it in {@code expectedParameters} and returns true.
+     * Otherwise, it returns false.
+     * @param token - a Token expected by the Command as a parameter
+     * @return - true if the given parameter was successfully added, false otherwise
+     */
     @Override
     public boolean giveNextExpectedToken(SLogoToken token) {
         if (token.isEqualTokenType(expectedParameters.get(parameterIndex))) {
@@ -67,11 +84,24 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
         return expectedParameters.size();
     }
 
+    /**
+     * Identifies whether the command has sufficient parameters to run. Note, the run method does not
+     * call isReady, so it is the responsibility of the outside class to check that isReady is true
+     * before running a command.
+     * @return - true if the command has all necessary parameters, false otherwise
+     */
     @Override
     public boolean isReady() {
         return parameterIndex >= expectedParameters.size();
     }
 
+    /**
+     * Does not clear the parameters given, but from the command's perspective this method requires
+     * it to receive all parameters over again. Needed for {@link SLogoUserDefinedCommand}, which
+     * has to create ready-to-run commands to test that the command can be defined. This method
+     * should be called after creating the commands the first time, such that they can be run with
+     * actual parameters when the user-defined command is called. 
+     */
     public void resetCommand() {
         parameterIndex = 0;
     }
