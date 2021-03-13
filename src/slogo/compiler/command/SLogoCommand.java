@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import slogo.SLogoException;
 import slogo.Turtle;
+import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoRunnable;
 
@@ -16,7 +17,7 @@ import slogo.compiler.token.SLogoRunnable;
  *
  * @author Patrick Liu
  */
-public abstract class SLogoCommand extends SLogoToken implements SLogoRunnable {
+public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnable {
     protected List<SLogoToken> expectedParameters; // contains the expected types: Variable, Token, or List
     protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
     protected Turtle modelTurtle;

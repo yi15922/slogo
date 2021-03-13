@@ -18,7 +18,7 @@ public class SLogoList extends SLogoToken {
   }
 
   public SLogoList(List<SLogoToken> innerTokens) {
-    super("");
+    super("List");
     myTokens = innerTokens;
   }
 
@@ -26,4 +26,8 @@ public class SLogoList extends SLogoToken {
     return Collections.unmodifiableList(myTokens);
   }
 
+  @Override
+  public String toString(){
+    return myTokens.toString();
+  }
 }
