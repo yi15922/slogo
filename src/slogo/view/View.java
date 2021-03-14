@@ -63,7 +63,7 @@ public class View extends Application {
         output.setMinWidth(OUTPUT_WIDTH);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        TextArea input = new TextArea();
+        InputConsole input = new InputConsole();
         input.setMaxWidth(OUTPUT_WIDTH);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
