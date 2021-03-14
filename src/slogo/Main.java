@@ -2,6 +2,7 @@ package slogo;
 
 
 import java.util.Scanner;
+
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
 import slogo.view.View;
@@ -22,6 +23,7 @@ public class Main {
      * Start of the program.
      */
     public static void main(String[] args) {
+
         Turtle modelTurtle = new Turtle();
         View view = new View(modelTurtle);
         view.runApplication(args);

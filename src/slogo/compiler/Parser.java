@@ -17,6 +17,7 @@ import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
+import slogo.observers.InputObserver;
 
 /**
  * The {@code Parser} class takes user inputs and converts them into {@link SLogoToken} objects
@@ -36,7 +37,7 @@ import slogo.compiler.token.SLogoList;
  *
  * @author Yi Chen
  */
-public class Parser {
+public class Parser implements InputObserver {
 
   private final ResourceBundle languageBundle;
   private final ResourceBundle syntaxBundle;
@@ -203,5 +204,8 @@ public class Parser {
   }
 
 
-
+  @Override
+  public void receiveUserInput(String input) {
+    parseInput(input);
+  }
 }

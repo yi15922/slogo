@@ -19,6 +19,10 @@ public class InputConsole extends TextArea {
         this.getChildren().add(button);
     }
 
+    public boolean isObserver(InputObserver o) {
+        return myInputObservers.contains(o);
+    }
+
     public void addInputObserver(InputObserver o) {
         myInputObservers.add(o);
     }
@@ -26,6 +30,8 @@ public class InputConsole extends TextArea {
     public void removeInputObserver(Object o) {
         myInputObservers.remove(o);
     }
+
+
 
     private void sendInputToObservers(String input) {
         for (InputObserver o : myInputObservers) {
