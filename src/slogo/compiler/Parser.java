@@ -91,11 +91,9 @@ public class Parser implements InputObserver {
       for (String s : strings) {
         SLogoToken newToken = createTokenFromString(s);
         if (newToken != null)
-          System.out.println(newToken.toString());
           tokenQueue.add(newToken);
       }
     }
-    System.out.println(tokenQueue);
     return tokenQueue;
   }
 
@@ -208,6 +206,5 @@ public class Parser implements InputObserver {
   @Override
   public void receiveUserInput(String input) {
     parseInput(input);
-    System.out.println(input);
   }
 }

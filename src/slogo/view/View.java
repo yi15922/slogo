@@ -13,6 +13,9 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import slogo.Turtle;
 import slogo.TurtleObserver;
+import slogo.compiler.Compiler;
+import slogo.compiler.Parser;
+import slogo.compiler.Workspace;
 import slogo.observers.InputObserver;
 
 import java.beans.PropertyChangeListener;
@@ -51,6 +54,10 @@ public class View extends Application {
     @Override
     public void start(Stage window) throws Exception {
 
+        myTurtle = new Turtle();
+        Workspace modelWorkspace = new Workspace();
+        myInputObserver = new Parser("English", modelWorkspace);
+        Compiler modelCompiler = new Compiler((Parser) myInputObserver, myTurtle);
 
         MenuBar menuBar = new MenuBar();
         menuBar.setMinHeight(80);
@@ -69,7 +76,7 @@ public class View extends Application {
 
         InputConsole input = new InputConsole();
         // cannot execute this line for now because myInputObserver is null at this point
-//        input.addInputObserver(myInputObserver);
+        input.addInputObserver(myInputObserver);
         input.setMaxWidth(OUTPUT_WIDTH);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -78,7 +85,6 @@ public class View extends Application {
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         InputLog log = new InputLog();
-        input.addInputObserver(log);
         log.setMinWidth(20);
         log.setBackground(new Background(new BackgroundFill(Color.SPRINGGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 

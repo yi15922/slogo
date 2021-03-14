@@ -24,11 +24,11 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Turtle modelTurtle = new Turtle();
-        Workspace modelWorkspace = new Workspace();
-        Parser modelParser = new Parser("English", modelWorkspace);
-        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
-        View view = new View(modelTurtle, modelParser);
+//        Turtle modelTurtle = new Turtle();
+//        Workspace modelWorkspace = new Workspace();
+//        Parser modelParser = new Parser("English", modelWorkspace);
+//        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
+        View view = new View();
         view.runApplication(args);
         startConsoleSLogo(args);
     }
