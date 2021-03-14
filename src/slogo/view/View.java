@@ -71,7 +71,8 @@ public class View extends Application {
         workspace.setMinWidth(20);
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        StackPane log = new StackPane();
+        InputLog log = new InputLog();
+        input.addInputObserver(log);
         log.setMinWidth(20);
         log.setBackground(new Background(new BackgroundFill(Color.SPRINGGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 

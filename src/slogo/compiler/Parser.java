@@ -207,5 +207,6 @@ public class Parser implements InputObserver {
   @Override
   public void receiveUserInput(String input) {
     parseInput(input);
+    System.out.println(input);
   }
 }
