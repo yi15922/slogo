@@ -25,7 +25,10 @@ public class Main {
     public static void main(String[] args) {
 
         Turtle modelTurtle = new Turtle();
-        View view = new View(modelTurtle);
+        Workspace modelWorkspace = new Workspace();
+        Parser modelParser = new Parser("English", modelWorkspace);
+        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
+        View view = new View(modelTurtle, modelParser);
         view.runApplication(args);
         startConsoleSLogo(args);
     }

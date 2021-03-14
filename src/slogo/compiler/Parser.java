@@ -91,6 +91,7 @@ public class Parser implements InputObserver {
       for (String s : strings) {
         SLogoToken newToken = createTokenFromString(s);
         if (newToken != null)
+          System.out.println(newToken.toString());
           tokenQueue.add(newToken);
       }
     }

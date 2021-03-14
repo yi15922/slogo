@@ -13,6 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import slogo.Turtle;
 import slogo.TurtleObserver;
+import slogo.observers.InputObserver;
 
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
@@ -29,11 +30,14 @@ public class View extends Application {
 
     private Turtle myTurtle;
     private List<PropertyChangeListener> myListeners;
+    private InputObserver myInputObserver;
 
+    //IF THIS DEFAULT CONSTRUCTOR IS NOT INCLUDED PROGRAM CRASHES
     public View() {}
 
-    public View(Turtle turtle) {
+    public View(Turtle turtle, InputObserver observer) {
         myTurtle = turtle;
+        myInputObserver = observer;
         myListeners = Arrays.asList(new TurtleObserver(this));
         setListeners(myListeners);
     }
@@ -64,6 +68,8 @@ public class View extends Application {
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         InputConsole input = new InputConsole();
+        // cannot execute this line for now because myInputObserver is null at this point
+//        input.addInputObserver(myInputObserver);
         input.setMaxWidth(OUTPUT_WIDTH);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
