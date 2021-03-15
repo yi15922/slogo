@@ -2,6 +2,7 @@ package slogo.view;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import slogo.observers.InputObserver;
 
@@ -16,6 +17,7 @@ public class InputConsole extends VBox {
 
     public InputConsole() {
         TextArea inputArea = new TextArea();
+        this.setVgrow(inputArea, Priority.ALWAYS);
         Button button = new Button(BUTTON_TEXT);
         button.setOnAction(e -> sendInputToObservers(inputArea.getText()));
         this.getChildren().addAll(inputArea, button);
