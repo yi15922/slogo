@@ -33,6 +33,7 @@ public class View {
     private static final double OUTPUT_WIDTH = 500;
     private static final double OUTPUT_HEIGHT = 500;
     private static final double MAIN_CONTENT_PADDING = 10;
+    private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
 
     private Turtle myTurtle;
     private List<PropertyChangeListener> myListeners;
@@ -97,6 +98,7 @@ public class View {
 
     private InputConsole createInputConsole() {
         InputConsole input = new InputConsole();
+        input.setMaxHeight(INPUT_CONSOLE_MAX_HEIGHT);
         input.addInputObserver(myInputObserver);
         input.setMaxWidth(OUTPUT_WIDTH);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
