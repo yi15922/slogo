@@ -108,7 +108,7 @@ public class ParserTest {
     assertThrows(SLogoException.class, () -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld \n# falskdjf"));
     assertNotNull(workspace.search(":variable"));
 
-    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable seth to \n# falskdjf hello this is a comment \n :anotherVariable"));
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :onevariable seth to \n# falskdjf hello this is a comment \n:anothervariable"));
   }
 
   @Test

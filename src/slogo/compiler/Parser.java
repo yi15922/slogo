@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
@@ -46,8 +46,8 @@ public class Parser {
   private final String COMMAND_TOKENTYPE = "Command";
   // use file system notation, standard Unix slashes, for other kinds of files
   private final String DEFAULT_RESOURCE_FOLDER = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-  private final Map<String, Pattern> builtinCommands;
-  private final Map<String, Pattern> tokenTypes;
+  private final Map<Pattern, String> builtinCommands;
+  private final Map<Pattern, String> tokenTypes;
 
   private Workspace workspace;
 
@@ -134,7 +134,7 @@ public class Parser {
   private String determineTokenType(String userInput) throws SLogoException{
     if (userInput.equals("")) { return null; }
 
-    String ret = getKeyFromRegex(tokenTypes, userInput);
+    String ret = getStringFromRegex(tokenTypes, userInput);
     if (ret == null) {
       throw new SLogoException("Not a valid token: %s", userInput);
     }
@@ -149,7 +149,7 @@ public class Parser {
    * @return either the proper {@link SLogoCommand} name or the user input as is.
    */
   private String determineCommandType(String userInput){
-    String ret = getKeyFromRegex(builtinCommands, userInput);
+    String ret = getStringFromRegex(builtinCommands, userInput);
     if (ret == null) {
       return userInput;
     }
@@ -162,48 +162,36 @@ public class Parser {
    * regex match with {@code userInput} string. If there is a match, returns the
    * {@code String} key of the corresponding pattern. If not, returns null.
    *
-   * The input map's keySet is searched in order of descending string length
-   * because regex finds the first matching {@code String}, even if it is a
-   * substring. Therefore, ordering the set in reverse eliminates the possibility
-   * of getting the key for "or" when the user input is "for", for example.
-   *
-   * @param regexMap a map containing {@code String} and {@code Pattern} pairs
+   * @param regexMap a map containing {@code Pattern} and {@code String} pairs
    * @param userInput the {@code String} to search for in the map
    * @return returns {@code String} match from the map, or null if none is found.
    */
-  private String getKeyFromRegex(Map<String, Pattern> regexMap, String userInput){
-    //FIXME: Order by descending regex string length rather than command name length
-    //FIXME: Maybe flip the key:value order for easier access?
-    ArrayList<String> reversedKeys = new ArrayList<>(regexMap.keySet());
-    reversedKeys.sort(Comparator.comparing(String::length)
-        .reversed());
-    System.out.println(reversedKeys);
-    for (String commandName : reversedKeys) {
-      Pattern p = regexMap.get(commandName);
-      Matcher m = p.matcher(userInput);
-      System.out.printf("Matching %s with %s\n", userInput, p);
-      if (m.find()) {
-        System.out.printf("Command type determined: %s\n", commandName);
-        return commandName;
+  private String getStringFromRegex(Map<Pattern, String> regexMap, String userInput){
+
+    for (Pattern pattern : regexMap.keySet()) {
+      Matcher m = pattern.matcher(userInput);
+      System.out.printf("Matching %s with %s\n", userInput, pattern);
+      if (m.matches()) {
+        return regexMap.get(pattern);
       }
     }
     return null;
   }
 
   /**
-   * Creates a {@code HashMap} of {@code String} and {@code Pattern} pairs so that
-   * the a used input string can be searched against the list of keys.
+   * Creates a {@code HashMap} of {@code Pattern} and {@code String} pairs so that
+   * the a user input string can be searched against the list of patterns.
    * @param bundle {@code ResourceBundle} object to use to create the map
-   * @return A {@code HashMap} containing {@code String} and {@code Pattern} pairs.
+   * @return A {@code HashMap} containing {@code Pattern} and {@code String} pairs.
    */
-  private Map<String, Pattern> createRegexMap(ResourceBundle bundle){
-    TreeMap<String, Pattern> ret = new TreeMap<>();
+  private Map<Pattern, String> createRegexMap(ResourceBundle bundle){
+    HashMap<Pattern, String> ret = new HashMap<>();
     Enumeration<String> keys = bundle.getKeys();
     while (keys.hasMoreElements()) {
       String commandName = keys.nextElement();
       String commandRegex = bundle.getString(commandName);
       Pattern p = Pattern.compile(commandRegex);
-      ret.put(commandName, p);
+      ret.put(p, commandName);
     }
     return ret;
   }
