@@ -13,6 +13,7 @@ import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoListEnd;
 import slogo.compiler.token.SLogoListStart;
 import slogo.compiler.token.SLogoToken;
+import slogo.observers.InputObserver;
 
 /**
  * Responsible for grouping tokens into a form in which they could be run. Detects beginning and end
@@ -25,7 +26,7 @@ import slogo.compiler.token.SLogoToken;
  *
  * @author Yi Chen
  */
-public class Compiler {
+public class Compiler implements InputObserver {
 
   private Parser parser;
   private Queue<SLogoToken> tokenQueue;
@@ -124,4 +125,8 @@ public class Compiler {
     return ret;
   }
 
+  @Override
+  public void receiveUserInput(String input) {
+    compileAndRun(input);
+  }
 }

@@ -17,6 +17,7 @@ import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
+import slogo.observers.InputObserver;
 
 /**
  * The {@code Parser} class takes user inputs and converts them into {@link SLogoToken} objects
@@ -93,7 +94,6 @@ public class Parser {
           tokenQueue.add(newToken);
       }
     }
-    System.out.println(tokenQueue);
     return tokenQueue;
   }
 
@@ -195,7 +195,5 @@ public class Parser {
     }
     return ret;
   }
-
-
 
 }

@@ -1,9 +1,11 @@
 package slogo;
 
+import slogo.observers.ModelObserver;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Turtle {
+public class Turtle extends SlogoModel{
 
   private double myX;
   private double myY;
@@ -23,8 +25,8 @@ public class Turtle {
 
   //TODO: test
   public double forward(double pixels) {
-    myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
-    myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
+    notifyObserversOfX(myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels));
+    notifyObserversOfY(myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels));
     return round(pixels);
   }
 
@@ -75,8 +77,8 @@ public class Turtle {
 
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    myX = round(x);
-    myY = round(y);
+    notifyObserversOfX(myX = round(x));
+    notifyObserversOfY(myY = round(y));
     return round(distance);
   }
 
@@ -167,4 +169,23 @@ public class Turtle {
     return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   }
 
+  @Override
+  protected void notifyObserversOfX(double x) {
+    for (ModelObserver o : myObservers) o.receiveXCor(x);
+  }
+
+  @Override
+  protected void notifyObserversOfY(double y) {
+    for (ModelObserver o : myObservers) o.receiveYCor(y);
+  }
+
+  @Override
+  protected void notifyObserversOfPen(boolean b) {
+    for (ModelObserver o : myObservers) o.checkPen(b);
+  }
+
+  @Override
+  protected void notifyObserversOfHeading(double heading) {
+    for (ModelObserver o : myObservers) o.receiveHeading(heading);
+  }
 }
