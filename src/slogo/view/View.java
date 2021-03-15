@@ -19,13 +19,14 @@ import slogo.compiler.Compiler;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
 import slogo.observers.InputObserver;
+import slogo.observers.ModelObserver;
 
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class View {
+public class View implements ModelObserver {
 
     private static final String OBJECT_IMAGE = "turtle.png";
     private static final double WINDOW_HEIGHT = 700;
@@ -35,18 +36,18 @@ public class View {
     private static final double MAIN_CONTENT_PADDING = 10;
     private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
 
-    private Turtle myTurtle;
-    private List<PropertyChangeListener> myListeners;
+//    private Turtle myTurtle;
+//    private List<PropertyChangeListener> myListeners;
     private InputObserver myInputObserver;
 
     //IF THIS DEFAULT CONSTRUCTOR IS NOT INCLUDED PROGRAM CRASHES
 //    public View(Turtle modelTurtle, Parser modelParser, Stage primaryStage) {}
 
-    public View(Turtle turtle, InputObserver observer, Stage primaryStage) {
-        myTurtle = turtle;
+    public View(InputObserver observer, Stage primaryStage) {
+//        myTurtle = turtle;
         myInputObserver = observer;
-        myListeners = Arrays.asList(new TurtleObserver(this));
-        setListeners(myListeners);
+//        myListeners = Arrays.asList(new TurtleObserver(this));
+//        setListeners(myListeners);
         startProgram(primaryStage);
     }
 
@@ -126,9 +127,29 @@ public class View {
     public void setTurtleY(double y) {}
     public void setTurtleHeading(double angle) {}
 
-    private void setListeners(List<PropertyChangeListener> listeners) {
-        for (PropertyChangeListener l : myListeners) {
-            myTurtle.addListener(l);
-        }
+//    private void setListeners(List<PropertyChangeListener> listeners) {
+//        for (PropertyChangeListener l : myListeners) {
+//            myTurtle.addListener(l);
+//        }
+//    }
+
+    @Override
+    public void receiveXCor(double x) {
+
+    }
+
+    @Override
+    public void receiveYCor(double y) {
+
+    }
+
+    @Override
+    public void receiveHeading(double heading) {
+
+    }
+
+    @Override
+    public void checkPen(boolean b) {
+
     }
 }

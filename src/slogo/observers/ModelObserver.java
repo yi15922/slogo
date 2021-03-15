@@ -7,5 +7,5 @@ public interface ModelObserver {
 
     void receiveHeading(double heading);
 
-    void isPenDown(boolean b);
+    void checkPen(boolean b);
 }

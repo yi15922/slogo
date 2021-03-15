@@ -64,7 +64,7 @@ public class Main extends Application {
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
-        View view = new View(modelTurtle, modelParser, primaryStage);
+        View view = new View(modelParser, primaryStage);
 
 
     }

@@ -1,5 +1,7 @@
 package slogo;
 
+import slogo.observers.ModelObserver;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -168,22 +170,22 @@ public class Turtle extends SlogoModel{
   }
 
   @Override
-  protected void notifyObserversOfX() {
-
+  protected void notifyObserversOfX(double x) {
+    for (ModelObserver o : myObservers) o.receiveXCor(x);
   }
 
   @Override
-  protected void notifyObserversOfY() {
-
+  protected void notifyObserversOfY(double y) {
+    for (ModelObserver o : myObservers) o.receiveYCor(y);
   }
 
   @Override
-  protected void notifyObserversOfPen() {
-
+  protected void notifyObserversOfPen(boolean b) {
+    for (ModelObserver o : myObservers) o.checkPen(b);
   }
 
   @Override
-  protected void notifyObserversOfHeading() {
-
+  protected void notifyObserversOfHeading(double heading) {
+    for (ModelObserver o : myObservers) o.receiveHeading(heading);
   }
 }
