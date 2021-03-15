@@ -11,9 +11,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import slogo.observers.ModelObserver;
 
 
-public class OutputScreen extends Region {
+public class OutputScreen extends Region implements ModelObserver {
 
     private ImageView myObject;
     private double myWidth;
@@ -49,5 +50,25 @@ public class OutputScreen extends Region {
         result.setFitWidth(width);
         result.setPreserveRatio(true);
         return result;
+    }
+
+    @Override
+    public void receiveXCor(double x) {
+        setX(x);
+    }
+
+    @Override
+    public void receiveYCor(double y) {
+        setY(y);
+    }
+
+    @Override
+    public void receiveHeading(double heading) {
+
+    }
+
+    @Override
+    public void checkPen(boolean b) {
+
     }
 }

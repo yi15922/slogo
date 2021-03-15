@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class View implements ModelObserver {
+public class View {
 
     private static final String OBJECT_IMAGE = "turtle.png";
     private static final double WINDOW_HEIGHT = 700;
@@ -133,23 +133,4 @@ public class View implements ModelObserver {
 //        }
 //    }
 
-    @Override
-    public void receiveXCor(double x) {
-
-    }
-
-    @Override
-    public void receiveYCor(double y) {
-
-    }
-
-    @Override
-    public void receiveHeading(double heading) {
-
-    }
-
-    @Override
-    public void checkPen(boolean b) {
-
-    }
 }
