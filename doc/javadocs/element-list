@@ -3,4 +3,5 @@ slogo.compiler
 slogo.compiler.command
 slogo.compiler.token
 slogo.controller
+slogo.observers
 slogo.view
