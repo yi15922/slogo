@@ -5,9 +5,9 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
 
-public class MakeUserInstruction extends SLogoCommand {
+public class MakeUserInstructionCommand extends SLogoCommand {
 
-  public MakeUserInstruction() {
+  public MakeUserInstructionCommand() {
     super("To");
     expectedParameters.add(new SLogoUserDefinedCommand("command name"));
     expectedParameters.add(new SLogoList("variables"));

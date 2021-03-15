@@ -16,6 +16,7 @@ public class ProductCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
+    //System.out.println("Multiplying " + expectedParameters.get(0).getValue() + " and " + expectedParameters.get(1).getValue());
     return new SLogoConstant(expectedParameters.get(0).getValue() * expectedParameters.get(1).getValue());
   }
 }

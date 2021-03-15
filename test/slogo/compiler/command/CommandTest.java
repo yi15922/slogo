@@ -422,7 +422,7 @@ class CommandTest {
 
   @Test
   void testBasicToCommand() {
-    command = new MakeUserInstruction();
+    command = new MakeUserInstructionCommand();
     SLogoUserDefinedCommand testCommand = new SLogoUserDefinedCommand("testCommand");
     parameterTokens.add(testCommand);
     List<SLogoToken> variableList = new ArrayList<>();
