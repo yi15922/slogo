@@ -18,9 +18,13 @@ public class InputConsole extends VBox {
 
     public InputConsole() {
         TextArea inputArea = new TextArea();
+        inputArea.setWrapText(true);
         this.setAlignment(Pos.BOTTOM_LEFT);
         Button button = new Button(BUTTON_TEXT);
-        button.setOnAction(e -> sendInputToObservers(inputArea.getText()));
+        button.setOnAction(e -> {
+            sendInputToObservers(inputArea.getText());
+            inputArea.clear();
+        });
         this.getChildren().addAll(inputArea, button);
     }
 

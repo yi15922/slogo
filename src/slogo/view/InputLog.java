@@ -8,9 +8,11 @@ import slogo.observers.InputObserver;
 public class InputLog extends VBox implements InputObserver {
 
     TextArea myLogScreen;
+    String myHistory = "";
 
     public InputLog() {
         myLogScreen = new TextArea();
+        myLogScreen.setWrapText(true);
         this.setVgrow(myLogScreen, Priority.ALWAYS);
         myLogScreen.setEditable(false);
         this.getChildren().add(myLogScreen);
@@ -18,6 +20,8 @@ public class InputLog extends VBox implements InputObserver {
 
     @Override
     public void receiveUserInput(String input) {
-        myLogScreen.setText(input);
+        if (myHistory.equals("")) myHistory += input;
+        else myHistory += "\n\n" + input;
+        myLogScreen.setText(myHistory);
     }
 }
