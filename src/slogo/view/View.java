@@ -2,6 +2,7 @@ package slogo.view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
@@ -49,36 +50,15 @@ public class View {
 
     public void startProgram(Stage window) {
 
-        MenuBar menuBar = new MenuBar();
-        menuBar.setMinHeight(80);
-        menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        MenuBar menuBar = createMenuBar();
+        OutputScreen output = createOutputScreen();
+        InputConsole input = createInputConsole();
+        StackPane workspace = createStackPane();
+        InputLog log = createInputLog(input);
 
-        OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)), OUTPUT_WIDTH, OUTPUT_HEIGHT);
-        output.setMaxHeight(OUTPUT_HEIGHT);
-        output.setMinHeight(OUTPUT_HEIGHT);
-        output.setMaxWidth(OUTPUT_WIDTH);
-        output.setMinWidth(OUTPUT_WIDTH);
-        output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        InputConsole input = new InputConsole();
-        // cannot execute this line for now because myInputObserver is null at this point
-        input.addInputObserver(myInputObserver);
-        input.setMaxWidth(OUTPUT_WIDTH);
-        input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        StackPane workspace = new StackPane();
-        workspace.setMinWidth(20);
-        workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        InputLog log = new InputLog();
-        input.addInputObserver(log);
-        log.setMinWidth(20);
-        log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        VBox outputAndInput = new VBox(output, input);
-        outputAndInput.setVgrow(output, Priority.ALWAYS);
-        outputAndInput.setVgrow(input, Priority.ALWAYS);
-        outputAndInput.setMaxWidth(OUTPUT_WIDTH);
+        SplitPane outputAndInput = new SplitPane(output, input);
+        outputAndInput.setOrientation(Orientation.VERTICAL);
+//        outputAndInput.setMaxWidth(OUTPUT_WIDTH);
 
         SplitPane splitPane = new SplitPane(log, workspace);
 
@@ -87,7 +67,6 @@ public class View {
         mainContent.setHgrow(workspace, Priority.ALWAYS);
         mainContent.setHgrow(log, Priority.ALWAYS);
         VBox everything = new VBox(menuBar, mainContent);
-        outputAndInput.setVgrow(mainContent, Priority.ALWAYS);
 
         Scene scene = new Scene(everything, WINDOW_WIDTH,WINDOW_HEIGHT);
 
@@ -95,6 +74,46 @@ public class View {
         window.setScene(scene);
         window.show();
         output.setY(0);output.setX(0);
+    }
+
+    private InputLog createInputLog(InputConsole input) {
+        InputLog log = new InputLog();
+        input.addInputObserver(log);
+        log.setMinWidth(20);
+        log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
+        return log;
+    }
+
+    private StackPane createStackPane() {
+        StackPane workspace = new StackPane();
+        workspace.setMinWidth(20);
+        workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
+        return workspace;
+    }
+
+    private InputConsole createInputConsole() {
+        InputConsole input = new InputConsole();
+        input.addInputObserver(myInputObserver);
+        input.setMaxWidth(OUTPUT_WIDTH);
+        input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        return input;
+    }
+
+    private OutputScreen createOutputScreen() {
+        OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)), OUTPUT_WIDTH, OUTPUT_HEIGHT);
+//        output.setMaxHeight(OUTPUT_HEIGHT);
+//        output.setMinHeight(OUTPUT_HEIGHT);
+//        output.setMaxWidth(OUTPUT_WIDTH);
+//        output.setMinWidth(OUTPUT_WIDTH);
+        output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
+        return output;
+    }
+
+    private MenuBar createMenuBar() {
+        MenuBar menuBar = new MenuBar();
+        menuBar.setMinHeight(80);
+        menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        return menuBar;
     }
 
     public void setTurtleX(double x) {}
