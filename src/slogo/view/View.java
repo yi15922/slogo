@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import slogo.SlogoModel;
 import slogo.Turtle;
 import slogo.TurtleObserver;
 import slogo.compiler.Compiler;
@@ -36,18 +37,12 @@ public class View {
     private static final double MAIN_CONTENT_PADDING = 10;
     private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
 
-//    private Turtle myTurtle;
-//    private List<PropertyChangeListener> myListeners;
+    private SlogoModel myModel;
     private InputObserver myInputObserver;
 
-    //IF THIS DEFAULT CONSTRUCTOR IS NOT INCLUDED PROGRAM CRASHES
-//    public View(Turtle modelTurtle, Parser modelParser, Stage primaryStage) {}
-
-    public View(InputObserver observer, Stage primaryStage) {
-//        myTurtle = turtle;
+    public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
+        myModel = model;
         myInputObserver = observer;
-//        myListeners = Arrays.asList(new TurtleObserver(this));
-//        setListeners(myListeners);
         startProgram(primaryStage);
     }
 
@@ -55,9 +50,12 @@ public class View {
 
         MenuBar menuBar = createMenuBar();
         OutputScreen output = createOutputScreen();
+        myModel.addObserver(output);
         InputConsole input = createInputConsole();
         StackPane workspace = createStackPane();
         InputLog log = createInputLog(input);
+
+
 
         SplitPane outputAndInput = new SplitPane(output, input);
         outputAndInput.setOrientation(Orientation.VERTICAL);

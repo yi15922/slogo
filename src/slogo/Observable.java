@@ -13,11 +13,11 @@ public class Observable<T> {
         return myObservers.contains(observer);
     }
 
-    public void addInputObserver(T observer) {
+    public void addObserver(T observer) {
         myObservers.add(observer);
     }
 
-    public void removeInputObserver(T observer) {
+    public void removeObserver(T observer) {
         myObservers.remove(observer);
     }
 
