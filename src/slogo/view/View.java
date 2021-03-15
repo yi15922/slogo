@@ -32,6 +32,7 @@ public class View {
     private static final double WINDOW_WIDTH = 1000;
     private static final double OUTPUT_WIDTH = 500;
     private static final double OUTPUT_HEIGHT = 500;
+    private static final double MAIN_CONTENT_PADDING = 10;
 
     private Turtle myTurtle;
     private List<PropertyChangeListener> myListeners;
@@ -67,6 +68,7 @@ public class View {
         HBox mainContent = new HBox(outputAndInput, splitPane);
         mainContent.setHgrow(splitPane, Priority.ALWAYS);
         mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        mainContent.setPadding(new Insets(MAIN_CONTENT_PADDING));
 
         VBox everything = new VBox(menuBar, mainContent);
         everything.setVgrow(mainContent, Priority.ALWAYS);
