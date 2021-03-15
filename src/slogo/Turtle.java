@@ -25,8 +25,8 @@ public class Turtle extends SlogoModel{
 
   //TODO: test
   public double forward(double pixels) {
-    myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
-    myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels);
+    notifyObserversOfX(myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels));
+    notifyObserversOfY(myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels));
     return round(pixels);
   }
 
@@ -77,8 +77,8 @@ public class Turtle extends SlogoModel{
 
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    myX = round(x);
-    myY = round(y);
+    notifyObserversOfX(myX = round(x));
+    notifyObserversOfY(myY = round(y));
     return round(distance);
   }
 

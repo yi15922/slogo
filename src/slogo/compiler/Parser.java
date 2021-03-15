@@ -37,7 +37,7 @@ import slogo.observers.InputObserver;
  *
  * @author Yi Chen
  */
-public class Parser implements InputObserver {
+public class Parser {
 
   private final ResourceBundle languageBundle;
   private final ResourceBundle syntaxBundle;
@@ -202,9 +202,4 @@ public class Parser implements InputObserver {
     return ret;
   }
 
-
-  @Override
-  public void receiveUserInput(String input) {
-    parseInput(input);
-  }
 }

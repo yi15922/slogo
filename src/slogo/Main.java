@@ -28,9 +28,9 @@ public class Main extends Application {
 
         launch(args);
 
-        Turtle modelTurtle = new Turtle();
-        Workspace modelWorkspace = new Workspace();
-        Parser modelParser = new Parser("English", modelWorkspace);
+//        Turtle modelTurtle = new Turtle();
+//        Workspace modelWorkspace = new Workspace();
+//        Parser modelParser = new Parser("English", modelWorkspace);
 //        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
 //        View view = new View(modelTurtle, modelParser);
 //        view.runApplication(args);
@@ -64,6 +64,7 @@ public class Main extends Application {
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
+        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
         View view = new View(modelTurtle, modelParser, primaryStage);
 
 
