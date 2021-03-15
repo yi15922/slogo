@@ -25,8 +25,8 @@ public class Turtle extends SlogoModel{
 
   //TODO: test
   public double forward(double pixels) {
-    notifyObserversOfX(myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels));
-    notifyObserversOfY(myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels));
+    notifyObserversOfPosition(myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels),
+                               myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels));
     return round(pixels);
   }
 
@@ -77,20 +77,19 @@ public class Turtle extends SlogoModel{
 
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    notifyObserversOfX(myX = round(x));
-    notifyObserversOfY(myY = round(y));
+    notifyObserversOfPosition(myX = round(x), myY = round(y));
     return round(distance);
   }
 
   //TODO: tests
   public double penDown() {
-    myPen = true;
+    notifyObserversOfPen(myPen = true);
     return 1;
   }
 
   //TODO: tests
   public double penUp() {
-    myPen = false;
+    notifyObserversOfPen(myPen = false);
     return 0;
   }
 
@@ -170,13 +169,8 @@ public class Turtle extends SlogoModel{
   }
 
   @Override
-  protected void notifyObserversOfX(double x) {
-    for (ModelObserver o : myObservers) o.receiveXCor(x);
-  }
-
-  @Override
-  protected void notifyObserversOfY(double y) {
-    for (ModelObserver o : myObservers) o.receiveYCor(y);
+  protected void notifyObserversOfPosition(double x, double y) {
+    for (ModelObserver o : myObservers) o.receiveNewPosition(x, y);
   }
 
   @Override

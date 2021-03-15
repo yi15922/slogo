@@ -1,31 +1,16 @@
 package slogo.view;
 
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
-import slogo.Turtle;
-import slogo.TurtleObserver;
-import slogo.compiler.Compiler;
-import slogo.compiler.Parser;
-import slogo.compiler.Workspace;
 import slogo.observers.InputObserver;
-import slogo.observers.ModelObserver;
-
-import java.beans.PropertyChangeListener;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
 
 public class View {
 
@@ -79,7 +64,7 @@ public class View {
 //        window.setResizable(false);
         window.setScene(scene);
         window.show();
-        output.setY(0);output.setX(0);
+        output.setPosition(0,0);
     }
 
     private InputLog createInputLog(InputConsole input) {

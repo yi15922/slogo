@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import slogo.observers.ModelObserver;
 
@@ -19,6 +20,7 @@ public class OutputScreen extends Region implements ModelObserver {
     private ImageView myObject;
     private double myWidth;
     private double myHeight;
+    private boolean isPenDown = false;
 
     public OutputScreen(Image displayObject, double width, double height) {
         myObject = makeDisplayObject("displayObject", 20, displayObject);
@@ -35,13 +37,27 @@ public class OutputScreen extends Region implements ModelObserver {
         });
     }
 
-    public void setX(double x) {
-        myObject.setX(x + myWidth/2);
+//    public void setX(double x) {
+//        myObject.setX(x + myWidth/2);
+//    }
+//
+//    public void setY(double y) {
+//        myObject.setY(myHeight/2 - y);
+//    }
+
+    public void setPosition(double x, double y) {
+        double localX = x + myWidth/2;
+        double localY = myHeight/2 - y;
+        if (isPenDown) drawLine(localX, localY);
+        myObject.setX(localX);
+        myObject.setY(localY);
     }
 
-    public void setY(double y) {
-        myObject.setY(myHeight/2 - y);
+    private void drawLine(double x, double y) {
+        Line line = new Line(myObject.getX(), myObject.getY(), x, y);
+        this.getChildren().add(line);
     }
+
 
     // make object to be displayed
     private ImageView makeDisplayObject (String id, int width, Image image) {
@@ -52,14 +68,19 @@ public class OutputScreen extends Region implements ModelObserver {
         return result;
     }
 
-    @Override
-    public void receiveXCor(double x) {
-        setX(x);
-    }
+//    @Override
+//    public void receiveXCor(double x) {
+//        setX(x);
+//    }
+//
+//    @Override
+//    public void receiveYCor(double y) {
+//        setY(y);
+//    }
 
     @Override
-    public void receiveYCor(double y) {
-        setY(y);
+    public void receiveNewPosition(double x, double y) {
+        setPosition(x, y);
     }
 
     @Override
@@ -69,6 +90,6 @@ public class OutputScreen extends Region implements ModelObserver {
 
     @Override
     public void checkPen(boolean b) {
-
+        isPenDown = b;
     }
 }
