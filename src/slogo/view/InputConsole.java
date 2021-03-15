@@ -40,10 +40,9 @@ public class InputConsole extends VBox {
         myInputObservers.remove(o);
     }
 
-
-
     private void sendInputToObservers(String input) {
         for (InputObserver o : myInputObservers) {
             o.receiveUserInput(input);
         }
-    }}
+    }
+}

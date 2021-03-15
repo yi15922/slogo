@@ -3,7 +3,7 @@ package slogo;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Turtle extends Observable{
+public class Turtle extends SlogoModel{
 
   private double myX;
   private double myY;
@@ -167,4 +167,23 @@ public class Turtle extends Observable{
     return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   }
 
+  @Override
+  protected void notifyObserversOfX() {
+
+  }
+
+  @Override
+  protected void notifyObserversOfY() {
+
+  }
+
+  @Override
+  protected void notifyObserversOfPen() {
+
+  }
+
+  @Override
+  protected void notifyObserversOfHeading() {
+
+  }
 }
