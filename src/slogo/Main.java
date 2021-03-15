@@ -3,6 +3,8 @@ package slogo;
 
 import java.util.Scanner;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
 import slogo.view.View;
@@ -11,7 +13,7 @@ import slogo.compiler.Compiler;
 /**
  * Feel free to completely change this code or delete it entirely. 
  */
-public class Main {
+public class Main extends Application {
     /**
      * A method to test (and a joke :).
      */
@@ -24,13 +26,15 @@ public class Main {
      */
     public static void main(String[] args) {
 
-//        Turtle modelTurtle = new Turtle();
-//        Workspace modelWorkspace = new Workspace();
-//        Parser modelParser = new Parser("English", modelWorkspace);
+        launch(args);
+
+        Turtle modelTurtle = new Turtle();
+        Workspace modelWorkspace = new Workspace();
+        Parser modelParser = new Parser("English", modelWorkspace);
 //        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
-        View view = new View();
-        view.runApplication(args);
-        startConsoleSLogo(args);
+//        View view = new View(modelTurtle, modelParser);
+//        view.runApplication(args);
+//        startConsoleSLogo(args);
     }
 
     // in lieu of a view, this method is a proof of concept that our Model works
@@ -55,4 +59,13 @@ public class Main {
         }
     }
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Turtle modelTurtle = new Turtle();
+        Workspace modelWorkspace = new Workspace();
+        Parser modelParser = new Parser("English", modelWorkspace);
+        View view = new View(modelTurtle, modelParser, primaryStage);
+
+
+    }
 }

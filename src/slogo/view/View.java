@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class View extends Application {
+public class View {
 
     private static final String OBJECT_IMAGE = "turtle.png";
     private static final double WINDOW_HEIGHT = 700;
@@ -36,36 +37,21 @@ public class View extends Application {
     private InputObserver myInputObserver;
 
     //IF THIS DEFAULT CONSTRUCTOR IS NOT INCLUDED PROGRAM CRASHES
-    public View() {}
+//    public View(Turtle modelTurtle, Parser modelParser, Stage primaryStage) {}
 
-    public View(Turtle turtle, InputObserver observer) {
+    public View(Turtle turtle, InputObserver observer, Stage primaryStage) {
         myTurtle = turtle;
         myInputObserver = observer;
         myListeners = Arrays.asList(new TurtleObserver(this));
         setListeners(myListeners);
+        startProgram(primaryStage);
     }
 
-
-
-    public void runApplication(String[] args) {
-        launch( args );
-    }
-
-    @Override
-    public void start(Stage window) throws Exception {
-
-        myTurtle = new Turtle();
-        Workspace modelWorkspace = new Workspace();
-        myInputObserver = new Parser("English", modelWorkspace);
-        Compiler modelCompiler = new Compiler((Parser) myInputObserver, myTurtle);
+    public void startProgram(Stage window) {
 
         MenuBar menuBar = new MenuBar();
         menuBar.setMinHeight(80);
         menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-//
-//        StackPane output = new StackPane();
-//        output.setMinHeight(50);
-//        output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)), OUTPUT_WIDTH, OUTPUT_HEIGHT);
         output.setMaxHeight(OUTPUT_HEIGHT);
@@ -85,15 +71,18 @@ public class View extends Application {
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         InputLog log = new InputLog();
+        input.addInputObserver(log);
         log.setMinWidth(20);
-        log.setBackground(new Background(new BackgroundFill(Color.SPRINGGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         VBox outputAndInput = new VBox(output, input);
         outputAndInput.setVgrow(output, Priority.ALWAYS);
         outputAndInput.setVgrow(input, Priority.ALWAYS);
         outputAndInput.setMaxWidth(OUTPUT_WIDTH);
 
-        HBox mainContent = new HBox(outputAndInput, workspace, log);
+        SplitPane splitPane = new SplitPane(log, workspace);
+
+        HBox mainContent = new HBox(outputAndInput, splitPane);
         mainContent.setHgrow(outputAndInput, Priority.ALWAYS);
         mainContent.setHgrow(workspace, Priority.ALWAYS);
         mainContent.setHgrow(log, Priority.ALWAYS);
