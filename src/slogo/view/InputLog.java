@@ -10,6 +10,7 @@ public class InputLog extends Pane implements InputObserver {
 
     public InputLog() {
         myLogScreen = new TextArea();
+//        myLogScreen.setPrefHeight(Double.MAX_VALUE);
         myLogScreen.setEditable(false);
         this.getChildren().add(myLogScreen);
     }

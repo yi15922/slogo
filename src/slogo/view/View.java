@@ -58,19 +58,23 @@ public class View {
 
         SplitPane outputAndInput = new SplitPane(output, input);
         outputAndInput.setOrientation(Orientation.VERTICAL);
-//        outputAndInput.setMaxWidth(OUTPUT_WIDTH);
 
         SplitPane splitPane = new SplitPane(log, workspace);
+        splitPane.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        splitPane.setMaxHeight(Double.MAX_VALUE);
+        splitPane.setMaxWidth(Double.MAX_VALUE);
 
         HBox mainContent = new HBox(outputAndInput, splitPane);
-        mainContent.setHgrow(outputAndInput, Priority.ALWAYS);
-        mainContent.setHgrow(workspace, Priority.ALWAYS);
-        mainContent.setHgrow(log, Priority.ALWAYS);
+        mainContent.setHgrow(splitPane, Priority.ALWAYS);
+        mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+
         VBox everything = new VBox(menuBar, mainContent);
+        everything.setVgrow(mainContent, Priority.ALWAYS);
+        everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Scene scene = new Scene(everything, WINDOW_WIDTH,WINDOW_HEIGHT);
 
-        window.setResizable(false);
+//        window.setResizable(false);
         window.setScene(scene);
         window.show();
         output.setY(0);output.setX(0);
@@ -79,14 +83,12 @@ public class View {
     private InputLog createInputLog(InputConsole input) {
         InputLog log = new InputLog();
         input.addInputObserver(log);
-        log.setMinWidth(20);
         log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
         return log;
     }
 
     private StackPane createStackPane() {
         StackPane workspace = new StackPane();
-        workspace.setMinWidth(20);
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
         return workspace;
     }
