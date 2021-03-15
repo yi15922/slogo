@@ -7,9 +7,7 @@ import java.util.List;
 
 public abstract class SlogoModel extends Observable<ModelObserver>{
 
-    protected abstract void notifyObserversOfX(double x);
-
-    protected abstract void notifyObserversOfY(double y);
+    protected abstract void notifyObserversOfPosition(double x, double y);
 
     protected abstract void notifyObserversOfPen(boolean b);
 

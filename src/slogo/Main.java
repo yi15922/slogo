@@ -28,13 +28,6 @@ public class Main extends Application {
 
         launch(args);
 
-//        Turtle modelTurtle = new Turtle();
-//        Workspace modelWorkspace = new Workspace();
-//        Parser modelParser = new Parser("English", modelWorkspace);
-//        Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
-//        View view = new View(modelTurtle, modelParser);
-//        view.runApplication(args);
-//        startConsoleSLogo(args);
     }
 
     // in lieu of a view, this method is a proof of concept that our Model works
