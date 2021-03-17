@@ -13,9 +13,9 @@ public class Turtle extends Observable {
   private static final int ROUND_DECIMAL_PLACES = 3;
 
   public Turtle() {
-    myX = 0;
-    myY = 0;
-    myAngle = 0;
+    setX(0);
+    setY(0);
+    setHeading(0);
     myPen = true;
     myShow = true;
   }
@@ -27,25 +27,26 @@ public class Turtle extends Observable {
   }
 
   public double back(double pixels) {
-    myAngle = standardizeAngle(myAngle+180);
+    setHeading(myAngle + 180);
     forward(pixels);
-    myAngle = standardizeAngle(myAngle-180);
+    setHeading(myAngle - 180);
     return round(pixels);
   }
 
   public double left(double degrees) {
-    myAngle = standardizeAngle(myAngle-degrees);
+    setHeading(myAngle - degrees);
     return round(degrees);
   }
 
   public double right(double degrees) {
-    myAngle = standardizeAngle(myAngle+degrees);
+    setHeading(myAngle + degrees);
     return round(degrees);
   }
 
   public double setHeading(double degrees) {
     double oldMyAngle = myAngle;
     myAngle = standardizeAngle(degrees);
+    notifyListeners("HEADING", oldMyAngle, myAngle);
     return standardizeAngle(degrees - oldMyAngle);
   }
 
@@ -79,26 +80,45 @@ public class Turtle extends Observable {
 
   //no tests
   public double penDown() {
-    myPen = true;
+    if (!myPen) {
+      togglePen();
+    }
     return 1;
   }
 
   //no tests
   public double penUp() {
-    myPen = false;
+    if (myPen) {
+      togglePen();
+    }
     return 0;
+  }
+
+  //assumes that pen state has changed
+  private void togglePen() {
+    myPen = !myPen;
+    notifyListeners("PEN", !myPen, myPen);
   }
 
   //no tests
   public double showTurtle() {
-    myShow = true;
+    if (!myShow) {
+      toggleShow();
+    }
     return 1;
   }
 
   //no tests
   public double hideTurtle() {
-    myShow = false;
+    if (myShow) {
+      toggleShow();
+    }
     return 0;
+  }
+
+  private void toggleShow() {
+    myShow = !myShow;
+    notifyListeners("PEN", !myShow, myShow);
   }
 
   public double home() {
@@ -156,7 +176,7 @@ public class Turtle extends Observable {
     while (returned < 0) {
       returned += 360;
     }
-    if(returned > 360) {
+    if (returned > 360) {
       returned %= 360;
     }
     return round(returned);
