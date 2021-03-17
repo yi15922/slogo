@@ -73,7 +73,7 @@ public class Parser {
    * The method first breaks the strings into lines, then into individual space delimited
    * strings.
    *
-   * If a "#" character is encountered, the entire line is ignored.
+   * If a "#" character is encountered at the beginning of a line, the entire line is ignored.
    *
    * @param inputString a user input SLogo code
    * @return a {@code Queue} of {@code SLogoToken} objects.
@@ -84,10 +84,10 @@ public class Parser {
 
     for (String line : allLines) {
       //System.out.println(line);
-      ArrayList<String> strings = new ArrayList<>(Arrays.asList(line.split(" ")));
-      if (strings.get(0).equals("#")) {
+      if (line.charAt(0) == '#') {
         continue;
       }
+      ArrayList<String> strings = new ArrayList<>(Arrays.asList(line.split(" ")));
       for (String s : strings) {
         SLogoToken newToken = createTokenFromString(s);
         if (newToken != null)
