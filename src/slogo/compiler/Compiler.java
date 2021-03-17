@@ -1,12 +1,19 @@
 package slogo.compiler;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import slogo.SLogoException;
+import slogo.Turtle;
+import slogo.compiler.command.SLogoCommand;
+import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoListEnd;
+import slogo.compiler.token.SLogoListStart;
 import slogo.compiler.token.SLogoToken;
+import slogo.observers.InputObserver;
 
 /**
  * Responsible for grouping tokens into a form in which they could be run. Detects beginning and end
@@ -16,18 +23,22 @@ import slogo.compiler.token.SLogoToken;
  *
  * Upon encountering a {@link slogo.compiler.token.SLogoComment} token, the compiler
  * will ignore all subsequent tokens until the next new line character.
+ *
+ * @author Yi Chen
  */
-public class Compiler {
+public class Compiler implements InputObserver {
 
   private Parser parser;
   private Queue<SLogoToken> tokenQueue;
+  private Turtle turtle;
 
   /**
    * Creates an instance of a compiler. The instance takes an instance of {@link Parser}.
    * @param parser the {@code Parser} instance for this parsing session.
    */
-  public Compiler(Parser parser) {
+  public Compiler(Parser parser, Turtle turtle) {
     this.parser = parser;
+    this.turtle = turtle;
   }
 
 
@@ -38,6 +49,31 @@ public class Compiler {
    */
   public void makeTokenQueue(String input){
     tokenQueue = parser.parseInput(input);
+  }
+
+  /**
+   * Creates a {@link slogo.compiler.token.SLogoFunction} object containing all compiled
+   * {@link SLogoToken} objects. This will add lists as {@link SLogoList} objects rather
+   * than as individual tokens, therefore these lists should be treated link single tokens.
+   *
+   * Upon successful creation of the {@code SLogoFunction} object, this method will call
+   * the function's {@code run()} method.
+   */
+  public void compileAndRun(String input){
+    makeTokenQueue(input);
+    if (!hasNextToken()) return;
+    SLogoCommand initialCommand = (SLogoCommand) getNextToken();
+    Deque<SLogoToken> parameterTokens = new LinkedList<>();
+    while (hasNextToken()) {
+      SLogoToken tokenToAdd = getNextToken();
+      if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
+        tokenToAdd = makeList();
+      }
+      parameterTokens.add(tokenToAdd);
+    }
+
+    new SLogoFunction(initialCommand, parameterTokens, turtle).run();
+
   }
 
 
@@ -59,7 +95,7 @@ public class Compiler {
    * @return {@code boolean} whether there are more parsed {@code SLogoToken}s.
    */
   public boolean hasNextToken(){
-    return (tokenQueue.size() != 0);
+    return (tokenQueue != null && tokenQueue.size() != 0);
   }
 
   /**
@@ -89,4 +125,8 @@ public class Compiler {
     return ret;
   }
 
+  @Override
+  public void receiveUserInput(String input) {
+    compileAndRun(input);
+  }
 }

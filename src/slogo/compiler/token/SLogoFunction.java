@@ -70,6 +70,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
           nextCommand.attachTurtle(modelTurtle);
           SLogoToken resultToken = new SLogoFunction(nextCommand, parameterTokens, modelTurtle).run();
           parameterTokens.addFirst(resultToken);
+          nextCommand.resetCommand();
         }
         catch (ClassCastException e) {
           throw new SLogoException("Invalid syntax"); // received a generic Token, List, or Function
@@ -122,5 +123,11 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
       resultToken = command.run();
     }
     return resultToken;
+  }
+
+  public void resetFunction() {
+    for (SLogoCommand command : runnableCommandList) {
+      command.resetCommand();
+    }
   }
 }

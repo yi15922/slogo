@@ -7,9 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Scanner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
+import slogo.Turtle;
 import slogo.compiler.Compiler;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
@@ -20,13 +27,15 @@ public class CompilerTest {
   Parser parser;
   Workspace workspace;
   Compiler compiler;
+  Turtle turtle;
 
 
   @BeforeEach
   void createParser() {
     workspace = new Workspace();
     parser = new Parser(LANGUAGE, workspace);
-    compiler = new Compiler(parser);
+    turtle = new Turtle();
+    compiler = new Compiler(parser, turtle);
   }
 
   @Test
@@ -64,6 +73,13 @@ public class CompilerTest {
   void testIncompleteList(){
     compiler.makeTokenQueue("fd 50 :variable");
     assertThrows(SLogoException.class, () -> compiler.makeList());
+  }
+
+  @Test
+  void testCompilingWholeFiles() throws FileNotFoundException {
+    String inputString = new Scanner(new File("data/examples/simple/random_fun.slogo"))
+        .useDelimiter("\\Z").next();
+    compiler.compileAndRun(inputString);
   }
 
 }

@@ -31,23 +31,26 @@ public class ForCommand extends SLogoCommand {
     SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     List<SLogoFunction> functionList = new ArrayList<>();
-    while (! commandQueue.isEmpty()) {
-      try {
-        SLogoCommand innerCommand = (SLogoCommand) commandQueue.poll();
-        SLogoFunction innerFunction = new SLogoFunction(innerCommand, commandQueue,
-            modelTurtle);
-        functionList.add(innerFunction);
-      }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid command list syntax");
-      }
-    }
     SLogoToken returnToken = new SLogoConstant(0);
     for (int i = start; i <= end; i += increment) {
+      Deque<SLogoToken> copiedCommandQueue = new ArrayDeque<>(commandQueue);
       counterVariable.setValue(i);
+      while (! copiedCommandQueue.isEmpty()) {
+        try {
+          SLogoCommand innerCommand = (SLogoCommand) copiedCommandQueue.poll();
+          SLogoFunction innerFunction = new SLogoFunction(innerCommand, copiedCommandQueue,
+              modelTurtle);
+          functionList.add(innerFunction);
+        }
+        catch (ClassCastException e) {
+          throw new SLogoException("Invalid command list syntax");
+        }
+      }
       for (SLogoFunction function : functionList) {
         returnToken = function.run();
+        function.resetFunction();
       }
+      functionList.clear();
     }
     return returnToken;
   }
