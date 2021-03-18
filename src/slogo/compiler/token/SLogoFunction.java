@@ -22,6 +22,7 @@ import slogo.compiler.command.SLogoCommand;
 public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   protected List<SLogoCommand> runnableCommandList;
   protected Turtle modelTurtle;
+  protected Deque<SLogoToken> functionTokens;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -48,6 +49,54 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     runnableCommandList = new ArrayList<>();
     this.modelTurtle = modelTurtle;
     parseParameterTokens(initCommand, parameterTokens);
+  }
+
+  public SLogoFunction(Deque<SLogoToken> functionTokens, Turtle modelTurtle) {
+    super("Function");
+    this.functionTokens = functionTokens;
+    this.modelTurtle = modelTurtle;
+  }
+
+  public SLogoToken runFunction() {
+    SLogoToken returnToken = new SLogoConstant(0);
+    while (! functionTokens.isEmpty()) {
+      SLogoCommand nextCommand;
+      try {
+        nextCommand = (SLogoCommand) functionTokens.poll();
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid syntax");
+      }
+      returnToken = runCommand(nextCommand);
+    }
+    return returnToken;
+  }
+
+  private SLogoToken runCommand(SLogoCommand command) {
+    command.attachTurtle(modelTurtle);
+    while (! command.isReady()) {
+      if (functionTokens.isEmpty()) {
+        throw new SLogoException("Invalid syntax");
+      }
+      SLogoToken nextToken = functionTokens.poll();
+      if (nextToken.isEqualTokenType(new SLogoConstant(0))) {
+        double tokenValue = nextToken.getValue();
+        nextToken = new SLogoVariable("wrapper", tokenValue);
+      }
+      if (! command.giveNextExpectedToken(nextToken)) {
+        SLogoCommand innerCommand;
+        try {
+          innerCommand = (SLogoCommand) nextToken;
+        }
+        catch (ClassCastException e) {
+          throw new SLogoException("Invalid syntax");
+        }
+        functionTokens.addFirst(runCommand(innerCommand));
+      }
+    }
+    SLogoToken returnToken = command.run();
+    command.resetCommand();
+    return returnToken;
   }
 
   // recursively assembles and runs a command
