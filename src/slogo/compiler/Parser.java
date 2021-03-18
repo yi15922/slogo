@@ -84,7 +84,7 @@ public class Parser {
 
     for (String line : allLines) {
       //System.out.println(line);
-      if (line.charAt(0) == '#') {
+      if (line.length() != 0 && line.charAt(0) == '#') {
         continue;
       }
       ArrayList<String> strings = new ArrayList<>(Arrays.asList(line.split(" ")));
