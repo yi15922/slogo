@@ -1,7 +1,5 @@
 package slogo;
 
-import slogo.observers.ModelObserver;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -10,15 +8,23 @@ public class Turtle extends Observable {
   private double myX;
   private double myY;
   private double myAngle;
-  private boolean myPen;
+  private boolean myPenDown;
   private boolean myShow;
+  private int myID;
+  private boolean myActive;
   private static final int ROUND_DECIMAL_PLACES = 3;
 
-  public Turtle() {
+  public Turtle(int ID) {
     setXY(0,0);
     setHeading(0);
-    myPen = true;
+    myPenDown = true;
     myShow = true;
+    myID = ID;
+    myActive = true;
+  }
+
+  public Turtle() {
+    this(0);
   }
 
   public double forward(double pixels) {
@@ -83,7 +89,7 @@ public class Turtle extends Observable {
 
   //no tests
   public double penDown() {
-    if (!myPen) {
+    if (!myPenDown) {
       togglePen();
     }
     return 1;
@@ -91,7 +97,7 @@ public class Turtle extends Observable {
 
   //no tests
   public double penUp() {
-    if (myPen) {
+    if (myPenDown) {
       togglePen();
     }
     return 0;
@@ -99,8 +105,8 @@ public class Turtle extends Observable {
 
   //assumes that pen state has changed
   private void togglePen() {
-    myPen = !myPen;
-    notifyObserversOfPen(myPen);
+    myPenDown = !myPenDown;
+    notifyObserversOfPen(myPenDown);
   }
 
   //no tests
@@ -148,7 +154,7 @@ public class Turtle extends Observable {
   }
 
   public int penDownP() {
-    if (myPen) {
+    if (myPenDown) {
       return 1;
     }
     return 0;
