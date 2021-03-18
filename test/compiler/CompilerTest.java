@@ -76,6 +76,12 @@ public class CompilerTest {
   }
 
   @Test
+  void testComment(){
+    assertDoesNotThrow(() -> compiler.makeTokenQueue("fd 50 :variable \n#flksdlfj fcslkdfj \nfd 20"));
+
+  }
+
+  @Test
   void testCompilingWholeFiles() throws FileNotFoundException {
     String inputString = new Scanner(new File("data/examples/simple/random_fun.slogo"))
         .useDelimiter("\\Z").next();
