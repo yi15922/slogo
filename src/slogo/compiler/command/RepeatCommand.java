@@ -41,7 +41,7 @@ public class RepeatCommand extends SLogoCommand {
     List<SLogoFunction> functionList = new ArrayList<>();
     while (! commandQueue.isEmpty()) { // todo: error checking
       try {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
+        SLogoFunction innerFunction = new SLogoFunction(commandQueue,
             modelTurtle);
         functionList.add(innerFunction);
       }
