@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import slogo.SlogoModel;
 import slogo.observers.InputObserver;
 
+import java.util.ResourceBundle;
+
 public class View {
 
     private static final String OBJECT_IMAGE = "turtle.png";
@@ -21,14 +23,29 @@ public class View {
     private static final double OUTPUT_HEIGHT = 500;
     private static final double MAIN_CONTENT_PADDING = 10;
     private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
+    private static final String VIEW_RESOURCE_FOLDER = "view";
 
+    // get strings from resource file
+    private ResourceBundle mySettings;
+    private ResourceBundle myResources;
     private SlogoModel myModel;
     private InputObserver myInputObserver;
 
     public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
+        retrieveResources();
+        System.out.println(myResources.getString("Intro"));
         myModel = model;
         myInputObserver = observer;
         startProgram(primaryStage);
+    }
+
+    private void retrieveResources() {
+        mySettings = ResourceBundle.getBundle("Settings");
+        try {
+            myResources = ResourceBundle.getBundle(mySettings.getString("DefaultLanguage"));
+        } catch (Exception ignore) {
+            myResources = ResourceBundle.getBundle("English");
+        }
     }
 
     public void startProgram(Stage window) {
@@ -90,10 +107,6 @@ public class View {
 
     private OutputScreen createOutputScreen() {
         OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)), OUTPUT_WIDTH, OUTPUT_HEIGHT);
-//        output.setMaxHeight(OUTPUT_HEIGHT);
-//        output.setMinHeight(OUTPUT_HEIGHT);
-//        output.setMaxWidth(OUTPUT_WIDTH);
-//        output.setMinWidth(OUTPUT_WIDTH);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
         return output;
     }
