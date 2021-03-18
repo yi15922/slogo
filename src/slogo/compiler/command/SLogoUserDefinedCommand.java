@@ -54,7 +54,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
     while (! replacedCommandQueue.isEmpty()) {
       try {
         SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
-        SLogoFunction innerFunction = new SLogoFunction(command, replacedCommandQueue, modelTurtle);
+        SLogoFunction innerFunction = new SLogoFunction(replacedCommandQueue, modelTurtle);
         functionList.add(innerFunction);
       }
       catch (ClassCastException e) {
@@ -85,7 +85,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
     while (! dummyCommandQueue.isEmpty()) {
       try {
         SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll();
-        SLogoFunction innerFunction = new SLogoFunction(command, dummyCommandQueue, modelTurtle);
+        SLogoFunction innerFunction = new SLogoFunction(dummyCommandQueue, modelTurtle);
         dummyFunctionList.add(innerFunction);
         command.resetCommand();
       }

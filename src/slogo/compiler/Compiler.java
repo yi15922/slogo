@@ -62,17 +62,16 @@ public class Compiler implements InputObserver {
   public void compileAndRun(String input){
     makeTokenQueue(input);
     if (!hasNextToken()) return;
-    SLogoCommand initialCommand = (SLogoCommand) getNextToken();
-    Deque<SLogoToken> parameterTokens = new LinkedList<>();
+    Deque<SLogoToken> functionTokens = new LinkedList<>();
     while (hasNextToken()) {
       SLogoToken tokenToAdd = getNextToken();
       if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
         tokenToAdd = makeList();
       }
-      parameterTokens.add(tokenToAdd);
+      functionTokens.add(tokenToAdd);
     }
 
-    new SLogoFunction(initialCommand, parameterTokens, turtle).run();
+    new SLogoFunction(functionTokens, turtle).run();
 
   }
 

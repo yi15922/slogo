@@ -38,7 +38,7 @@ public class ForCommand extends SLogoCommand {
       while (! copiedCommandQueue.isEmpty()) {
         try {
           SLogoCommand innerCommand = (SLogoCommand) copiedCommandQueue.poll();
-          SLogoFunction innerFunction = new SLogoFunction(innerCommand, copiedCommandQueue,
+          SLogoFunction innerFunction = new SLogoFunction(copiedCommandQueue,
               modelTurtle);
           functionList.add(innerFunction);
         }
@@ -62,12 +62,12 @@ public class ForCommand extends SLogoCommand {
     catch (ClassCastException e) {
       throw new SLogoException("Invalid parameter list syntax");
     }
-    SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue,
+    SLogoFunction helperFunction = new SLogoFunction(tokenQueue,
         modelTurtle);
     start = (int) helperFunction.run().getValue();
-    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue, modelTurtle);
+    helperFunction = new SLogoFunction(tokenQueue, modelTurtle);
     end = (int) helperFunction.run().getValue();
-    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue, modelTurtle);
+    helperFunction = new SLogoFunction(tokenQueue, modelTurtle);
     increment = (int) helperFunction.run().getValue();
   }
 }

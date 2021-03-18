@@ -31,7 +31,7 @@ public class DoTimesCommand extends SLogoCommand {
     List<SLogoFunction> functionList = new ArrayList<>();
     while (! commandQueue.isEmpty()) {
       try {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
+        SLogoFunction innerFunction = new SLogoFunction(commandQueue,
             modelTurtle);
         functionList.add(innerFunction);
       }
@@ -57,7 +57,7 @@ public class DoTimesCommand extends SLogoCommand {
     catch (ClassCastException e) {
       throw new SLogoException("Invalid parameter list syntax");
     }
-    SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue,
+    SLogoFunction helperFunction = new SLogoFunction(tokenQueue,
         modelTurtle);
     limit = (int) helperFunction.run().getValue();
   }
