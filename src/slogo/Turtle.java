@@ -15,16 +15,16 @@ public class Turtle extends Observable {
   private static final int ROUND_DECIMAL_PLACES = 3;
 
   public Turtle() {
-    setX(0);
-    setY(0);
+    setXY(0,0);
     setHeading(0);
     myPen = true;
     myShow = true;
   }
 
   public double forward(double pixels) {
-    setX(myX + Math.sin(Math.toRadians(myAngle)) * pixels);
-    setY(myY + Math.cos(Math.toRadians(myAngle)) * pixels);
+    double newX = myX + Math.sin(Math.toRadians(myAngle)) * pixels;
+    double newY = myY + Math.cos(Math.toRadians(myAngle)) * pixels;
+    setXY(newX, newY);
     return round(pixels);
   }
 
@@ -48,7 +48,7 @@ public class Turtle extends Observable {
   public double setHeading(double degrees) {
     double oldMyAngle = myAngle;
     myAngle = standardizeAngle(degrees);
-    notifyListeners("HEADING", oldMyAngle, myAngle);
+    notifyObserversOfHeading(myAngle);
     return standardizeAngle(degrees - oldMyAngle);
   }
 
@@ -75,8 +75,9 @@ public class Turtle extends Observable {
 
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    setX(x);
-    setY(y);
+    myX = round(x);
+    myY = round(y);
+    notifyObserversOfPosition(myX, myY);
     return round(distance);
   }
 
@@ -99,7 +100,7 @@ public class Turtle extends Observable {
   //assumes that pen state has changed
   private void togglePen() {
     myPen = !myPen;
-    notifyListeners("PEN", !myPen, myPen);
+    notifyObserversOfPen(myPen);
   }
 
   //no tests
@@ -120,14 +121,11 @@ public class Turtle extends Observable {
 
   private void toggleShow() {
     myShow = !myShow;
-    notifyListeners("PEN", !myShow, myShow);
+    notifyObserversOfShow(myShow);
   }
 
   public double home() {
-    double distance = calculate2PointDistance(myX, myY, 0, 0);
-    setX(0);
-    setY(0);
-    return round(distance);
+    return setXY(0,0);
   }
 
   //TODO: complete
@@ -163,15 +161,6 @@ public class Turtle extends Observable {
     return 0;
   }
 
-  private void setX(double x) {
-    notifyListeners("X", myX, x);
-    myX = round(x);
-  }
-
-  private void setY(double y) {
-    notifyListeners("Y", myY, y);
-    myY = round(y);
-  }
 
   private double standardizeAngle(double angle) {
     double returned = angle;
