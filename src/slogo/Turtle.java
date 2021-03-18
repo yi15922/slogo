@@ -168,18 +168,4 @@ public class Turtle extends SlogoModel{
     return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   }
 
-  @Override
-  protected void notifyObserversOfPosition(double x, double y) {
-    for (ModelObserver o : myObservers) o.receiveNewPosition(x, y);
-  }
-
-  @Override
-  protected void notifyObserversOfPen(boolean b) {
-    for (ModelObserver o : myObservers) o.checkPen(b);
-  }
-
-  @Override
-  protected void notifyObserversOfHeading(double heading) {
-    for (ModelObserver o : myObservers) o.receiveHeading(heading);
-  }
 }

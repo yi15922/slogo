@@ -33,7 +33,7 @@ public class View {
 
     public void startProgram(Stage window) {
 
-        MenuBar menuBar = createMenuBar();
+        TopBar topBar = createTopBar();
         OutputScreen output = createOutputScreen();
         myModel.addObserver(output);
         InputConsole input = createInputConsole();
@@ -55,13 +55,12 @@ public class View {
         mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         mainContent.setPadding(new Insets(MAIN_CONTENT_PADDING));
 
-        VBox everything = new VBox(menuBar, mainContent);
+        VBox everything = new VBox(topBar, mainContent);
         everything.setVgrow(mainContent, Priority.ALWAYS);
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Scene scene = new Scene(everything, WINDOW_WIDTH,WINDOW_HEIGHT);
 
-//        window.setResizable(false);
         window.setScene(scene);
         window.show();
         output.setPosition(0,0);
@@ -99,21 +98,11 @@ public class View {
         return output;
     }
 
-    private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar();
-        menuBar.setMinHeight(80);
-        menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-        return menuBar;
+    private TopBar createTopBar() {
+        TopBar topBar = new TopBar();
+        topBar.setMinHeight(80);
+        topBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        return topBar;
     }
-
-    public void setTurtleX(double x) {}
-    public void setTurtleY(double y) {}
-    public void setTurtleHeading(double angle) {}
-
-//    private void setListeners(List<PropertyChangeListener> listeners) {
-//        for (PropertyChangeListener l : myListeners) {
-//            myTurtle.addListener(l);
-//        }
-//    }
 
 }
