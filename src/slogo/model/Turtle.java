@@ -9,7 +9,7 @@ public class Turtle extends SlogoModel {
   private double myX;
   private double myY;
   private double myAngle;
-  private boolean myPenDown;
+  private Pen myPen;
   private boolean myShow;
   private int myID;
   private boolean myActive;
@@ -18,7 +18,7 @@ public class Turtle extends SlogoModel {
   public Turtle(int ID) {
     setXY(0, 0);
     setHeading(0);
-    myPenDown = true;
+    myPen = new Pen();
     myShow = true;
     myID = ID;
     myActive = true;
@@ -90,24 +90,12 @@ public class Turtle extends SlogoModel {
 
   //no tests
   public double penDown() {
-    if (!myPenDown) {
-      togglePen();
-    }
-    return 1;
+    return myPen.penDown();
   }
 
   //no tests
   public double penUp() {
-    if (myPenDown) {
-      togglePen();
-    }
-    return 0;
-  }
-
-  //assumes that pen state has changed
-  private void togglePen() {
-    myPenDown = !myPenDown;
-    notifyObserversOfPen(myPenDown);
+    return myPen.penUp();
   }
 
   //no tests
@@ -155,10 +143,7 @@ public class Turtle extends SlogoModel {
   }
 
   public int penDownP() {
-    if (myPenDown) {
-      return 1;
-    }
-    return 0;
+    return myPen.penDownP();
   }
 
   public int showingP() {
