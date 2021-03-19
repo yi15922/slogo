@@ -1,4 +1,10 @@
 
+##Design Considerations
+
+###InputLog
+We decided to have the input log display any user input, regardless of if it's correct syntax.
+We made this design decision so that the user can copy their invalid input from the log and paste
+it into the input console to correct it.
 
 ###InputConsole
 
