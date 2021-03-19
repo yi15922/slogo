@@ -1,7 +1,8 @@
-package slogo;
+package slogo.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import slogo.SlogoModel;
 
 public class Turtle extends SlogoModel {
 

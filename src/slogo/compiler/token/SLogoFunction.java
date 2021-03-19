@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
-import slogo.Turtle;
+import slogo.model.Turtle;
 import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.command.SLogoCommand;
 

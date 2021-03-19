@@ -1,4 +1,6 @@
-package slogo;
+package slogo.model;
+
+import slogo.model.Turtle;
 
 public class TurtleRunner {
   public static void main (String[] args) {

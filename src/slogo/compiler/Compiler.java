@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import slogo.SLogoException;
-import slogo.Turtle;
+import slogo.model.Turtle;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;

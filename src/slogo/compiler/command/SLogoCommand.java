@@ -3,7 +3,7 @@ package slogo.compiler.command;
 import java.util.ArrayList;
 import java.util.List;
 import slogo.SLogoException;
-import slogo.Turtle;
+import slogo.model.Turtle;
 import slogo.compiler.WorkspaceEntry;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoRunnable;
@@ -13,7 +13,7 @@ import slogo.compiler.token.SLogoRunnable;
  * All commands must implement this interface, because the Compiler and Function rely on
  * identifying Command objects in order to compile and run a user-entered String.
  * Since commands have different functionalities, any object that implements Command needs
- * access to the slogo.Turtle and the Workspace.
+ * access to the slogo.model.Turtle and the Workspace.
  *
  * @author Patrick Liu
  */
@@ -62,7 +62,7 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
 
     /**
      * Performs the intended function of the Command, with the end result potentially affecting
-     * other classes such as slogo.Turtle or Workspace. This method should first check that
+     * other classes such as slogo.model.Turtle or Workspace. This method should first check that
      * isReady() is true, ensuring it has the correct number of parameters. Next, it should
      * perform its function, using helper methods as needed.
      * Running this method is an assurance that the syntax of all parameters is correct; however,

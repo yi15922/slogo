@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
-import slogo.Turtle;
+import slogo.model.Turtle;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoComment;
 import slogo.compiler.token.SLogoFunction;

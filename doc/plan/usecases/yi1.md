@@ -8,5 +8,5 @@
 * The `MakeCommand` creates a `WorkspaceEntry` object with name "distance" and calls `Workspace.add()`. The command returns. 
 * `Function` moves onto `fd`, which it recognizes as a `MoveForwardCommand`, and calls `run()` on it, which eventually passes it the `Variable` with name "distance". 
 * `MoveForwardCommand` calls `Workspace.search()` with the variable name "distance", and finds the variable in the workspace. It adds it as its own parameter. 
-* `MoveForwardCommand` runs, calling `slogo.Turtle.move()`. 
-* `slogo.Turtle` updates the view to reflect the change. 
+* `MoveForwardCommand` runs, calling `slogo.model.Turtle.move()`. 
+* `slogo.model.Turtle` updates the view to reflect the change. 

@@ -96,11 +96,12 @@ loadScripts(document, 'script');</script>
 <pre>public abstract class <span class="type-name-label">SLogoCommand</span>
 extends <a href="../WorkspaceEntry.html" title="class in slogo.compiler">WorkspaceEntry</a>
 implements <a href="../token/SLogoRunnable.html" title="interface in slogo.compiler.token">SLogoRunnable</a></pre>
-<div class="block">An interface that provides methods to completely define an SLogo supported command.
- All commands must implement this interface, because the Compiler and Function rely on
- identifying Command objects in order to compile and run a user-entered String.
- Since commands have different functionalities, any object that implements Command needs
- access to the slogo.Turtle and the Workspace.</div>
+<div class="block">An interface that provides methods to completely define an SLogo supported
+  command.
+  All commands must implement this interface, because the Compiler and Function rely on
+  identifying Command objects in order to compile and run a user-entered String.
+  Since commands have different functionalities, any object that implements Command needs
+  access to the slogo.model.Turtle and the Workspace.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -224,8 +225,9 @@ implements <a href="../token/SLogoRunnable.html" title="interface in slogo.compi
 <td class="col-first"><code>abstract <a href="../token/SLogoToken.html" title="class in slogo.compiler.token">SLogoToken</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#run()">run</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Performs the intended function of the Command, with the end result potentially affecting
- other classes such as slogo.Turtle or Workspace.</div>
+<div class="block">Performs the intended function of the Command, with the end result potentially
+  affecting
+  other classes such as slogo.model.Turtle or Workspace.</div>
 </td>
 </tr>
 </tbody>
@@ -332,13 +334,14 @@ implements <a href="../token/SLogoRunnable.html" title="interface in slogo.compi
 <h3>run</h3>
 <div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="../token/SLogoToken.html" title="class in slogo.compiler.token">SLogoToken</a></span>&nbsp;<span class="member-name">run</span>()
                         throws <span class="exceptions"><a href="../../SLogoException.html" title="class in slogo">SLogoException</a></span></div>
-<div class="block">Performs the intended function of the Command, with the end result potentially affecting
- other classes such as slogo.Turtle or Workspace. This method should first check that
- isReady() is true, ensuring it has the correct number of parameters. Next, it should
- perform its function, using helper methods as needed.
- Running this method is an assurance that the syntax of all parameters is correct; however,
- this method still can throw an exception if it encounters an issue while running (i.e.
- an illegal turtle movement).</div>
+<div class="block">Performs the intended function of the Command, with the end result potentially
+  affecting
+  other classes such as slogo.model.Turtle or Workspace. This method should first check that
+  isReady() is true, ensuring it has the correct number of parameters. Next, it should
+  perform its function, using helper methods as needed.
+  Running this method is an assurance that the syntax of all parameters is correct; however,
+  this method still can throw an exception if it encounters an issue while running (i.e.
+  an illegal turtle movement).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../token/SLogoRunnable.html#run()">run</a></code>&nbsp;in interface&nbsp;<code><a href="../token/SLogoRunnable.html" title="interface in slogo.compiler.token">SLogoRunnable</a></code></dd>

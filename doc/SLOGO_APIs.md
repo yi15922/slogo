@@ -31,14 +31,14 @@
 * What do commands know, when do they know it, and how do they get it?
     * Objects that extend `Command` know what they do because they are implemented for their specific purpose and constructed when a parsed command is valid.
     * They they are initialized with the parameter the user gave the command
-    * They communicate with the `slogo.Turtle` to update the turtle's state
+    * They communicate with the `slogo.model.Turtle` to update the turtle's state
 
 * How is the GUI updated after a command has completed execution?
     * The View receives the turtle's next position, updates the position of the turtle on the screen, and then draws a line representing the path if the pen is on
 
 * What behaviors does the result of a command need to have to be used by the front end?
     * The command needs to be valid in order to spawn a new `Command` subclass
-    * The parameter needs to be valid for the `Command` to make a change to the `slogo.Turtle`
+    * The parameter needs to be valid for the `Command` to make a change to the `slogo.model.Turtle`
     * The result of the command should include the updated "state" of the turtle (position, orientation, whether or not the pen is on)
 
 ### APIs
