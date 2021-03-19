@@ -25,37 +25,16 @@ public class RepeatCommand extends SLogoCommand {
   @Override
   public SLogoToken run() throws SLogoException {
     int numTimesToRepeat = (int) expectedParameters.get(0).getValue();
-    try {
-      SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
-      commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-    }
-    catch (ClassCastException e) {
-      throw new SLogoException("Invalid command syntax");
-    }
+    SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
+    commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     for (SLogoToken token : commandQueue) {
       if (token.isEqualTokenType(new SLogoVariable("")) && token.toString().equals(":repcount")) {
         System.out.println("Found repcount variable");
         repcountVariable = (SLogoVariable) token;
+        break;
       }
     }
-    List<SLogoFunction> functionList = new ArrayList<>();
-    while (! commandQueue.isEmpty()) { // todo: error checking
-      try {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
-            modelTurtle);
-        functionList.add(innerFunction);
-      }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid command list syntax");
-      }
-    }
-    SLogoToken returnToken = new SLogoConstant(0);
-    for (int i = 1; i <= numTimesToRepeat; i++) {
-      repcountVariable.setValue(i);
-      for (SLogoFunction function : functionList) {
-        returnToken = function.run();
-      }
-    }
-    return returnToken;
+    return new LoopHelper(1, numTimesToRepeat, 1, new SLogoFunction(commandQueue, modelTurtle),
+        repcountVariable).run();
   }
 }
