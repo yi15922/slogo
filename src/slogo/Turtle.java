@@ -3,7 +3,7 @@ package slogo;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Turtle extends Observable {
+public class Turtle extends SlogoModel {
 
   private double myX;
   private double myY;
@@ -15,7 +15,7 @@ public class Turtle extends Observable {
   private static final int ROUND_DECIMAL_PLACES = 3;
 
   public Turtle(int ID) {
-    setXY(0,0);
+    setXY(0, 0);
     setHeading(0);
     myPenDown = true;
     myShow = true;
@@ -131,7 +131,7 @@ public class Turtle extends Observable {
   }
 
   public double home() {
-    return setXY(0,0);
+    return setXY(0, 0);
   }
 
   //TODO: complete
