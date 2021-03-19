@@ -38,8 +38,7 @@ public class DoTimesCommand extends SLogoCommand {
     catch (ClassCastException e) {
       throw new SLogoException("Invalid parameter list syntax");
     }
-    SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue,
-        modelTurtle);
-    limit = (int) helperFunction.run().getValue();
+    tokenQueue.addFirst(new EvaluateNumberCommand());
+    limit = (int) new SLogoFunction(tokenQueue, modelTurtle).runSingleCommand().getValue();
   }
 }

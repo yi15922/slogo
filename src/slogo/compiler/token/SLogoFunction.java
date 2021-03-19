@@ -102,6 +102,17 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return returnToken;
   }
 
+  public SLogoToken runSingleCommand() {
+    SLogoCommand commandToRun;
+    try {
+      commandToRun = (SLogoCommand) functionTokens.poll();
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid syntax");
+    }
+    return runCommand(commandToRun, functionTokens);
+  }
+
   // recursively assembles and runs a command
   // takes in Deque of all remaining Tokens in the user-entered String, polls Tokens that it uses
   // to create parameters for the initial command and all nested commands
