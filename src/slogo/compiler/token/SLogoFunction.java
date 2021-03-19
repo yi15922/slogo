@@ -1,5 +1,6 @@
 package slogo.compiler.token;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
@@ -59,26 +60,27 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
 
   public SLogoToken runFunction() {
     SLogoToken returnToken = new SLogoConstant(0);
-    while (! functionTokens.isEmpty()) {
+    Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
+    while (! runnableTokens.isEmpty()) {
       SLogoCommand nextCommand;
       try {
-        nextCommand = (SLogoCommand) functionTokens.poll();
+        nextCommand = (SLogoCommand) runnableTokens.poll();
       }
       catch (ClassCastException e) {
         throw new SLogoException("Invalid syntax");
       }
-      returnToken = runCommand(nextCommand);
+      returnToken = runCommand(nextCommand, runnableTokens);
     }
     return returnToken;
   }
 
-  private SLogoToken runCommand(SLogoCommand command) {
+  private SLogoToken runCommand(SLogoCommand command, Deque<SLogoToken> remainingTokens) {
     command.attachTurtle(modelTurtle);
     while (! command.isReady()) {
-      if (functionTokens.isEmpty()) {
+      if (remainingTokens.isEmpty()) {
         throw new SLogoException("Invalid syntax");
       }
-      SLogoToken nextToken = functionTokens.poll();
+      SLogoToken nextToken = remainingTokens.poll();
       if (nextToken.isEqualTokenType(new SLogoConstant(0))) {
         double tokenValue = nextToken.getValue();
         nextToken = new SLogoVariable("wrapper", tokenValue);
@@ -91,7 +93,8 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
         catch (ClassCastException e) {
           throw new SLogoException("Invalid syntax");
         }
-        functionTokens.addFirst(runCommand(innerCommand));
+        SLogoToken resultToken = runCommand(innerCommand, remainingTokens);
+        remainingTokens.addFirst(resultToken);
       }
     }
     SLogoToken returnToken = command.run();

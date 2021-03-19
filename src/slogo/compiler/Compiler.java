@@ -62,7 +62,7 @@ public class Compiler implements InputObserver {
   public void compileAndRun(String input){
     makeTokenQueue(input);
     if (!hasNextToken()) return;
-    SLogoCommand initialCommand = (SLogoCommand) getNextToken();
+    //SLogoCommand initialCommand = (SLogoCommand) getNextToken();
     Deque<SLogoToken> parameterTokens = new LinkedList<>();
     while (hasNextToken()) {
       SLogoToken tokenToAdd = getNextToken();
@@ -72,7 +72,8 @@ public class Compiler implements InputObserver {
       parameterTokens.add(tokenToAdd);
     }
 
-    new SLogoFunction(initialCommand, parameterTokens, turtle).run();
+    //new SLogoFunction(initialCommand, parameterTokens, turtle).run();
+    new SLogoFunction(parameterTokens, turtle).runFunction();
 
   }
 

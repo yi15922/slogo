@@ -23,33 +23,14 @@ public class DoTimesCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    SLogoList parameterList = (SLogoList) expectedParameters.get(0);
-    Deque<SLogoToken> parameterQueue = new ArrayDeque<>(parameterList.getTokenList());
-    parseParameterQueue(parameterQueue);
+    parseParameterList((SLogoList) expectedParameters.get(0));
     SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-    List<SLogoFunction> functionList = new ArrayList<>();
-    while (! commandQueue.isEmpty()) {
-      try {
-        SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
-            modelTurtle);
-        functionList.add(innerFunction);
-      }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid command list syntax");
-      }
-    }
-    SLogoToken returnToken = new SLogoConstant(0);
-    for (int i = 1; i <= limit; i++) {
-      for (SLogoFunction function : functionList) {
-        returnToken = function.run();
-      }
-      counterVariable.setValue(counterVariable.getValue() + 1);
-    }
-    return returnToken;
+    return new LoopHelper(1, limit, 1, new SLogoFunction(commandQueue, modelTurtle), counterVariable).run();
   }
 
-  private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
+  private void parseParameterList(SLogoList parameterList) {
+    Deque<SLogoToken> tokenQueue = new ArrayDeque<>(parameterList.getTokenList());
     try {
       counterVariable = (SLogoVariable) tokenQueue.poll();
       counterVariable.setValue(1);
