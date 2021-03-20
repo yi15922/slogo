@@ -3,10 +3,7 @@ package slogo.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -44,21 +41,18 @@ public class View implements AlertObserver, UserActionObserver {
         startProgram();
     }
 
-    private ComboBox<String> createLanguagesDropdown() {
-        ComboBox<String> languages = new ComboBox();
-        languages.setPromptText("Select Language");
+    private MenuButton createLanguagesDropdown() {
+        MenuButton languages = new MenuButton(myResources.getString("SelectLanguagePrompt"));
         for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
-            languages.getItems().add(myLanguages.getString(keys.nextElement()));
+            String langKey = keys.nextElement();
+            MenuItem item = new MenuItem(myLanguages.getString(langKey));
+            item.setOnAction(e -> {
+                retrieveResources(myLocale = new Locale(langKey));
+                startProgram();
+            });
+            languages.getItems().add(item);
         }
-        languages.setOnAction(e -> {
-            for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
-                String key = keys.nextElement();
-                if (myLanguages.getString(key).equals(languages.getValue())) {
-                    retrieveResources(myLocale = new Locale(key));
-                    startProgram();
-                }
-            }
-        });
+
         return languages;
     }
 

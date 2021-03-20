@@ -1,6 +1,5 @@
 package slogo.view;
 
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import slogo.Observable;
