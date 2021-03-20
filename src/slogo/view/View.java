@@ -11,17 +11,21 @@ import javafx.stage.Stage;
 import slogo.SlogoModel;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
-import slogo.observers.UserInputObserver;
+import slogo.observers.UserActionObserver;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class View implements AlertObserver, UserInputObserver {
+public class View implements AlertObserver, UserActionObserver {
 
     private ResourceBundle myLanguages;
     private ResourceBundle mySettings;
     private ResourceBundle myResources;
+    private ResourceBundle myMethods;
+    private Locale myLocale;
     private final SlogoModel myModel;
     private final InputObserver myInputObserver;
     private Stage myWindow;
@@ -32,7 +36,7 @@ public class View implements AlertObserver, UserInputObserver {
         myModel = model;
         myInputObserver = observer;
         mySettings = ResourceBundle.getBundle("Settings");
-        retrieveResources(new Locale(mySettings.getString("DefaultLanguage")));
+        retrieveResources(myLocale = new Locale(mySettings.getString("DefaultLanguage")));
         startProgram();
     }
 
@@ -46,7 +50,7 @@ public class View implements AlertObserver, UserInputObserver {
             for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
                 String key = keys.nextElement();
                 if (myLanguages.getString(key).equals(languages.getValue())) {
-                    retrieveResources(new Locale(key));
+                    retrieveResources(myLocale = new Locale(key));
                     startProgram();
                 }
             }
@@ -56,6 +60,7 @@ public class View implements AlertObserver, UserInputObserver {
 
     private void retrieveResources(Locale locale) {
         myResources = ResourceBundle.getBundle("MyResources", locale);
+        myMethods = ResourceBundle.getBundle("MyUserActionViewMethods", locale);
     }
 
     public void startProgram() {
@@ -136,20 +141,38 @@ public class View implements AlertObserver, UserInputObserver {
     }
 
     @Override
-    public String receiveAlert(String message) {
-        return null;
+    public void receiveAlert(String message) {
+        System.out.println(message);
     }
 
     @Override
-    public String receiveErrorAlert(String message) {
-        return null;
+    public void receiveErrorAlert(String message) {
+        System.out.println(message);
     }
 
     @Override
-    public void receiveAction(String s) {
-        // searches for key with String matching the argument
-        for (Enumeration<String> keys = myResources.getKeys(); keys.hasMoreElements();) {
+    public void receiveAction(String action) {
+        Class thisClass = this.getClass();
+        //converts to lower case use selected locale, since different languages could have different ways
+        //of lowercasing letters
+        try {
+            String methodName = myMethods.getString(action.toLowerCase(myLocale).replaceAll("\\s+",""));
 
+            Method method = thisClass.getDeclaredMethod(methodName, null);
+            method.invoke(this, null);
+        } catch (NoSuchMethodException ignore) {
+            receiveErrorAlert("Something went wrong calling the method\n" +
+                    "Make sure .properties files have correct method names written");
+        } catch (IllegalAccessException ignore) {
+            receiveErrorAlert("Something went wrong calling the method\n" +
+                    "Make sure .properties files have correct method names written");
+        } catch (InvocationTargetException ignore) {
+            receiveErrorAlert("Something went wrong calling the method\n" +
+                    "Make sure .properties files have correct method names written");
         }
+    }
+
+    private void changeBackgroundColor() {
+        System.out.println("Background color has been changed");
     }
 }

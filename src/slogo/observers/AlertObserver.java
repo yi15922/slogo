@@ -1,7 +1,7 @@
 package slogo.observers;
 
 public interface AlertObserver {
-    String receiveAlert(String message);
+    void receiveAlert(String message);
 
-    String receiveErrorAlert(String message);
+    void receiveErrorAlert(String message);
 }

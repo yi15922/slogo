@@ -5,16 +5,16 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
-import slogo.observers.UserInputObserver;
+import slogo.observers.UserActionObserver;
 
 import java.util.ResourceBundle;
 
 public class TopBar extends HBox {
 
-    private UserInputObserver myInputObserver;
+    private UserActionObserver myInputObserver;
     private ResourceBundle myResources;
 
-    public TopBar(UserInputObserver observer, ResourceBundle myResources) {
+    public TopBar(UserActionObserver observer, ResourceBundle myResources) {
         myInputObserver = observer;
         this.myResources = myResources;
         Button reset = new Button("Reset");
