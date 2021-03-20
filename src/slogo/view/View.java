@@ -18,8 +18,6 @@ import java.util.ResourceBundle;
 public class View implements AlertObserver {
 
     private static final String OBJECT_IMAGE = "turtle.png";
-    private static final double WINDOW_HEIGHT = 700;
-    private static final double WINDOW_WIDTH = 1000;
     private static final double OUTPUT_WIDTH = 500;
     private static final double OUTPUT_HEIGHT = 500;
     private static final double MAIN_CONTENT_PADDING = 10;
@@ -77,7 +75,8 @@ public class View implements AlertObserver {
         everything.setVgrow(mainContent, Priority.ALWAYS);
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Scene scene = new Scene(everything, WINDOW_WIDTH,WINDOW_HEIGHT);
+        Scene scene = new Scene(everything, Double.parseDouble(mySettings.getString("GUIWidth")),
+                                 Double.parseDouble(mySettings.getString("GUIHeight")));
 
         window.setScene(scene);
         window.show();
@@ -107,7 +106,7 @@ public class View implements AlertObserver {
     }
 
     private OutputScreen createOutputScreen() {
-        OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)), OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        OutputScreen output = new OutputScreen(mySettings.getString("ObjectImage"), OUTPUT_WIDTH, OUTPUT_HEIGHT);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
         return output;
     }

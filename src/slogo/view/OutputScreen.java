@@ -1,14 +1,9 @@
 package slogo.view;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -17,13 +12,17 @@ import slogo.observers.ModelObserver;
 
 public class OutputScreen extends Region implements ModelObserver {
 
-    private ImageView myObject;
+    private Node myObject;
     private double myWidth;
     private double myHeight;
     private boolean isPenDown = false;
 
-    public OutputScreen(Image displayObject, double width, double height) {
-        myObject = makeDisplayObject("displayObject", 20, displayObject);
+    public OutputScreen(String displayObject, double width, double height) {
+        try {
+            myObject = makeDisplayObject("displayObject", 20, new Image(this.getClass().getClassLoader().getResourceAsStream(displayObject)));
+        } catch (Exception ignore) {
+            myObject = new Circle(10);
+        }
         myWidth = width;
         myHeight = height;
         this.getChildren().addAll(myObject);
@@ -46,15 +45,15 @@ public class OutputScreen extends Region implements ModelObserver {
 //    }
 
     public void setPosition(double x, double y) {
-        double localX = x + myWidth/2;
-        double localY = myHeight/2 - y;
+        double localX = x + this.getBoundsInLocal().getWidth()/2;
+        double localY = this.getBoundsInLocal().getHeight()/2 - y;
         if (isPenDown) drawLine(localX, localY);
-        myObject.setX(localX);
-        myObject.setY(localY);
+        myObject.setLayoutX(localX);
+        myObject.setLayoutY(localY);
     }
 
     private void drawLine(double x, double y) {
-        Line line = new Line(myObject.getX(), myObject.getY(), x, y);
+        Line line = new Line(myObject.getLayoutX(), myObject.getLayoutY(), x, y);
         this.getChildren().add(line);
     }
 
