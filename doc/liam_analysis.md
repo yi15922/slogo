@@ -1,12 +1,30 @@
 
 ##Design Considerations
 
-###InputLog
+####Observable
+
+The intent of this interface is assure that its implementations have observers of the correct type.
+For example, InputConsole implements Observable<InputObserver> so that it is guaranteed it will
+have ways of adding and removing observers *of type InpuObserver*. That way, when implementations 
+notify their observers of changes in data, they know what methods they can call because they are aware
+of what type their observers are. 
+
+Moreover, notification methods were not included in the Observable interface so that the individual
+implementations of the interface can decide how to notify observers of the specified type. For example,
+InputConsole and SlogoModel notify their observers of different things, therefore, they implement
+different notify methods. 
+
+This interface was originally a class extended by SlogoModel, but it had to be made into an interface so
+that it wouldn't cause conflicts if a class was already extending another class. For example, an Observable 
+class could not be *extended* by InputConsole because it already extends VBox.
+
+###View
+####InputLog
 We decided to have the input log display any user input, regardless of if it's correct syntax.
 We made this design decision so that the user can copy their invalid input from the log and paste
 it into the input console to correct it.
 
-###InputConsole
+####InputConsole
 
 Created InputConsole class extending JavaFX TextArea modifications could be 
 done to the input console on the GUI without changing code inside View, thereby leaving

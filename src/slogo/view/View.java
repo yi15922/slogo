@@ -10,11 +10,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
+import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 
 import java.util.ResourceBundle;
 
-public class View {
+public class View implements AlertObserver {
 
     private static final String OBJECT_IMAGE = "turtle.png";
     private static final double WINDOW_HEIGHT = 700;
@@ -85,7 +86,7 @@ public class View {
 
     private InputLog createInputLog(InputConsole input) {
         InputLog log = new InputLog();
-        input.addInputObserver(log);
+        input.addObserver(log);
         log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
         return log;
     }
@@ -99,7 +100,7 @@ public class View {
     private InputConsole createInputConsole() {
         InputConsole input = new InputConsole();
         input.setMaxHeight(INPUT_CONSOLE_MAX_HEIGHT);
-        input.addInputObserver(myInputObserver);
+        input.addObserver(myInputObserver);
         input.setMaxWidth(OUTPUT_WIDTH);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         return input;
@@ -118,4 +119,13 @@ public class View {
         return topBar;
     }
 
+    @Override
+    public String receiveAlert(String message) {
+        return null;
+    }
+
+    @Override
+    public String receiveErrorAlert(String message) {
+        return null;
+    }
 }
