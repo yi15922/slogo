@@ -3,6 +3,7 @@ package slogo.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -12,33 +13,52 @@ import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserInputObserver;
 
+import java.util.Enumeration;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class View implements AlertObserver, UserInputObserver {
 
-    // get strings from resource file
+    private ResourceBundle myLanguages;
     private ResourceBundle mySettings;
     private ResourceBundle myResources;
     private final SlogoModel myModel;
     private final InputObserver myInputObserver;
+    private Stage myWindow;
 
     public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
-        retrieveResources();
+        myWindow = primaryStage;
+        myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;
         myInputObserver = observer;
-        startProgram(primaryStage);
-    }
-
-    private void retrieveResources() {
         mySettings = ResourceBundle.getBundle("Settings");
-        try {
-            myResources = ResourceBundle.getBundle(mySettings.getString("DefaultLanguage"));
-        } catch (Exception ignore) {
-            myResources = ResourceBundle.getBundle("English");
-        }
+        retrieveResources(new Locale(mySettings.getString("DefaultLanguage")));
+        startProgram();
     }
 
-    public void startProgram(Stage window) {
+    private ComboBox<String> createLanguagesDropdown() {
+        ComboBox<String> languages = new ComboBox();
+        languages.setPromptText("Select Language");
+        for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
+            languages.getItems().add(myLanguages.getString(keys.nextElement()));
+        }
+        languages.setOnAction(e -> {
+            for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
+                String key = keys.nextElement();
+                if (myLanguages.getString(key).equals(languages.getValue())) {
+                    retrieveResources(new Locale(key));
+                    startProgram();
+                }
+            }
+        });
+        return languages;
+    }
+
+    private void retrieveResources(Locale locale) {
+        myResources = ResourceBundle.getBundle("MyResources", locale);
+    }
+
+    public void startProgram() {
 
         TopBar topBar = createTopBar(myResources);
         OutputScreen output = createOutputScreen();
@@ -71,8 +91,8 @@ public class View implements AlertObserver, UserInputObserver {
         Scene scene = new Scene(everything, Double.parseDouble(mySettings.getString("GUIWidth")),
                                  Double.parseDouble(mySettings.getString("GUIHeight")));
 
-        window.setScene(scene);
-        window.show();
+        myWindow.setScene(scene);
+        myWindow.show();
         output.setPosition(0,0);
     }
 
@@ -109,6 +129,7 @@ public class View implements AlertObserver, UserInputObserver {
     private TopBar createTopBar(ResourceBundle myResources) {
         mySettings.getKeys();
         TopBar topBar = new TopBar(this, myResources);
+        topBar.getChildren().add(createLanguagesDropdown());
         topBar.setMinHeight(Double.parseDouble(mySettings.getString("MenuBarMaxHeight")));
         topBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         return topBar;
@@ -126,6 +147,9 @@ public class View implements AlertObserver, UserInputObserver {
 
     @Override
     public void receiveAction(String s) {
-        System.out.println("Action received: " + s);
+        // searches for key with String matching the argument
+        for (Enumeration<String> keys = myResources.getKeys(); keys.hasMoreElements();) {
+
+        }
     }
 }
