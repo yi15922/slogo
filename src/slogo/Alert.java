@@ -10,6 +10,18 @@ public class Alert implements Observable<AlertObserver>{
 
     private List<AlertObserver> myObservers = new ArrayList<>();
 
+    public void displayAlert(String message) {
+        for (AlertObserver o : myObservers ) {
+            o.receiveAlert(message);
+        }
+    }
+
+    public void displayError(String message) {
+        for (AlertObserver o : myObservers ) {
+            o.receiveErrorAlert(message);
+        }
+    }
+
     public Alert(AlertObserver observer) {
         myObservers.add(observer);
     }
