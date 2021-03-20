@@ -4,8 +4,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.Observable;
 import slogo.observers.InputObserver;
 import util.DukeApplicationTest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,7 +34,8 @@ public class InputConsoleTest extends DukeApplicationTest {
             }
         }
         Listener listener = new Listener();
-        myInputConsole.addInputObserver(listener);
+        myInputConsole.addObserver(listener);
         assertTrue(myInputConsole.isObserver(listener));
     }
+
 }

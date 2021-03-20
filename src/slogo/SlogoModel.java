@@ -5,7 +5,9 @@ import slogo.observers.ModelObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlogoModel extends Observable<ModelObserver>{
+public class SlogoModel implements Observable<ModelObserver>{
+
+    protected List<ModelObserver> myObservers = new ArrayList<>();
 
     protected void notifyObserversOfPosition(double x, double y) {
         for (ModelObserver o : myObservers) o.receiveNewPosition(x, y);
@@ -17,5 +19,20 @@ public class SlogoModel extends Observable<ModelObserver>{
 
     protected void notifyObserversOfHeading(double heading) {
         for (ModelObserver o : myObservers) o.receiveHeading(heading);
+    }
+
+    @Override
+    public boolean isObserver(ModelObserver observer) {
+        return myObservers.contains(observer);
+    }
+
+    @Override
+    public void addObserver(ModelObserver observer) {
+        myObservers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(ModelObserver observer) {
+        myObservers.remove(observer);
     }
 }

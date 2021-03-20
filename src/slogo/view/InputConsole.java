@@ -5,12 +5,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import slogo.Observable;
 import slogo.observers.InputObserver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputConsole extends VBox {
+public class InputConsole extends VBox implements Observable<InputObserver>{
 
     final static String BUTTON_TEXT = "Run";
 
@@ -28,16 +29,19 @@ public class InputConsole extends VBox {
         this.getChildren().addAll(inputArea, button);
     }
 
-    public boolean isObserver(InputObserver o) {
-        return myInputObservers.contains(o);
+    @Override
+    public boolean isObserver(InputObserver observer) {
+        return myInputObservers.contains(observer);
     }
 
-    public void addInputObserver(InputObserver o) {
-        myInputObservers.add(o);
+    @Override
+    public void addObserver(InputObserver observer) {
+        myInputObservers.add(observer);
     }
 
-    public void removeInputObserver(Object o) {
-        myInputObservers.remove(o);
+    @Override
+    public void removeObserver(InputObserver observer) {
+        myInputObservers.remove(observer);
     }
 
     private void sendInputToObservers(String input) {
