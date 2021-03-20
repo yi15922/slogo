@@ -10,10 +10,11 @@ import javafx.stage.Stage;
 import slogo.SlogoModel;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
+import slogo.observers.UserInputObserver;
 
 import java.util.ResourceBundle;
 
-public class View implements AlertObserver {
+public class View implements AlertObserver, UserInputObserver {
 
     // get strings from resource file
     private ResourceBundle mySettings;
@@ -39,7 +40,7 @@ public class View implements AlertObserver {
 
     public void startProgram(Stage window) {
 
-        TopBar topBar = createTopBar();
+        TopBar topBar = createTopBar(myResources);
         OutputScreen output = createOutputScreen();
         myModel.addObserver(output);
         InputConsole input = createInputConsole();
@@ -105,8 +106,9 @@ public class View implements AlertObserver {
         return output;
     }
 
-    private TopBar createTopBar() {
-        TopBar topBar = new TopBar();
+    private TopBar createTopBar(ResourceBundle myResources) {
+        mySettings.getKeys();
+        TopBar topBar = new TopBar(this, myResources);
         topBar.setMinHeight(Double.parseDouble(mySettings.getString("MenuBarMaxHeight")));
         topBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         return topBar;
@@ -120,5 +122,10 @@ public class View implements AlertObserver {
     @Override
     public String receiveErrorAlert(String message) {
         return null;
+    }
+
+    @Override
+    public void receiveAction(String s) {
+        System.out.println("Action received: " + s);
     }
 }

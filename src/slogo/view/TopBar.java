@@ -5,18 +5,23 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
+import slogo.observers.UserInputObserver;
+
+import java.util.ResourceBundle;
 
 public class TopBar extends HBox {
 
-    //TODO use reflection to call methods when options selected and use properties files to enter
-    //promt text
-    public TopBar() {
+    private UserInputObserver myInputObserver;
+    private ResourceBundle myResources;
+
+    public TopBar(UserInputObserver observer, ResourceBundle myResources) {
+        myInputObserver = observer;
+        this.myResources = myResources;
         Button reset = new Button("Reset");
         ComboBox load = new ComboBox();
         load.setPromptText("Load Program");
         Button save = new Button("Save Program");
-        SettingsDropDown settings = new SettingsDropDown("Settings");
-        settings.setPromptText("Settings");
+        SettingsDropDown settings = new SettingsDropDown(myResources.getString("SettingsButtonPrompt"), observer, myResources);
         Button help = new Button("Help");
 
         this.getChildren().addAll(reset,load,save,settings,help);
