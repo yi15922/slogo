@@ -54,12 +54,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        newWindow(primaryStage);
+    }
+
+
+    private void newWindow(Stage stage){
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
         Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
-        View view = new View(modelTurtle, modelCompiler, primaryStage);
 
-
+        new View(modelTurtle, modelCompiler, stage, event -> newWindow(new Stage()));
     }
 }

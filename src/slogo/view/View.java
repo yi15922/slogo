@@ -1,11 +1,20 @@
 package slogo.view;
 
+
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -24,16 +33,19 @@ public class View {
 
     private SlogoModel myModel;
     private InputObserver myInputObserver;
+    private EventHandler menubarHandler;
 
-    public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
+    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
         myModel = model;
         myInputObserver = observer;
         startProgram(primaryStage);
+        menubarHandler = handler;
     }
 
     public void startProgram(Stage window) {
 
         MenuBar menuBar = createMenuBar();
+        MenuBar macOSMenuBar = makeMacOSMenuBar();
         OutputScreen output = createOutputScreen();
         myModel.addObserver(output);
         InputConsole input = createInputConsole();
@@ -55,7 +67,7 @@ public class View {
         mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         mainContent.setPadding(new Insets(MAIN_CONTENT_PADDING));
 
-        VBox everything = new VBox(menuBar, mainContent);
+        VBox everything = new VBox(menuBar, macOSMenuBar, mainContent);
         everything.setVgrow(mainContent, Priority.ALWAYS);
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -103,6 +115,24 @@ public class View {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinHeight(80);
         menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        return menuBar;
+    }
+
+    private MenuBar makeMacOSMenuBar(){
+        MenuBar menuBar = new MenuBar();
+        String os = System.getProperty("os.name");
+        if (os != null && os.startsWith("Mac")) {
+            Platform.runLater(() -> menuBar.useSystemMenuBarProperty().set(true)) ;
+        }
+
+        Menu menu1 = new Menu("File");
+        MenuItem newWindowButton = new MenuItem("New Window");
+        newWindowButton.setOnAction(event -> menubarHandler.handle(null));
+        newWindowButton.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.META_DOWN));
+
+        menu1.getItems().add(newWindowButton);
+
+        menuBar.getMenus().add(menu1);
         return menuBar;
     }
 
