@@ -21,6 +21,9 @@ import java.util.ResourceBundle;
 
 public class View implements AlertObserver, UserActionObserver {
 
+    private final StackPane myWorkspace;
+    private final InputConsole myInput;
+    private final InputLog myLog;
     private ResourceBundle myLanguages;
     private ResourceBundle mySettings;
     private ResourceBundle myResources;
@@ -38,6 +41,12 @@ public class View implements AlertObserver, UserActionObserver {
         myInputObserver = observer;
         mySettings = ResourceBundle.getBundle("Settings");
         retrieveResources(myLocale = new Locale(mySettings.getString("DefaultLanguage")));
+        //fields assigned here instead of start program so they are not reset when language is switched
+        myOutputScreen = createOutputScreen();
+        myModel.addObserver(myOutputScreen);
+        myWorkspace = createWorkSpace();
+        myInput = createInputConsole();
+        myLog = createInputLog(myInput);
         startProgram();
     }
 
@@ -64,19 +73,13 @@ public class View implements AlertObserver, UserActionObserver {
     public void startProgram() {
 
         TopBar topBar = createTopBar(myResources);
-        myOutputScreen = createOutputScreen();
-        myModel.addObserver(myOutputScreen);
-        InputConsole input = createInputConsole();
-        StackPane workspace = createWorkSpace();
-        InputLog log = createInputLog(input);
 
 
-
-        SplitPane outputAndInput = new SplitPane(myOutputScreen, input);
+        SplitPane outputAndInput = new SplitPane(myOutputScreen, myInput);
         outputAndInput.setOrientation(Orientation.VERTICAL);
         outputAndInput.setDividerPosition(0,1);
 
-        SplitPane logAndWorkspace = new SplitPane(log, workspace);
+        SplitPane logAndWorkspace = new SplitPane(myLog, myWorkspace);
         logAndWorkspace.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
         logAndWorkspace.setMinWidth(Double.parseDouble(mySettings.getString("LogAndWorkSpaceMinWidth")));
 //        logAndWorkspace.setMaxHeight(Double.MAX_VALUE);
@@ -93,10 +96,9 @@ public class View implements AlertObserver, UserActionObserver {
 
         Scene scene = new Scene(everything, Double.parseDouble(mySettings.getString("GUIWidth")),
                                  Double.parseDouble(mySettings.getString("GUIHeight")));
-
         myWindow.setScene(scene);
         myWindow.show();
-        myOutputScreen.setPosition(0,0);
+        myOutputScreen.initializeTurtle();
     }
 
     private InputLog createInputLog(InputConsole input) {
@@ -171,6 +173,14 @@ public class View implements AlertObserver, UserActionObserver {
     }
 
     private void changeBackgroundColor() {
+        myOutputScreen.changeBackgroundColor(createDialogueAndGetColor());
+    }
+
+    private void changePenColor() {
+        myOutputScreen.changePenColor(createDialogueAndGetColor());
+    }
+
+    private String createDialogueAndGetColor() {
         Dialog dialog = new TextInputDialog();
         dialog.setHeaderText("Color in html, hex, or rgb format");
         Optional<String> result = dialog.showAndWait();
@@ -180,8 +190,7 @@ public class View implements AlertObserver, UserActionObserver {
 
             color = result.get();
         }
-
-        myOutputScreen.changeBackgroundColor(color);
-        System.out.println("Background color has been changed");
+        return color;
     }
+
 }

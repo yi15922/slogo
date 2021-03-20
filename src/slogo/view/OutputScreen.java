@@ -7,6 +7,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -16,9 +17,9 @@ import slogo.observers.ModelObserver;
 public class OutputScreen extends Region implements ModelObserver {
 
     private Node myObject;
-    private double myWidth;
-    private double myHeight;
     private boolean isPenDown = false;
+    private Paint myPenColor = Color.BLACK;
+    private boolean isTurtleInitialized = false;
 
     public OutputScreen(String displayObject) {
         try {
@@ -26,8 +27,6 @@ public class OutputScreen extends Region implements ModelObserver {
         } catch (Exception ignore) {
             myObject = new Circle(10);
         }
-//        this.setWidth(width);
-//        this.setHeight(height);
         this.getChildren().addAll(myObject);
 
         // disallows displayed object from appearing outside of output screen
@@ -39,13 +38,10 @@ public class OutputScreen extends Region implements ModelObserver {
         });
     }
 
-//    public void setX(double x) {
-//        myObject.setX(x + myWidth/2);
-//    }
-//
-//    public void setY(double y) {
-//        myObject.setY(myHeight/2 - y);
-//    }
+    public void initializeTurtle() {
+        if (!isTurtleInitialized) setPosition(0,0);
+        isTurtleInitialized = true;
+    }
 
     public void setPosition(double x, double y) {
         double localX = x + this.getBoundsInLocal().getWidth()/2;
@@ -57,6 +53,7 @@ public class OutputScreen extends Region implements ModelObserver {
 
     private void drawLine(double x, double y) {
         Line line = new Line(myObject.getLayoutX(), myObject.getLayoutY(), x, y);
+        line.setStroke(myPenColor);
         this.getChildren().add(line);
     }
 
@@ -73,6 +70,11 @@ public class OutputScreen extends Region implements ModelObserver {
     public void changeBackgroundColor(String color) {
         if (!color.equals("")) this.setBackground(new Background(new BackgroundFill(Color.valueOf(color), null, null)));
     }
+
+    public void changePenColor(String color) {
+        if (!color.equals("")) myPenColor = Color.valueOf(color);
+    }
+
 
     @Override
     public void receiveNewPosition(double x, double y) {
