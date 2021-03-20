@@ -71,7 +71,7 @@ public class OutputScreen extends Region implements ModelObserver {
     }
 
     public void changeBackgroundColor(String color) {
-        this.setBackground(new Background(new BackgroundFill(Color.valueOf(color), null, null)));
+        if (!color.equals("")) this.setBackground(new Background(new BackgroundFill(Color.valueOf(color), null, null)));
     }
 
     @Override

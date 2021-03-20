@@ -4,7 +4,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -17,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class View implements AlertObserver, UserActionObserver {
@@ -174,7 +177,17 @@ public class View implements AlertObserver, UserActionObserver {
     }
 
     private void changeBackgroundColor() {
-        myOutputScreen.changeBackgroundColor("orange");
+        Dialog dialog = new TextInputDialog();
+        dialog.setHeaderText("Color in html, hex, or rgb format");
+        Optional<String> result = dialog.showAndWait();
+        String color = "";
+
+        if (result.isPresent()) {
+
+            color = result.get();
+        }
+
+        myOutputScreen.changeBackgroundColor(color);
         System.out.println("Background color has been changed");
     }
 }
