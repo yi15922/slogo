@@ -1,8 +1,14 @@
 package slogo.view;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -12,9 +18,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -30,21 +33,25 @@ public class View {
     private static final double OUTPUT_HEIGHT = 500;
     private static final double MAIN_CONTENT_PADDING = 10;
     private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "slogo.view.UIResources.";
+    private static final String MENUBAR_BUTTONS_BUNDLE = "menuBar";
 
     private SlogoModel myModel;
     private InputObserver myInputObserver;
-    private EventHandler menubarHandler;
+    private final EventHandler<ActionEvent> menubarHandler;
+
+
 
     public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
         myModel = model;
         myInputObserver = observer;
-        startProgram(primaryStage);
         menubarHandler = handler;
+        startProgram(primaryStage);
     }
 
     public void startProgram(Stage window) {
 
-        MenuBar menuBar = createMenuBar();
+        MenuBar menuBar = createTopBar();
         MenuBar macOSMenuBar = makeMacOSMenuBar();
         OutputScreen output = createOutputScreen();
         myModel.addObserver(output);
@@ -111,13 +118,26 @@ public class View {
         return output;
     }
 
-    private MenuBar createMenuBar() {
+    /**
+     * Creates a horizontal toolbar that can hold buttons
+     * @return a {@code MenuBar} object
+     */
+    private MenuBar createTopBar() {
         MenuBar menuBar = new MenuBar();
         menuBar.setMinHeight(80);
         menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         return menuBar;
     }
 
+
+    /**
+     * Populates the system default menu bar on MacOS devices.
+     *
+     * Detects the operating system, and if the system is MacOS, creates a menu bar with various
+     * menus and options such as open, save, or open new window. Many of these options can
+     * have keyboard combinations attached to them.
+     * @return a {@code MenuBar} object.
+     */
     private MenuBar makeMacOSMenuBar(){
         MenuBar menuBar = new MenuBar();
         String os = System.getProperty("os.name");
@@ -125,15 +145,34 @@ public class View {
             Platform.runLater(() -> menuBar.useSystemMenuBarProperty().set(true)) ;
         }
 
-        Menu menu1 = new Menu("File");
-        MenuItem newWindowButton = new MenuItem("New Window");
-        newWindowButton.setOnAction(event -> menubarHandler.handle(null));
-        newWindowButton.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.META_DOWN));
+        ResourceBundle menubarBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + MENUBAR_BUTTONS_BUNDLE);
 
-        menu1.getItems().add(newWindowButton);
-
-        menuBar.getMenus().add(menu1);
+        menuBar.getMenus().add(makeMenuFromProperties("File", menubarBundle));
         return menuBar;
+    }
+
+    private Menu makeMenuFromProperties(String menuName, ResourceBundle bundle){
+        String fileMenu = bundle.getString(menuName + ".menu");
+        Menu menu = null;
+        LinkedList<String> menuItems = new LinkedList<String>(Arrays.asList(fileMenu.split(",")));
+        if (menuItems.size() != 0) {
+            menu = new Menu(menuItems.remove());
+            while (menuItems.size() != 0) {
+                MenuItem newMenuItem = makeMenuButton(menuItems.remove(), menubarHandler, bundle);
+                menu.getItems().add(newMenuItem);
+            }
+        }
+        return menu;
+    }
+
+    private MenuItem makeMenuButton(String property, EventHandler<ActionEvent> eHandler,
+                                ResourceBundle bundle) {
+        MenuItem result = new MenuItem();
+        String label = bundle.getString(property);
+        result.setText(label);
+        result.setOnAction(eHandler);
+        result.setId(property);
+        return result;
     }
 
     public void setTurtleX(double x) {}

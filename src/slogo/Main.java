@@ -1,9 +1,14 @@
 package slogo;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Scanner;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
@@ -11,7 +16,10 @@ import slogo.view.View;
 import slogo.compiler.Compiler;
 
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * The entry point of the program. This class instantiates all necessary components of
+ * {@code SLogo} and populates a {@code Stage} with them. Objects that are instantiated
+ * here include {@link Turtle}, {@link Workspace}, {@link Parser}, {@link Compiler}, and
+ * a {@link View} instance.
  */
 public class Main extends Application {
     /**
@@ -57,13 +65,58 @@ public class Main extends Application {
         newWindow(primaryStage);
     }
 
+    /**
+     * A version of {@code newWindow()} that does not require any parameters.
+     *
+     * This is useful for the creation of new windows using reflection.
+     */
+    public void newWindow(){
+        newWindow(new Stage());
+    }
 
+    public void open(){
+
+    }
+
+    public void save(){
+
+    }
+
+
+    /**
+     * Creates a new window that contains a fresh instance of {@code SLogo}. Everything
+     * in the new window is independent from the previous window.
+     * @param stage a {@code Stage} in which to create the new window.
+     */
     private void newWindow(Stage stage){
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
         Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
 
-        new View(modelTurtle, modelCompiler, stage, event -> newWindow(new Stage()));
+        EventHandler<ActionEvent> handler = new EventHandler<>() {
+            @Override
+            public void handle(ActionEvent event) {
+                MenuItem buttonPressed = (MenuItem) event.getSource();
+                String buttonId = buttonPressed.getId();
+                Method methodToCall = null;
+                try {
+                    System.out.printf("User clicked %s\n", buttonId);
+                    methodToCall = this.getClass().getMethod(buttonId);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    methodToCall.invoke(this);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        new View(modelTurtle, modelCompiler, stage, handler);
     }
+
+
 }
