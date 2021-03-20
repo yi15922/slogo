@@ -65,15 +65,11 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       }
       dummyCommandQueue.add(token);
     }
-    while (! dummyCommandQueue.isEmpty()) {
-      try {
-        SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll();
-        new SLogoFunction(command, dummyCommandQueue, modelTurtle);
-        command.resetCommand();
-      }
-      catch (ClassCastException | SLogoException e) {
-        throw new SLogoException("Invalid command syntax");
-      }
+    try {
+      new SLogoFunction(dummyCommandQueue, modelTurtle).runFunction();
+    }
+    catch (SLogoException e) {
+      return false;
     }
     return true;
   }

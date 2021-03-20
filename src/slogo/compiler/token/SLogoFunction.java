@@ -52,9 +52,9 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     parseParameterTokens(initCommand, parameterTokens);
   }
 
-  public SLogoFunction(Deque<SLogoToken> functionTokens, Turtle modelTurtle) {
+  public SLogoFunction(Collection<SLogoToken> functionTokens, Turtle modelTurtle) {
     super("Function");
-    this.functionTokens = functionTokens;
+    this.functionTokens = new ArrayDeque<>(functionTokens);
     this.modelTurtle = modelTurtle;
   }
 

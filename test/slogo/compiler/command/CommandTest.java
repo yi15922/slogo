@@ -29,36 +29,43 @@ class CommandTest {
     modelTurtle = new Turtle();
   }
 
+  private double runZeroArgumentCommand(SLogoCommand testCommand) {
+    parameterTokens.add(testCommand);
+    function = new SLogoFunction(parameterTokens, modelTurtle);
+    parameterTokens.clear();
+    return function.runFunction().getValue();
+  }
+
+  private double runOneArgumentCommand(SLogoCommand testCommand, SLogoToken expr) {
+    parameterTokens.add(testCommand);
+    parameterTokens.add(expr);
+    function = new SLogoFunction(parameterTokens, modelTurtle);
+    parameterTokens.clear();
+    return function.runFunction().getValue();
+  }
+
+  private double runTwoArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2) {
+    parameterTokens.add(testCommand);
+    parameterTokens.add(expr1);
+    parameterTokens.add(expr2);
+    function = new SLogoFunction(parameterTokens, modelTurtle);
+    parameterTokens.clear();
+    return function.runFunction().getValue();
+  }
+
   @Test
   void testMovementCommands() {
-    command = new ForwardCommand();
-    parameterTokens.add(new SLogoVariable("pixels", 50));
-    function = new SLogoFunction(command, parameterTokens, modelTurtle);
-    assertEquals(50.0, function.run().getValue());
-    command.resetCommand();
-    parameterTokens.add(new SLogoToken("generic token"));
-    assertThrows(SLogoException.class, () -> function = new SLogoFunction(command, parameterTokens, modelTurtle));
-    command = new BackwardCommand();
-    parameterTokens.add(new SLogoConstant(1.5));
-    function = new SLogoFunction(command, parameterTokens, modelTurtle);
-    assertEquals(1.5, function.run().getValue());
-    command.resetCommand();
-    parameterTokens.add(new SLogoComment(""));
-    assertThrows(SLogoException.class, () -> function = new SLogoFunction(command, parameterTokens,
-        modelTurtle));
-    command = new SetPositionCommand();
-    parameterTokens.add(new SLogoConstant(0));
-    parameterTokens.add(new SLogoConstant(50));
-    function = new SLogoFunction(command, parameterTokens, modelTurtle);
-    assertEquals(1.5, function.run().getValue());
+    assertEquals(50.0, runOneArgumentCommand(new ForwardCommand(), new SLogoVariable("pixels", 50)));
+    assertThrows(SLogoException.class, () -> runOneArgumentCommand(new ForwardCommand(), new SLogoToken("generic token")));
+    assertEquals(1.5, runOneArgumentCommand(new BackwardCommand(), new SLogoConstant(1.5)));
+    assertThrows(SLogoException.class, () -> runOneArgumentCommand(new BackwardCommand(), new SLogoComment("comment")));
+    assertEquals(1.5, runTwoArgumentCommand(new SetPositionCommand(), new SLogoConstant(0), new SLogoConstant(50)));
     assertEquals(0.0, modelTurtle.xCor());
     assertEquals(50.0, modelTurtle.yCor());
-    command = new HomeCommand();
-    function = new SLogoFunction(command, parameterTokens, modelTurtle);
-    assertEquals(50.0, function.run().getValue());
-    command = new ClearScreenCommand();
-    function = new SLogoFunction(command, parameterTokens, modelTurtle);
-    assertEquals(0.0, function.run().getValue());
+    assertEquals(50.0, runZeroArgumentCommand(new HomeCommand()));
+    assertEquals(0.0, modelTurtle.xCor());
+    assertEquals(0.0, modelTurtle.yCor());
+    assertEquals(0.0, runZeroArgumentCommand(new ClearScreenCommand()));
     assertEquals(0.0, modelTurtle.xCor());
     assertEquals(0.0, modelTurtle.yCor());
   }
@@ -249,33 +256,42 @@ class CommandTest {
 
   @Test
   void testTwoArgumentBooleanCommands() {
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new LessThanCommand(), new SLogoConstant(0), new SLogoConstant(1)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new LessThanCommand(), new SLogoConstant(1), new SLogoConstant(1)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new LessThanCommand(), new SLogoConstant(1), new SLogoConstant(0)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new GreaterThanCommand(), new SLogoConstant(0), new SLogoConstant(1)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new GreaterThanCommand(), new SLogoConstant(1), new SLogoConstant(1)));
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new GreaterThanCommand(), new SLogoConstant(1), new SLogoConstant(0)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new EqualCommand(), new SLogoConstant(5), new SLogoConstant(10)));
+    assertEquals(1.0, runTwoArgumentCommand(new LessThanCommand(), new SLogoConstant(0),
+        new SLogoConstant(1)));
+    assertEquals(0.0, runTwoArgumentCommand(new LessThanCommand(), new SLogoConstant(1),
+        new SLogoConstant(1)));
+    assertEquals(0.0, runTwoArgumentCommand(new LessThanCommand(), new SLogoConstant(1),
+        new SLogoConstant(0)));
+    assertEquals(0.0, runTwoArgumentCommand(new GreaterThanCommand(), new SLogoConstant(0),
+        new SLogoConstant(1)));
+    assertEquals(0.0, runTwoArgumentCommand(new GreaterThanCommand(), new SLogoConstant(1),
+        new SLogoConstant(1)));
+    assertEquals(1.0, runTwoArgumentCommand(new GreaterThanCommand(), new SLogoConstant(1),
+        new SLogoConstant(0)));
+    assertEquals(0.0, runTwoArgumentCommand(new EqualCommand(), new SLogoConstant(5),
+        new SLogoConstant(10)));
     SLogoCommand piCommand = new PiCommand();
     SLogoFunction piFunction = new SLogoFunction(piCommand, new ArrayDeque<>(), modelTurtle);
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new EqualCommand(), piFunction.run(), new SLogoConstant(Math.PI)));
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new NotEqualCommand(), new SLogoConstant(5), new SLogoConstant(10)));
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new AndCommand(), new SLogoConstant(1), new SLogoConstant(1)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new AndCommand(), new SLogoConstant(0), new SLogoConstant(1)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new AndCommand(), new SLogoConstant(1), new SLogoConstant(0)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new AndCommand(), new SLogoConstant(0), new SLogoConstant(0)));
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new OrCommand(), new SLogoConstant(1), new SLogoConstant(1)));
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new OrCommand(), new SLogoConstant(0), new SLogoConstant(1)));
-    assertEquals(1.0, runTwoArgumentBooleanFunction(new OrCommand(), new SLogoConstant(1), new SLogoConstant(0)));
-    assertEquals(0.0, runTwoArgumentBooleanFunction(new OrCommand(), new SLogoConstant(0), new SLogoConstant(0)));
-  }
-
-  private double runTwoArgumentBooleanFunction(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2) {
-    command = testCommand;
-    parameterTokens.add(expr1);
-    parameterTokens.add(expr2);
-    function = new SLogoFunction(command, parameterTokens, modelTurtle);
-    return function.run().getValue();
+    assertEquals(1.0, runTwoArgumentCommand(new EqualCommand(), piFunction.run(),
+        new SLogoConstant(Math.PI)));
+    assertEquals(1.0, runTwoArgumentCommand(new NotEqualCommand(), new SLogoConstant(5),
+        new SLogoConstant(10)));
+    assertEquals(1.0, runTwoArgumentCommand(new AndCommand(), new SLogoConstant(1),
+        new SLogoConstant(1)));
+    assertEquals(0.0, runTwoArgumentCommand(new AndCommand(), new SLogoConstant(0),
+        new SLogoConstant(1)));
+    assertEquals(0.0, runTwoArgumentCommand(new AndCommand(), new SLogoConstant(1),
+        new SLogoConstant(0)));
+    assertEquals(0.0, runTwoArgumentCommand(new AndCommand(), new SLogoConstant(0),
+        new SLogoConstant(0)));
+    assertEquals(1.0,
+        runTwoArgumentCommand(new OrCommand(), new SLogoConstant(1), new SLogoConstant(1)));
+    assertEquals(1.0,
+        runTwoArgumentCommand(new OrCommand(), new SLogoConstant(0), new SLogoConstant(1)));
+    assertEquals(1.0,
+        runTwoArgumentCommand(new OrCommand(), new SLogoConstant(1), new SLogoConstant(0)));
+    assertEquals(0.0,
+        runTwoArgumentCommand(new OrCommand(), new SLogoConstant(0), new SLogoConstant(0)));
   }
 
   @Test
