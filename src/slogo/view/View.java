@@ -3,9 +3,7 @@ package slogo.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -17,22 +15,14 @@ import java.util.ResourceBundle;
 
 public class View implements AlertObserver {
 
-    private static final String OBJECT_IMAGE = "turtle.png";
-    private static final double OUTPUT_WIDTH = 500;
-    private static final double OUTPUT_HEIGHT = 500;
-    private static final double MAIN_CONTENT_PADDING = 10;
-    private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
-    private static final String VIEW_RESOURCE_FOLDER = "view";
-
     // get strings from resource file
     private ResourceBundle mySettings;
     private ResourceBundle myResources;
-    private SlogoModel myModel;
-    private InputObserver myInputObserver;
+    private final SlogoModel myModel;
+    private final InputObserver myInputObserver;
 
     public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
         retrieveResources();
-        System.out.println(myResources.getString("Intro"));
         myModel = model;
         myInputObserver = observer;
         startProgram(primaryStage);
@@ -53,26 +43,28 @@ public class View implements AlertObserver {
         OutputScreen output = createOutputScreen();
         myModel.addObserver(output);
         InputConsole input = createInputConsole();
-        StackPane workspace = createStackPane();
+        StackPane workspace = createWorkSpace();
         InputLog log = createInputLog(input);
 
 
 
         SplitPane outputAndInput = new SplitPane(output, input);
         outputAndInput.setOrientation(Orientation.VERTICAL);
+        outputAndInput.setDividerPosition(0,1);
 
-        SplitPane splitPane = new SplitPane(log, workspace);
-        splitPane.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
-        splitPane.setMaxHeight(Double.MAX_VALUE);
-        splitPane.setMaxWidth(Double.MAX_VALUE);
+        SplitPane logAndWorkspace = new SplitPane(log, workspace);
+        logAndWorkspace.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        logAndWorkspace.setMinWidth(Double.parseDouble(mySettings.getString("LogAndWorkSpaceMinWidth")));
+//        logAndWorkspace.setMaxHeight(Double.MAX_VALUE);
+//        logAndWorkspace.setMaxWidth(Double.MAX_VALUE);
 
-        HBox mainContent = new HBox(outputAndInput, splitPane);
-        mainContent.setHgrow(splitPane, Priority.ALWAYS);
+        HBox mainContent = new HBox(outputAndInput, logAndWorkspace);
+        HBox.setHgrow(logAndWorkspace, Priority.ALWAYS);
         mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        mainContent.setPadding(new Insets(MAIN_CONTENT_PADDING));
+        mainContent.setPadding(new Insets(Double.parseDouble(mySettings.getString("MainContentPadding"))));
 
         VBox everything = new VBox(topBar, mainContent);
-        everything.setVgrow(mainContent, Priority.ALWAYS);
+        VBox.setVgrow(mainContent, Priority.ALWAYS);
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Scene scene = new Scene(everything, Double.parseDouble(mySettings.getString("GUIWidth")),
@@ -90,7 +82,7 @@ public class View implements AlertObserver {
         return log;
     }
 
-    private StackPane createStackPane() {
+    private StackPane createWorkSpace() {
         StackPane workspace = new StackPane();
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
         return workspace;
@@ -98,22 +90,24 @@ public class View implements AlertObserver {
 
     private InputConsole createInputConsole() {
         InputConsole input = new InputConsole();
-        input.setMaxHeight(INPUT_CONSOLE_MAX_HEIGHT);
+//        input.setMaxHeight(Double.parseDouble(mySettings.getString("InputConsoleMaxHeight")));
+        input.setMaxWidth(Double.parseDouble(mySettings.getString("OutputWidth")));
         input.addObserver(myInputObserver);
-        input.setMaxWidth(OUTPUT_WIDTH);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         return input;
     }
 
     private OutputScreen createOutputScreen() {
-        OutputScreen output = new OutputScreen(mySettings.getString("ObjectImage"), OUTPUT_WIDTH, OUTPUT_HEIGHT);
+        OutputScreen output = new OutputScreen(mySettings.getString("ObjectImage"));
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
+        output.setMinHeight(Double.parseDouble(mySettings.getString("OutputMinHeight")));
+        output.setPrefWidth(Double.parseDouble(mySettings.getString("OutputWidth")));
         return output;
     }
 
     private TopBar createTopBar() {
         TopBar topBar = new TopBar();
-        topBar.setMinHeight(80);
+        topBar.setMinHeight(Double.parseDouble(mySettings.getString("MenuBarMaxHeight")));
         topBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
         return topBar;
     }

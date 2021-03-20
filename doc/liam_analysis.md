@@ -33,6 +33,12 @@ View open but closed.
 Added listeners to the input button so that potential future components requiring user input can be added 
 without modifying InputConsole.
 
+####OutputScreen
+
+myobject is of type Node to accommodate either images or JavaFX shapes. A try catch is placed in the 
+constructor; The try assigns myObject to the default image specified as ObjectImage in Settings.properties,
+while the catch assigns it to a Javafx Circle.
+
 ##Resources used 
 
 [comment]: <> (- [Accessing private methods and variables for unit testing]&#40;https://stackoverflow.com/questions/34571/how-do-i-test-a-private-function-or-a-class-that-has-private-methods-fields-or&#41;)

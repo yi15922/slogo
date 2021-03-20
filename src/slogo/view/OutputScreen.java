@@ -17,14 +17,14 @@ public class OutputScreen extends Region implements ModelObserver {
     private double myHeight;
     private boolean isPenDown = false;
 
-    public OutputScreen(String displayObject, double width, double height) {
+    public OutputScreen(String displayObject) {
         try {
             myObject = makeDisplayObject("displayObject", 20, new Image(this.getClass().getClassLoader().getResourceAsStream(displayObject)));
         } catch (Exception ignore) {
             myObject = new Circle(10);
         }
-        myWidth = width;
-        myHeight = height;
+//        this.setWidth(width);
+//        this.setHeight(height);
         this.getChildren().addAll(myObject);
 
         // disallows displayed object from appearing outside of output screen
