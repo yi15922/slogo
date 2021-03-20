@@ -99,23 +99,31 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 MenuItem buttonPressed = (MenuItem) event.getSource();
                 String buttonId = buttonPressed.getId();
-                Method methodToCall = null;
-                try {
-                    System.out.printf("User clicked %s\n", buttonId);
-                    methodToCall = this.getClass().getMethod(buttonId);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    methodToCall.invoke(this);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                callInstanceMethod(buttonId);
             }
         };
 
         new View(modelTurtle, modelCompiler, stage, handler);
+    }
+
+    /**
+     * Helper method to call any method within this class by name.
+     * @param name name of method to call
+     */
+    private void callInstanceMethod(String name){
+        Method methodToCall = null;
+        try {
+            System.out.printf("User clicked %s\n", name);
+            methodToCall = this.getClass().getMethod(name);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            methodToCall.invoke(this);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -151,6 +151,19 @@ public class View {
         return menuBar;
     }
 
+    /**
+     * Creates a {@code Menu} with all corresponding {@code MenuItem}s from a properties
+     * file.
+     *
+     * An {@code String} input is needed for the name of the menu. This method will then
+     * look in the properties file for all menu items for this menu, and add them as children
+     * to this menu. This will invoke {@code makeMenuButton} to create menu item buttons as well
+     * as their {@code EventHandler}.
+     *
+     * @param menuName name of the top level menu to create
+     * @param bundle resource bundle for the menu bar
+     * @return a {@code Menu} object complete with menu items connected to event handlers.
+     */
     private Menu makeMenuFromProperties(String menuName, ResourceBundle bundle){
         String fileMenu = bundle.getString(menuName + ".menu");
         Menu menu = null;
@@ -165,6 +178,17 @@ public class View {
         return menu;
     }
 
+    /**
+     * Creates a menu button using data from a resource bundle.
+     *
+     * The ID of the {@code MenuItem} created will also be used by reflection later to
+     * invoke methods.
+     *
+     * @param property the property name of the button being created
+     * @param eHandler the {@code EventHandler }for the button being created
+     * @param bundle a {@code ResourceBundle} for the button being created
+     * @return a {@code MenuItem} with a label, an ID, and an event handler
+     */
     private MenuItem makeMenuButton(String property, EventHandler<ActionEvent> eHandler,
                                 ResourceBundle bundle) {
         MenuItem result = new MenuItem();
