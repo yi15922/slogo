@@ -69,7 +69,7 @@ public class Compiler implements InputObserver {
       if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
         tokenToAdd = makeList();
       }
-      functionTokens.add(tokenToAdd);
+      parameterTokens.add(tokenToAdd);
     }
 
     //new SLogoFunction(initialCommand, parameterTokens, turtle).run();

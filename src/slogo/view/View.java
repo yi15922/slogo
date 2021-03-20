@@ -110,7 +110,7 @@ public class View implements AlertObserver, UserActionObserver {
         mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         mainContent.setPadding(new Insets(Double.parseDouble(mySettings.getString("MainContentPadding"))));
 
-        VBox everything = new VBox(menuBar, macOSMenuBar, mainContent);
+        VBox everything = new VBox(macOSMenuBar, topBar, mainContent);
         everything.setVgrow(mainContent, Priority.ALWAYS);
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
