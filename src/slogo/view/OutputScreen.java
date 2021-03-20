@@ -3,7 +3,10 @@ package slogo.view;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -67,15 +70,9 @@ public class OutputScreen extends Region implements ModelObserver {
         return result;
     }
 
-//    @Override
-//    public void receiveXCor(double x) {
-//        setX(x);
-//    }
-//
-//    @Override
-//    public void receiveYCor(double y) {
-//        setY(y);
-//    }
+    public void changeBackgroundColor(String color) {
+        this.setBackground(new Background(new BackgroundFill(Color.valueOf(color), null, null)));
+    }
 
     @Override
     public void receiveNewPosition(double x, double y) {

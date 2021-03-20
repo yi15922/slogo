@@ -29,6 +29,7 @@ public class View implements AlertObserver, UserActionObserver {
     private final SlogoModel myModel;
     private final InputObserver myInputObserver;
     private Stage myWindow;
+    private OutputScreen myOutputScreen;
 
     public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
         myWindow = primaryStage;
@@ -66,15 +67,15 @@ public class View implements AlertObserver, UserActionObserver {
     public void startProgram() {
 
         TopBar topBar = createTopBar(myResources);
-        OutputScreen output = createOutputScreen();
-        myModel.addObserver(output);
+        myOutputScreen = createOutputScreen();
+        myModel.addObserver(myOutputScreen);
         InputConsole input = createInputConsole();
         StackPane workspace = createWorkSpace();
         InputLog log = createInputLog(input);
 
 
 
-        SplitPane outputAndInput = new SplitPane(output, input);
+        SplitPane outputAndInput = new SplitPane(myOutputScreen, input);
         outputAndInput.setOrientation(Orientation.VERTICAL);
         outputAndInput.setDividerPosition(0,1);
 
@@ -98,7 +99,7 @@ public class View implements AlertObserver, UserActionObserver {
 
         myWindow.setScene(scene);
         myWindow.show();
-        output.setPosition(0,0);
+        myOutputScreen.setPosition(0,0);
     }
 
     private InputLog createInputLog(InputConsole input) {
@@ -173,6 +174,7 @@ public class View implements AlertObserver, UserActionObserver {
     }
 
     private void changeBackgroundColor() {
+        myOutputScreen.changeBackgroundColor("orange");
         System.out.println("Background color has been changed");
     }
 }
