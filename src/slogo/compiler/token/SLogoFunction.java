@@ -1,6 +1,6 @@
 package slogo.compiler.token;
 
-import java.awt.SecondaryLoop;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
@@ -23,6 +23,7 @@ import slogo.compiler.command.SLogoCommand;
 public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   protected List<SLogoCommand> runnableCommandList;
   protected Turtle modelTurtle;
+  protected Deque<SLogoToken> functionTokens;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -48,6 +49,67 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     runnableCommandList = new ArrayList<>();
     this.modelTurtle = modelTurtle;
     parseFunctionTokens(remainingTokens);
+  }
+
+  public SLogoFunction(Deque<SLogoToken> functionTokens, Turtle modelTurtle) {
+    super("Function");
+    this.functionTokens = functionTokens;
+    this.modelTurtle = modelTurtle;
+  }
+
+  public SLogoToken runFunction() {
+    SLogoToken returnToken = new SLogoConstant(0);
+    Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
+    while (! runnableTokens.isEmpty()) {
+      SLogoCommand nextCommand;
+      try {
+        nextCommand = (SLogoCommand) runnableTokens.poll();
+      }
+      catch (ClassCastException e) {
+        throw new SLogoException("Invalid syntax");
+      }
+      returnToken = runCommand(nextCommand, runnableTokens);
+    }
+    return returnToken;
+  }
+
+  private SLogoToken runCommand(SLogoCommand command, Deque<SLogoToken> remainingTokens) {
+    command.attachTurtle(modelTurtle);
+    while (! command.isReady()) {
+      if (remainingTokens.isEmpty()) {
+        throw new SLogoException("Invalid syntax");
+      }
+      SLogoToken nextToken = remainingTokens.poll();
+      if (nextToken.isEqualTokenType(new SLogoConstant(0))) {
+        double tokenValue = nextToken.getValue();
+        nextToken = new SLogoVariable("wrapper", tokenValue);
+      }
+      if (! command.giveNextExpectedToken(nextToken)) {
+        SLogoCommand innerCommand;
+        try {
+          innerCommand = (SLogoCommand) nextToken;
+        }
+        catch (ClassCastException e) {
+          throw new SLogoException("Invalid syntax");
+        }
+        SLogoToken resultToken = runCommand(innerCommand, remainingTokens);
+        remainingTokens.addFirst(resultToken);
+      }
+    }
+    SLogoToken returnToken = command.run();
+    command.resetCommand();
+    return returnToken;
+  }
+
+  public SLogoToken runSingleCommand() {
+    SLogoCommand commandToRun;
+    try {
+      commandToRun = (SLogoCommand) functionTokens.poll();
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid syntax");
+    }
+    return runCommand(commandToRun, functionTokens);
   }
 
   // recursively assembles and runs a command
