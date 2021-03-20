@@ -60,7 +60,7 @@ public class Main extends Application {
         Parser modelParser = new Parser("English", modelWorkspace);
         Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
         View view = new View(modelTurtle, modelCompiler, primaryStage);
-        Alert GUIAlert = new Alert(view);
+        WindowAlert GUIAlert = new WindowAlert(view);
 
     }
 }

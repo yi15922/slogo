@@ -6,7 +6,7 @@ import slogo.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alert implements Observable<AlertObserver>{
+public class WindowAlert implements Observable<AlertObserver>{
 
     private List<AlertObserver> myObservers = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class Alert implements Observable<AlertObserver>{
         }
     }
 
-    public Alert(AlertObserver observer) {
+    public WindowAlert(AlertObserver observer) {
         myObservers.add(observer);
     }
 
