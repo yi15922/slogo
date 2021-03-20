@@ -21,5 +21,11 @@ public class SlogoModel extends Observable<ModelObserver> {
           o.receiveHeading(heading);
       }
   }
+
+  protected void notifyObserversOfShow(boolean show){
+    for (ModelObserver o : myObservers) {
+      o.receiveShow(show);
+    }
+  }
 }
 
