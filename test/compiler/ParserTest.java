@@ -1,5 +1,6 @@
 package compiler;
 
+import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
@@ -47,65 +48,32 @@ public class ParserTest {
 //  }
 
   @Test
-  void testTokenCreation() {
+  void testTokenQueueCreation() {
     // Testing variable creation
-    SLogoToken token = tester.createTokenFromString(":something");
-    assertEquals(":something", token.toString());
-    assertEquals(SLogoVariable.class, token.getClass());
-
-    // Testing constant creation
-    token = tester.createTokenFromString("5");
-    assertEquals("Constant", token.toString());
-    assertEquals(SLogoConstant.class, token.getClass());
-    assertEquals(5, token.getValue());
-
-    // Testing gibberish
-    assertThrows(SLogoException.class, () -> tester.createTokenFromString("flaksjdflkadjsf"));
-
-    // Testing list start and end
-    token = tester.createTokenFromString("[");
-    assertEquals(SLogoListStart.class, token.getClass());
-    assertEquals("ListStart", token.toString());
-    token = tester.createTokenFromString("]");
-    assertEquals(SLogoListEnd.class, token.getClass());
-    assertEquals("ListEnd", token.toString());
-
-
-
+    Queue<SLogoToken> tokens = tester.parseInput(":something fd 50 [ :anotherVariable ]");
+    assertEquals(6, tokens.size());
   }
 
-  @Test
-  void testCommandObjectCreation() {
-    SLogoToken token = tester.createTokenFromString("ifelse");
-    assertEquals(IfElseCommand.class, token.getClass());
-    assertEquals("IfElse", token.toString());
-
-    token = tester.createTokenFromString("for");
-    assertEquals(ForCommand.class, token.getClass());
-    assertEquals("For", token.toString());
-
-    token = tester.createTokenFromString("fd");
-    assertEquals(ForwardCommand.class, token.getClass());
-    assertEquals("Forward", token.toString());
-  }
 
   @Test
-  void testGettingExistingWorkspaceEntries(){
-    SLogoToken token = tester.createTokenFromString(":something");
+  void testWorkspaceAccess(){
+    tester.parseInput(":something");
+    assertNotNull(workspace.search(":something"));
 
-    token = tester.createTokenFromString(":something");
-    assertEquals(":something", token.toString());
-    assertEquals(SLogoVariable.class, token.getClass());
+    assertEquals(":something", workspace.search(":something").toString());
 
-    workspace.add(new SLogoUserDefinedCommand("NewCommand"));
-    token = workspace.search("NewCommand");
+    assertNull(workspace.search("NewCommand"));
+    assertDoesNotThrow(() -> tester.parseInput("NewCommand"));
+    assertDoesNotThrow(() -> tester.parseInput("to NewCommand [ :variable ] [ fd fd 50 ]"));
+    SLogoToken token = workspace.search("NewCommand");
     assertEquals(SLogoUserDefinedCommand.class, token.getClass());
     assertEquals("NewCommand", token.toString());
+    assertDoesNotThrow(() -> tester.parseInput("NewCommand 50"));
   }
 
   @Test
   void testParseInput(){
-    assertThrows(SLogoException.class, () -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld \n# falskdjf"));
+    assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :variable flaksdfjld \n# falskdjf"));
     assertNotNull(workspace.search(":variable"));
 
     assertDoesNotThrow(() -> tester.parseInput("fd 50 fd 3489 :onevariable seth to \n# falskdjf hello this is a comment \n:anothervariable"));

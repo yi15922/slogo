@@ -3,6 +3,7 @@ package compiler;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,45 +41,27 @@ public class CompilerTest {
 
   @Test
   void testEmptyCompile(){
-    compiler.makeTokenQueue("");
-    assertFalse(compiler.hasNextToken());
+    assertDoesNotThrow(() -> compiler.compileAndRun(""));
   }
 
-  @Test
-  void testParserAccess(){
-    assertThrows(SLogoException.class, () -> compiler.makeTokenQueue("fd 50 :variable \nflaksdfjld"));
-
-    SLogoToken token;
-    assertDoesNotThrow(() -> compiler.makeTokenQueue("fd 50 :variable"));
-    token = compiler.getNextToken();
-    assertEquals("Forward", token.toString());
-
-    token = compiler.getNextToken();
-    assertEquals("Constant", token.toString());
-
-    token = compiler.getNextToken();
-    assertEquals(":variable", token.toString());
-
-    assertFalse(compiler.hasNextToken());
-
-  }
 
   @Test
-  void testListCreation(){
-    compiler.makeTokenQueue("fd 50 :variable ]");
-    compiler.makeList();
+  void testListInCode(){
+    assertDoesNotThrow(() -> compiler.compileAndRun("fd 50 make :variable 50 repeat 3 [ fd 50 ]"));
+    assertNotNull(workspace.search(":variable"));
   }
 
   @Test
   void testIncompleteList(){
-    compiler.makeTokenQueue("fd 50 :variable");
-    assertThrows(SLogoException.class, () -> compiler.makeList());
+    assertThrows(SLogoException.class, () -> compiler.compileAndRun("[ fd 50 :variable"));
   }
 
   @Test
   void testComment(){
-    assertDoesNotThrow(() -> compiler.makeTokenQueue("fd 50 :variable \n#flksdlfj fcslkdfj \nfd 20"));
-
+    assertDoesNotThrow(() -> compiler.compileAndRun("fd 50 \n#flksdlfj :fake "
+        + "this is a comment falskdfjaslknvlaksjdf \nfd 20 make :variable 50"));
+    assertNull(workspace.search(":fake"));
+    assertNotNull(workspace.search(":variable"));
   }
 
   @Test

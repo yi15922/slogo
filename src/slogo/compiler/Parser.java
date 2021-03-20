@@ -109,7 +109,7 @@ public class Parser {
    * @param userInput
    * @return the {@code SLogoToken} of the correct type.
    */
-  public SLogoToken createTokenFromString(String userInput) throws SLogoException {
+  private SLogoToken createTokenFromString(String userInput) throws SLogoException {
     String tokenType = determineTokenType(userInput);
     System.out.printf("Token type: %s\n", tokenType);
     if (tokenType == null) return null;
