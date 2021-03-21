@@ -18,7 +18,6 @@ import slogo.model.Turtle;
 import slogo.compiler.Compiler;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
-import slogo.compiler.token.SLogoToken;
 
 public class CompilerTest {
   static final String LANGUAGE = "English";

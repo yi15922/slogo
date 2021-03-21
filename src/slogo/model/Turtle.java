@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import slogo.SlogoModel;
+import slogo.model.SingleTurtle;
+import slogo.model.TurtleInterface;
 
 public class Turtle extends SlogoModel implements TurtleInterface {
 

@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import slogo.Main;
 import slogo.SLogoException;
+import slogo.compiler.command.IDCommand;
 import slogo.model.Turtle;
-import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoListEnd;
@@ -61,6 +61,7 @@ public class Compiler implements InputObserver {
    * the function's {@code run()} method.
    */
   public void compileAndRun(String input){
+    boolean containsID = false;
     makeTokenQueue(input);
     if (!hasNextToken()) return;
     Deque<SLogoToken> functionTokens = new LinkedList<>();
@@ -68,6 +69,9 @@ public class Compiler implements InputObserver {
       SLogoToken tokenToAdd = getNextToken();
       if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
         tokenToAdd = makeList();
+      }
+      else if (tokenToAdd.getClass().equals(IDCommand.class)) {
+
       }
       functionTokens.add(tokenToAdd);
     }
