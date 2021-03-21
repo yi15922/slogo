@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import slogo.SlogoModel;
 
-public class SingleTurtle extends SlogoModel {
+public class SingleTurtle extends SlogoModel implements TurtleInterface {
 
   private double myX;
   private double myY;
@@ -14,6 +14,7 @@ public class SingleTurtle extends SlogoModel {
   private int myID;
   private boolean myActive;
   private static int turtleCount = 0;
+  private int myShape;
   private static final int ROUND_DECIMAL_PLACES = 3;
 
   public SingleTurtle(int ID) {
@@ -24,6 +25,7 @@ public class SingleTurtle extends SlogoModel {
     myID = ID;
     myActive = true;
     turtleCount++;
+    myShape=0;
   }
 
   public SingleTurtle() {
@@ -82,6 +84,10 @@ public class SingleTurtle extends SlogoModel {
     return setHeading(angle);
   }
 
+  public double heading() {
+    return myAngle;
+  }
+
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
     myX = round(x);
@@ -90,14 +96,12 @@ public class SingleTurtle extends SlogoModel {
     return round(distance);
   }
 
-  //no tests
-  public double penDown() {
-    return myPen.penDown();
+  public double xCor() {
+    return myX;
   }
 
-  //no tests
-  public double penUp() {
-    return myPen.penUp();
+  public double yCor() {
+    return myY;
   }
 
   //no tests
@@ -112,6 +116,13 @@ public class SingleTurtle extends SlogoModel {
   public double hideTurtle() {
     if (myShow) {
       toggleShow();
+    }
+    return 0;
+  }
+
+  public int showingP() {
+    if (myShow) {
+      return 1;
     }
     return 0;
   }
@@ -132,27 +143,46 @@ public class SingleTurtle extends SlogoModel {
     return home();
   }
 
-  public double xCor() {
-    return myX;
+  //no tests
+  public double penDown() {
+    notifyObserversOfPen(true);
+    return myPen.penDown();
   }
 
-  public double yCor() {
-    return myY;
-  }
-
-  public double heading() {
-    return myAngle;
+  //no tests
+  public double penUp() {
+    notifyObserversOfPen(false);
+    return myPen.penUp();
   }
 
   public int penDownP() {
     return myPen.penDownP();
   }
 
-  public int showingP() {
-    if (myShow) {
-      return 1;
-    }
-    return 0;
+  @Override
+  public int setPenColor(int index) {
+    return myPen.setPenColor(index);
+  }
+
+  @Override
+  public double setPenSize(double pixels) {
+    return myPen.setPenSize(pixels);
+  }
+
+  @Override
+  public int penColor() {
+    return myPen.getPenColor();
+  }
+
+  public int setShape(int index){
+    myShape = index;
+    notifyObserversOfShape(myShape);
+    return index;
+  }
+
+  @Override
+  public int shape() {
+    return myShape;
   }
 
 

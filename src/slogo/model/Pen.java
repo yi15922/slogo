@@ -2,22 +2,26 @@ package slogo.model;
 
 public class Pen {
 
-  private String myColor;
+  private int myColor;
   private double myPenSize;
   private boolean myPenDown;
 
   public Pen() {
-      myColor = "black";
+      myColor = 1;//how to do default
       myPenSize = 1;
       myPenDown = true;
   }
 
-  public String setPenColor(String index) {
+  public int setPenColor(int index) {
     myColor = index;
     return index;
   }
 
-  public double setPenSize(double pixels){
+  public int getPenColor() {
+    return myColor;
+  }
+
+  public double setPenSize(double pixels) {
     myPenSize = pixels;
     return pixels;
   }
@@ -48,7 +52,6 @@ public class Pen {
   //assumes that pen state has changed
   private void togglePen() {
     myPenDown = !myPenDown;
-    notifyObserversOfPen(myPenDown);
   }
 
 }

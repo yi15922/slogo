@@ -8,4 +8,6 @@ public interface ModelObserver {
     void checkPen(boolean b);
 
     void receiveShow(boolean show);
+
+    void receiveShape(int shape);
 }

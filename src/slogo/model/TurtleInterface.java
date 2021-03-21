@@ -36,4 +36,14 @@ public interface TurtleInterface {
   int penDownP();
 
   int showingP();
+
+  int setPenColor(int index);
+
+  double setPenSize(double pixels);
+
+  int setShape(int index);
+
+  int penColor();
+
+  int shape();
 }
