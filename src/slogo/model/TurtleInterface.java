@@ -43,7 +43,5 @@ public interface TurtleInterface {
 
   int setShape(int index);
 
-  int penColor();
-
   int shape();
 }

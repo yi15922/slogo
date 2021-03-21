@@ -1,11 +1,17 @@
 package slogo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import slogo.SlogoModel;
 
 public class Turtle extends SlogoModel implements TurtleInterface {
 
   List<SingleTurtle> turtleList;
+
+  public Turtle(){
+    turtleList = new ArrayList<>();
+    turtleList.add(new SingleTurtle());
+  }
 
   @Override
   public double forward(double pixels) {
