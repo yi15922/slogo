@@ -37,14 +37,14 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   }
 
   /**
-   * {@code SLogoFunction} takes in a generic {@code Collection} of {@code Token} objects
+   * {@code SLogoFunction} takes in a {@code Deque} of {@code Token} objects
    * representing one or more commands entered by the user.
    * @param functionTokens - all tokens entered by the user up to a comment token
    * @param modelTurtle - the {@code Turtle} object containing the model state
    */
-  public SLogoFunction(Collection<SLogoToken> functionTokens, Turtle modelTurtle) {
+  public SLogoFunction(Deque<SLogoToken> functionTokens, Turtle modelTurtle) {
     super("Function");
-    this.functionTokens = new ArrayDeque<>(functionTokens);
+    this.functionTokens = functionTokens;
     this.modelTurtle = modelTurtle;
   }
 

@@ -30,36 +30,36 @@ class CommandTest {
   }
 
   private double runZeroArgumentCommand(SLogoCommand testCommand) {
+    parameterTokens.clear();
     parameterTokens.add(testCommand);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    parameterTokens.clear();
     return function.runFunction().getValue();
   }
 
   private double runOneArgumentCommand(SLogoCommand testCommand, SLogoToken expr) {
+    parameterTokens.clear();
     parameterTokens.add(testCommand);
     parameterTokens.add(expr);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    parameterTokens.clear();
     return function.runFunction().getValue();
   }
 
   private double runTwoArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2) {
+    parameterTokens.clear();
     parameterTokens.add(testCommand);
     parameterTokens.add(expr1);
     parameterTokens.add(expr2);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    parameterTokens.clear();
     return function.runFunction().getValue();
   }
 
   private double runThreeArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2, SLogoToken expr3) {
+    parameterTokens.clear();
     parameterTokens.add(testCommand);
     parameterTokens.add(expr1);
     parameterTokens.add(expr2);
     parameterTokens.add(expr3);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    parameterTokens.clear();
     return function.runFunction().getValue();
   }
 
@@ -306,6 +306,19 @@ class CommandTest {
     commandList.clear();
     commandList.add(new ForwardCommand());
     assertEquals(0.0, runThreeArgumentCommand(new MakeUserInstructionCommand(), new SLogoUserDefinedCommand("testCommand"), new SLogoList(variableList), new SLogoList(commandList)));
+  }
+
+  @Test
+  void testTellCommand() {
+    List<SLogoToken> turtleIDList = new ArrayList<>();
+    turtleIDList.add(new SLogoConstant(1));
+    turtleIDList.add(new SLogoConstant(3));
+    turtleIDList.add(new SLogoConstant(5));
+    assertEquals(5.0, runOneArgumentCommand(new TellCommand(), new SLogoList(turtleIDList)));
+    turtleIDList.clear();
+    turtleIDList.add(new ForwardCommand());
+    turtleIDList.add(new SLogoConstant(10));
+    assertEquals(10.0, runOneArgumentCommand(new TellCommand(), new SLogoList(turtleIDList)));
   }
 
 }
