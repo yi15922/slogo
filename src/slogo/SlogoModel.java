@@ -1,8 +1,10 @@
 package slogo;
 
+import java.util.ArrayList;
+import java.util.List;
 import slogo.observers.ModelObserver;
 
-public class SlogoModel extends Observable<ModelObserver> {
+public class SlogoModel implements Observable<ModelObserver> {
 
     protected List<ModelObserver> myObservers = new ArrayList<>();
 
