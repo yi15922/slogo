@@ -25,8 +25,7 @@ public class LoopHelper {
     SLogoToken returnToken = new SLogoConstant(0);
     for (int i = loopStart; i <= loopEnd; i += loopIncrement) {
       counterVariable.setValue(i);
-      //System.out.println("Running inner function");
-      returnToken = functionToRun.run();
+      returnToken = functionToRun.runFunction();
     }
     return returnToken;
   }
