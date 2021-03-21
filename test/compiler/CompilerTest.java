@@ -10,14 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Scanner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
-import slogo.Turtle;
+import slogo.model.Turtle;
 import slogo.compiler.Compiler;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;

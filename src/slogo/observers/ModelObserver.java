@@ -6,4 +6,8 @@ public interface ModelObserver {
     void receiveHeading(double heading);
 
     void checkPen(boolean b);
+
+    void receiveShow(boolean show);
+
+    void receiveShape(int shape);
 }

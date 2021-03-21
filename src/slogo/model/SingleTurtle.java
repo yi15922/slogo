@@ -1,56 +1,65 @@
-package slogo;
-
-import slogo.observers.ModelObserver;
+package slogo.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import slogo.SlogoModel;
 
-public class Turtle extends SlogoModel{
+public class SingleTurtle extends SlogoModel implements TurtleInterface {
 
   private double myX;
   private double myY;
   private double myAngle;
-  private boolean myPen;
+  private Pen myPen;
   private boolean myShow;
-  private static final double THRESHOLD = 0.0001;
+  private int myID;
+  private boolean myActive;
+  private static int turtleCount = 0;
+  private int myShape;
   private static final int ROUND_DECIMAL_PLACES = 3;
 
-  public Turtle() {
-    myX = 0;
-    myY = 0;
-    myAngle = 0;
-    myPen = true;
+  public SingleTurtle(int ID) {
+    setXY(0, 0);
+    setHeading(0);
+    myPen = new Pen();
     myShow = true;
+    myID = ID;
+    myActive = true;
+    turtleCount++;
+    myShape=0;
   }
 
-  //TODO: test
+  public SingleTurtle() {
+    this(0);
+  }
+
   public double forward(double pixels) {
-    notifyObserversOfPosition(myX = round(myX + Math.sin(Math.toRadians(myAngle)) * pixels),
-                               myY = round(myY += Math.cos(Math.toRadians(myAngle)) * pixels));
+    double newX = myX + Math.sin(Math.toRadians(myAngle)) * pixels;
+    double newY = myY + Math.cos(Math.toRadians(myAngle)) * pixels;
+    setXY(newX, newY);
     return round(pixels);
   }
 
-  //TODO: tests
   public double back(double pixels) {
-    myAngle = standardizeAngle(myAngle+180);
+    setHeading(myAngle + 180);
     forward(pixels);
-    myAngle = standardizeAngle(myAngle-180);
+    setHeading(myAngle - 180);
     return round(pixels);
   }
 
   public double left(double degrees) {
-    myAngle = standardizeAngle(myAngle-degrees);
+    setHeading(myAngle - degrees);
     return round(degrees);
   }
 
   public double right(double degrees) {
-    myAngle = standardizeAngle(myAngle+degrees);
+    setHeading(myAngle + degrees);
     return round(degrees);
   }
 
   public double setHeading(double degrees) {
     double oldMyAngle = myAngle;
     myAngle = standardizeAngle(degrees);
+    notifyObserversOfHeading(myAngle);
     return standardizeAngle(degrees - oldMyAngle);
   }
 
@@ -75,47 +84,16 @@ public class Turtle extends SlogoModel{
     return setHeading(angle);
   }
 
+  public double heading() {
+    return myAngle;
+  }
+
   public double setXY(double x, double y) {
     double distance = calculate2PointDistance(myX, myY, x, y);
-    notifyObserversOfPosition(myX = round(x), myY = round(y));
+    myX = round(x);
+    myY = round(y);
+    notifyObserversOfPosition(myX, myY);
     return round(distance);
-  }
-
-  //TODO: tests
-  public double penDown() {
-    notifyObserversOfPen(myPen = true);
-    return 1;
-  }
-
-  //TODO: tests
-  public double penUp() {
-    notifyObserversOfPen(myPen = false);
-    return 0;
-  }
-
-  //TODO: tests
-  public double showTurtle() {
-    myShow = true;
-    return 1;
-  }
-
-  //TODO: tests
-  public double hideTurtle() {
-    myShow = false;
-    return 0;
-  }
-
-  public double home() {
-    double distance = calculate2PointDistance(myX, myY, 0, 0);
-    myX = 0;
-    myY = 0;
-    return round(distance);
-  }
-
-  //TODO: do we need this one here?
-  public double clearScreen() {
-    //need to clear screen
-    return home();
   }
 
   public double xCor() {
@@ -126,13 +104,18 @@ public class Turtle extends SlogoModel{
     return myY;
   }
 
-  public double heading() {
-    return myAngle;
+  //no tests
+  public double showTurtle() {
+    if (!myShow) {
+      toggleShow();
+    }
+    return 1;
   }
 
-  public int penDownP() {
-    if (myPen) {
-      return 1;
+  //no tests
+  public double hideTurtle() {
+    if (myShow) {
+      toggleShow();
     }
     return 0;
   }
@@ -144,13 +127,71 @@ public class Turtle extends SlogoModel{
     return 0;
   }
 
+  private void toggleShow() {
+    myShow = !myShow;
+    notifyObserversOfShow(myShow);
+  }
+
+  public double home() {
+    return setXY(0, 0);
+  }
+
+  //TODO: complete
+  //no tests
+  public double clearScreen() {
+    //need to clear screen
+    return home();
+  }
+
+  //no tests
+  public double penDown() {
+    notifyObserversOfPen(true);
+    return myPen.penDown();
+  }
+
+  //no tests
+  public double penUp() {
+    notifyObserversOfPen(false);
+    return myPen.penUp();
+  }
+
+  public int penDownP() {
+    return myPen.penDownP();
+  }
+
+  @Override
+  public int setPenColor(int index) {
+    return myPen.setPenColor(index);
+  }
+
+  @Override
+  public double setPenSize(double pixels) {
+    return myPen.setPenSize(pixels);
+  }
+
+  @Override
+  public int penColor() {
+    return myPen.getPenColor();
+  }
+
+  public int setShape(int index){
+    myShape = index;
+    notifyObserversOfShape(myShape);
+    return index;
+  }
+
+  @Override
+  public int shape() {
+    return myShape;
+  }
+
 
   private double standardizeAngle(double angle) {
     double returned = angle;
     while (returned < 0) {
       returned += 360;
     }
-    if(returned > 360) {
+    if (returned > 360) {
       returned %= 360;
     }
     return round(returned);
@@ -167,5 +208,5 @@ public class Turtle extends SlogoModel{
   private double calculate2PointDistance(double x1, double y1, double x2, double y2) {
     return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   }
-
 }
+

@@ -12,6 +12,7 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
+import slogo.model.Turtle;
 import slogo.view.View;
 import slogo.compiler.Compiler;
 

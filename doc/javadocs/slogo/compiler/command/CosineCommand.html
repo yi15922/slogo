@@ -151,8 +151,9 @@ extends <a href="SLogoCommand.html" title="class in slogo.compiler.command">SLog
 <td class="col-first"><code><a href="../token/SLogoToken.html" title="class in slogo.compiler.token">SLogoToken</a></code></td>
 <th class="col-second" scope="row"><code><span class="member-name-link"><a href="#run()">run</a></span>()</code></th>
 <td class="col-last">
-<div class="block">Performs the intended function of the Command, with the end result potentially affecting
- other classes such as slogo.Turtle or Workspace.</div>
+<div class="block">Performs the intended function of the Command, with the end result potentially
+  affecting
+  other classes such as slogo.model.Turtle or Workspace.</div>
 </td>
 </tr>
 </tbody>
@@ -202,13 +203,14 @@ extends <a href="SLogoCommand.html" title="class in slogo.compiler.command">SLog
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../token/SLogoToken.html" title="class in slogo.compiler.token">SLogoToken</a></span>&nbsp;<span class="member-name">run</span>()
                throws <span class="exceptions"><a href="../../SLogoException.html" title="class in slogo">SLogoException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="SLogoCommand.html#run()">SLogoCommand</a></code></span></div>
-<div class="block">Performs the intended function of the Command, with the end result potentially affecting
- other classes such as slogo.Turtle or Workspace. This method should first check that
- isReady() is true, ensuring it has the correct number of parameters. Next, it should
- perform its function, using helper methods as needed.
- Running this method is an assurance that the syntax of all parameters is correct; however,
- this method still can throw an exception if it encounters an issue while running (i.e.
- an illegal turtle movement).</div>
+<div class="block">Performs the intended function of the Command, with the end result potentially
+  affecting
+  other classes such as slogo.model.Turtle or Workspace. This method should first check that
+  isReady() is true, ensuring it has the correct number of parameters. Next, it should
+  perform its function, using helper methods as needed.
+  Running this method is an assurance that the syntax of all parameters is correct; however,
+  this method still can throw an exception if it encounters an issue while running (i.e.
+  an illegal turtle movement).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../token/SLogoRunnable.html#run()">run</a></code>&nbsp;in interface&nbsp;<code><a href="../token/SLogoRunnable.html" title="interface in slogo.compiler.token">SLogoRunnable</a></code></dd>

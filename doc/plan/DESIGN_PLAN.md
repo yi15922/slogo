@@ -11,7 +11,7 @@ Yi Chen (yc311)
 Our team is trying to create a user interface that lets users run basic SLogo commands and craft programs. The commands directly interact with a turtle on the screen. It should be flexible on the front-end to support a variety of languages and styling options, and flexible on the back-end to support more complex turtle commands and data structures. Hence, the structure of a command and how the turtle's position is changed should be closed for modification, but the commands should be open for extension in order to support new commands. In essence, text entered by the user in the GUI should be passed to a compiler that parses through the String and calls the appropriate commands in the back-end, which then updates the turtle position/orientation in the front-end.
 
 ## Overview
-* `slogo.Turtle`: the model of the application, also the backend external API. The backend updates the turtle's state through this class, and the front end also interfaces to update the visual state of the turtle.
+* `slogo.model.Turtle`: the model of the application, also the backend external API. The backend updates the turtle's state through this class, and the front end also interfaces to update the visual state of the turtle.
     * Keeps track of its current position, orientation, pen state and visibility state
     * Keeps a record of its history (all positions it had been to)
     * Has states that can be updated such as:
@@ -32,7 +32,7 @@ Our team is trying to create a user interface that lets users run basic SLogo co
     * `run()`: runs the runnable and returns a result.
 
 * `Command`: a abstract class that extends `Token` and `SLogoRunnable`. `Command` is a backend internal API that backend programmers can use to create new commands that are recognized by the `Parser`
-    * Concrete implementations will override the `run()` method to perform the function of the command, potentially by updating the state of the `slogo.Turtle` by calling its API. `run()` is called at runtime and will return the return value of the given `Command`.
+    * Concrete implementations will override the `run()` method to perform the function of the command, potentially by updating the state of the `slogo.model.Turtle` by calling its API. `run()` is called at runtime and will return the return value of the given `Command`.
     * Contains instance variables `commandName`and `numberOfExpectedTokens`. `commandName` is the command token user writes to call the command, and `numberOfExpectedTokens` is the number of parameters expected by each command.
     * Has direct access to `Workspace` to access or create `WorkspaceEntry` objects in the workspace.
 
@@ -79,7 +79,7 @@ Our team is trying to create a user interface that lets users run basic SLogo co
 
 ## Design Details
 
-We will be utilizing the [Command design pattern](https://www.oodesign.com/command-pattern.html) to set up communication between Compiler and slogo.Turtle. The reasons we chose this design are the following:
+We will be utilizing the [Command design pattern](https://www.oodesign.com/command-pattern.html) to set up communication between Compiler and slogo.model.Turtle. The reasons we chose this design are the following:
 
 - Command interface allows easy addition of concrete commands to program. All that is needed is write a concrete command extending command interface, instantiate it in Commands class.
 - Commands can be queued in Function.
@@ -93,7 +93,7 @@ Strategies to make API's more readable
 * Useful parameter and return values for tests to be easy to run
 * Throw exceptions so that we know when and where the program goes bad
 
-Tests for slogo.Turtle Feature
+Tests for slogo.model.Turtle Feature
 * Check that turtle moves
     * check if it moves in x direction
         * expected outcome: x internal state is updated
@@ -125,7 +125,7 @@ There should be a test for each command supported by SLogo to test its proper fu
     * After each Function is run, the tester will assert that the return value matches the expected result
 * FORWARD (negative test case)
     * A test passes the command "FD x" to the Parser, where x is a number greater than either dimension of the allowable turtle space
-    * The Command will attempt to update the slogo.Turtle's position, but should throw an exception after learning that the new position is out of bounds (i.e. it is an illegal action)
+    * The Command will attempt to update the slogo.model.Turtle's position, but should throw an exception after learning that the new position is out of bounds (i.e. it is an illegal action)
     * The tester will assert that the Command threw the proper exception
 
 Tests for View
@@ -133,7 +133,7 @@ The front-end of this project should accurately display the state of the turtle 
 * Set Background Color
     * A test would simulate a click from the user attempting to change the background color, followed by a click on each available color.
     * The tester will assert that the property BackgroundColor in the appropriate Panel is set to the expected color after each click
-* Set slogo.Turtle Image
+* Set slogo.model.Turtle Image
     * A test would simulate a click from the user attempting to change the turtle image, followed by a click on each available image.
     * The tester will assert that the Image variable used to display the turtle is set the expected value after each click
 * See Available Variables
@@ -142,7 +142,7 @@ The front-end of this project should accurately display the state of the turtle 
     *  After each command, the tester will assert that the WorkspacePanel contains the corresponding variable and that its name and value are displayed correctly
 
 ## Design Considerations
-A controller class could possibly be added later in the communication flow between View and Compiler if non-text user input that affects the model is implemented at a later point. However, for our Basic implementation we will assume that the only interaction the user has with the slogo.Turtle comes in the form of text input, and the basic styling options that should be on the GUI.
+A controller class could possibly be added later in the communication flow between View and Compiler if non-text user input that affects the model is implemented at a later point. However, for our Basic implementation we will assume that the only interaction the user has with the slogo.model.Turtle comes in the form of text input, and the basic styling options that should be on the GUI.
 
 Another design decision we discussed at length was the responsibilites and communication between the Compiler and Function. Currently, our plan is to have the Compiler, given a list of Tokens from the Parser, create Functions with one or more Commands that can "run" themselves. Essentially, when the Compiler encounters a Command token, it creates a new Function object with the remaining tokens, and the Function is responsible for parsing through the remaining tokens to run the given Command. This structure takes advantage of recursion to handle nested commands/functions.
 One alternative we strongly considered was having the Compiler create Stacks of Commands for each runnable Command, and then running the Commands in order. For example, a nested command like 'fd fd 50' would result in a Stack with the inner 'fd 50' command on top. The Compiler would then have more responsibilities, since it is in charge of turning the given tokens into a form that is runnable. This approach has the advantage of being easier to visualize, since Stacks of Commands are a helpful way to picture nested commands. However, we ultimately decided this approach gave the Compiler too much responsibility. We are consciously separate the Compiler from knowledge of what specific Commands need to run.
@@ -155,4 +155,4 @@ One alternative we strongly considered was having the Compiler create Stacks of 
 
 * Patrick - Token inheritance hierarchy (Command, Variable, Constant, List, Comment) and Function, communication between Compiler and Function
 
-* Kenneth - slogo.Turtle and controllers for the View panels 
+* Kenneth - slogo.model.Turtle and controllers for the View panels 

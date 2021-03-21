@@ -1,11 +1,10 @@
 package slogo;
 
-import slogo.observers.ModelObserver;
-
 import java.util.ArrayList;
 import java.util.List;
+import slogo.observers.ModelObserver;
 
-public class SlogoModel implements Observable<ModelObserver>{
+public class SlogoModel implements Observable<ModelObserver> {
 
     protected List<ModelObserver> myObservers = new ArrayList<>();
 
@@ -20,6 +19,18 @@ public class SlogoModel implements Observable<ModelObserver>{
     protected void notifyObserversOfHeading(double heading) {
         for (ModelObserver o : myObservers) o.receiveHeading(heading);
     }
+
+  protected void notifyObserversOfShow(boolean show) {
+    for (ModelObserver o : myObservers) {
+      o.receiveShow(show);
+    }
+  }
+
+  protected void notifyObserversOfShape(int shape) {
+    for (ModelObserver o : myObservers) {
+      o.receiveShape(shape);
+    }
+  }
 
     @Override
     public boolean isObserver(ModelObserver observer) {
@@ -36,3 +47,4 @@ public class SlogoModel implements Observable<ModelObserver>{
         myObservers.remove(observer);
     }
 }
+
