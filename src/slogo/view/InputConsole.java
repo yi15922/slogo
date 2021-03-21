@@ -46,11 +46,8 @@ public class InputConsole extends VBox implements Observable<InputObserver>{
 
     public void sendInputToObservers(String input) {
         for (InputObserver o : myInputObservers) {
-            try {
-                o.receiveUserInput(input);
-            } catch (Exception e) {
-                System.out.println("Compiler failed");
-            }
+            o.receiveUserInput(input);
+            System.out.println("Compiler failed");
         }
         myInputArea.clear();
     }
