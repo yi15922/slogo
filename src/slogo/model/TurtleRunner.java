@@ -1,7 +1,5 @@
 package slogo.model;
 
-import slogo.model.Turtle;
-
 public class TurtleRunner {
   public static void main (String[] args) {
     Turtle t = new Turtle();

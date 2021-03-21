@@ -1,16 +1,11 @@
 package slogo.compiler.command;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
-import slogo.Turtle;
 import slogo.compiler.token.SLogoConstant;
-import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoToken;
-import slogo.compiler.token.SLogoVariable;
 
 public class TellCommand extends SLogoCommand {
   private List<Integer> turtleIDs;

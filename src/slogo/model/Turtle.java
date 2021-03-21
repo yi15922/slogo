@@ -3,6 +3,8 @@ package slogo.model;
 import java.util.ArrayList;
 import java.util.List;
 import slogo.SlogoModel;
+import slogo.model.SingleTurtle;
+import slogo.model.TurtleInterface;
 
 public class Turtle extends SlogoModel implements TurtleInterface {
 

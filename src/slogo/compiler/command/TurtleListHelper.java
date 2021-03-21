@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
-import slogo.Turtle;
+import slogo.model.Turtle;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
