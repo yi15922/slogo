@@ -1,5 +1,7 @@
 package slogo.view;
 
+import java.util.Collection;
+import java.util.Collections;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,18 +18,18 @@ import slogo.observers.ModelObserver;
 
 public class OutputScreen extends Region implements ModelObserver {
 
-    private Node myObject;
+    private Node myTurtleNode;
+    private TurtleView myTurtleView;
     private boolean isPenDown = false;
     private Paint myPenColor = Color.BLACK;
     private boolean isTurtleInitialized = false;
 
     public OutputScreen(String displayObject) {
-        try {
-            myObject = makeDisplayObject("displayObject", 20, new Image(this.getClass().getClassLoader().getResourceAsStream(displayObject)));
-        } catch (Exception ignore) {
-            myObject = new Circle(10);
-        }
-        this.getChildren().addAll(myObject);
+
+        myTurtleView = new TurtleView(displayObject);
+        myTurtleNode = myTurtleView.getTurtleNode();
+        this.getChildren().add(myTurtleNode);
+        this.getChildren().add(myTurtleView);
 
         // disallows displayed object from appearing outside of output screen
         Rectangle outputClip = new Rectangle();
@@ -47,25 +49,17 @@ public class OutputScreen extends Region implements ModelObserver {
         double localX = x + this.getBoundsInLocal().getWidth()/2;
         double localY = this.getBoundsInLocal().getHeight()/2 - y;
         if (isPenDown) drawLine(localX, localY);
-        myObject.setLayoutX(localX);
-        myObject.setLayoutY(localY);
+        myTurtleView.setPosition(localX, localY);
     }
 
     private void drawLine(double x, double y) {
-        Line line = new Line(myObject.getLayoutX(), myObject.getLayoutY(), x, y);
+        Line line = new Line(myTurtleNode.getLayoutX(), myTurtleNode.getLayoutY(), x, y);
         line.setStroke(myPenColor);
         this.getChildren().add(line);
     }
 
 
-    // make object to be displayed
-    private ImageView makeDisplayObject (String id, int width, Image image) {
-        ImageView result = new ImageView(image);
-        result.setId(id);
-        result.setFitWidth(width);
-        result.setPreserveRatio(true);
-        return result;
-    }
+
 
     public void changeBackgroundColor(String color) {
         if (!color.equals("")) this.setBackground(new Background(new BackgroundFill(Color.valueOf(color), null, null)));
