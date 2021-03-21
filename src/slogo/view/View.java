@@ -160,14 +160,19 @@ public class View implements AlertObserver, UserActionObserver {
         return topBar;
     }
 
+    private void displayAlert(String message, Alert.AlertType type) {
+        Alert alert = new Alert(type, message);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.showAndWait();
+    }
     @Override
     public void receiveAlert(String message) {
-        System.out.println(message);
+        displayAlert(message, Alert.AlertType.INFORMATION);
     }
 
     @Override
     public void receiveErrorAlert(String message) {
-        System.out.println(message);
+        displayAlert(message, Alert.AlertType.ERROR);
     }
 
     @Override
