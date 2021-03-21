@@ -134,4 +134,9 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   public int shape() {
     return 0;
   }
+
+  @Override
+  public int turtles() {
+    return turtleList.get(0).turtles();
+  }
 }

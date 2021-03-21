@@ -185,6 +185,11 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
     return myShape;
   }
 
+  @Override
+  public int turtles() {
+    return turtleCount;
+  }
+
 
   private double standardizeAngle(double angle) {
     double returned = angle;

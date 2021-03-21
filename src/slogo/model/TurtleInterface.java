@@ -41,7 +41,11 @@ public interface TurtleInterface {
 
   double setPenSize(double pixels);
 
+  int penColor();
+
   int setShape(int index);
 
   int shape();
+
+  int turtles();
 }
