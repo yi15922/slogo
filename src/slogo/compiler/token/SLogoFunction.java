@@ -37,27 +37,23 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   }
 
   /**
-   * Compiler is responsible for ensuring that the first {@code Token} given to the {@code Function}
-   * is a {@code Command} since SLogo syntax dictates that all user interactions are in the form of commands
-   * @param initCommand - the first command intended to be run
-   * @param parameterTokens - a list of all remaining tokens in the user-entered String
-   * @param modelTurtle
-   * @throws SLogoException - if there is invalid syntax in the command
+   * {@code SLogoFunction} takes in a generic {@code Collection} of {@code Token} objects
+   * representing one or more commands entered by the user.
+   * @param functionTokens - all tokens entered by the user up to a comment token
+   * @param modelTurtle - the {@code Turtle} object containing the model state
    */
-  public SLogoFunction(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens,
-      Turtle modelTurtle) throws SLogoException  {
-    super("Function");
-    runnableCommandList = new ArrayList<>();
-    this.modelTurtle = modelTurtle;
-    parseParameterTokens(initCommand, parameterTokens);
-  }
-
   public SLogoFunction(Collection<SLogoToken> functionTokens, Turtle modelTurtle) {
     super("Function");
     this.functionTokens = new ArrayDeque<>(functionTokens);
     this.modelTurtle = modelTurtle;
   }
 
+  /**
+   * Iterates through the {@code Deque} of {@code Token} objects representing the commands the
+   * user has entered, creating and running commands. The method {@code runCommand} takes care
+   * of running individual commands.
+   * @return - the final command's return value in the form of a {@code Token}
+   */
   public SLogoToken runFunction() {
     SLogoToken returnToken = new SLogoConstant(0);
     Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
@@ -74,6 +70,21 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return returnToken;
   }
 
+  /**
+   * Calls {@code runCommand()} recursively to take care of nested {@code SLogoRunnables}.
+   * If {@code runnable.isReady()} is true, call {@code run()} on the it and return the return value.
+   *
+   * If runnable is not ready, call {@code getNextToken()} and check what type of token it is.
+   *
+   * If it is type {@code Constant} or {@code Variable}, pass it to the SLogoRunnable using
+   * {@code runnable.giveNextExpectedToken()} and make check if it is ready. Constants are wrapped
+   * in a variable token for consistency in parameters.
+   * If the type is {@code SLogoRunnable}, make recursive {@code run()} call on the
+   * inner runnable, passing the return value to the outer runnable using
+   * {@code runnable.giveNextExpectedToken()}.
+   *
+   * @return the return value of the last runnable object in the form of a {@code Token}
+   */
   private SLogoToken runCommand(SLogoCommand command, Deque<SLogoToken> remainingTokens) {
     command.attachTurtle(modelTurtle);
     while (! command.isReady()) {
@@ -102,6 +113,12 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return returnToken;
   }
 
+  /**
+   * This method should be used when only one command should be evaluated instead of the entire
+   * {@code Deque} of tokens. This method is especially helpful with the {@code EvaluateNumberCommand}
+   * class, which is used when evaluating arguments in a parameter list.
+   * @return - the return value of the command in the form of a {@code Token}
+   */
   public SLogoToken runSingleCommand() {
     SLogoCommand commandToRun;
     try {
@@ -113,47 +130,6 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return runCommand(commandToRun, functionTokens);
   }
 
-  // recursively assembles and runs a command
-  // takes in Deque of all remaining Tokens in the user-entered String, polls Tokens that it uses
-  // to create parameters for the initial command and all nested commands
-  private void parseParameterTokens(SLogoCommand initCommand, Deque<SLogoToken> parameterTokens) throws SLogoException {
-    initCommand.attachTurtle(modelTurtle);
-    while (! initCommand.isReady()) {
-      if (parameterTokens.isEmpty()) {
-        throw new SLogoException("Invalid syntax");
-      }
-      SLogoToken nextToken = parameterTokens.poll();
-      if (nextToken.isEqualTokenType(new SLogoConstant(0))) { // wrap constants inside a variable Token
-        double tokenValue = nextToken.getValue();
-        nextToken = new SLogoVariable("wrapper", tokenValue);
-      }
-      if (! initCommand.giveNextExpectedToken(nextToken)) {
-        try {
-          SLogoCommand nextCommand = (SLogoCommand) nextToken;
-          nextCommand.attachTurtle(modelTurtle);
-          SLogoToken resultToken = new SLogoFunction(nextCommand, parameterTokens, modelTurtle).run();
-          parameterTokens.addFirst(resultToken);
-          nextCommand.resetCommand();
-        }
-        catch (ClassCastException e) {
-          throw new SLogoException("Invalid syntax"); // received a generic Token, List, or Function
-        }
-      }
-    }
-    runnableCommandList.add(initCommand);
-  }
-
-  /**
-   * Adds the passed {@code Token} to the collection of parameters. This is used to create
-   * {@code WorkspaceEntry} objects of parameters of the function. When the function is run,
-   * these {@code WorkspaceEntry} objects are set to the values that are passed to them.
-   * @param params a {@code Collection} of parameter names.
-   */
-  public void addParams(Collection<SLogoToken> params) {
-
-  }
-
-
   @Override
   public boolean isReady() {
     return false;
@@ -164,21 +140,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return false;
   }
 
-  /**
-   * Calls {@code run()} recursively to take care of nested {@code SLogoRunnables}.
-   * If {@code runnable.isReady()} is true, call {@code run()} on the it and return the return value.
-   *
-   * If runnable is not ready, call {@code getNextToken()} and check what type of token it is.
-   *
-   * If it is type {@code Constant} or {@code Variable}, pass it to the SLogoRunnable using
-   * {@code runnable.giveNextExpectedToken()} and make recursive {@code run(runnable)} call on it again.
-   * If the next token is a generic {@code Token}, check the {@code Workspace} and get the concrete
-   * token type. If the type is {@code SLogoRunnable}, make recursive {@code run()} call on the
-   * inner runnable, passing the return value to the outer runnable using
-   * {@code runnable.giveNextExpectedToken()}.
-   *
-   * @return the return value of the last runnable object, wrapped as a {@code Constant} token.
-   */
+
   @Override
   public SLogoToken run() {
     SLogoToken resultToken = null;
@@ -188,9 +150,4 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return resultToken;
   }
 
-  public void resetFunction() {
-    for (SLogoCommand command : runnableCommandList) {
-      command.resetCommand();
-    }
-  }
 }

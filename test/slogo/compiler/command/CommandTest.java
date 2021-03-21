@@ -178,9 +178,9 @@ class CommandTest {
         new SLogoConstant(0)));
     assertEquals(0.0, runTwoArgumentCommand(new EqualCommand(), new SLogoConstant(5),
         new SLogoConstant(10)));
-    SLogoCommand piCommand = new PiCommand();
-    SLogoFunction piFunction = new SLogoFunction(piCommand, new ArrayDeque<>(), modelTurtle);
-    assertEquals(1.0, runTwoArgumentCommand(new EqualCommand(), piFunction.run(),
+    parameterTokens.add(new PiCommand());
+    SLogoFunction piFunction = new SLogoFunction(parameterTokens, modelTurtle);
+    assertEquals(1.0, runTwoArgumentCommand(new EqualCommand(), piFunction.runFunction(),
         new SLogoConstant(Math.PI)));
     assertEquals(1.0, runTwoArgumentCommand(new NotEqualCommand(), new SLogoConstant(5),
         new SLogoConstant(10)));
