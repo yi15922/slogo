@@ -14,9 +14,21 @@ public class SlogoModel implements Observable<ModelObserver> {
     }
   }
 
-  protected void notifyObserversOfPen(boolean b) {
+  protected void notifyObserversOfPenStatus(boolean b) {
     for (ModelObserver o : myObservers) {
-      o.checkPen(b);
+      o.checkPenStatus(b);
+    }
+  }
+
+  protected void notifyObserversOfPenColor(int index) {
+    for (ModelObserver o : myObservers) {
+      o.checkPenColor(index);
+    }
+  }
+
+  protected void notifyObserversOfPenSize(double pixels) {
+    for (ModelObserver o : myObservers) {
+      o.checkPenSize(pixels);
     }
   }
 

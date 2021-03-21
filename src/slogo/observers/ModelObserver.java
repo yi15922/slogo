@@ -5,9 +5,13 @@ public interface ModelObserver {
 
     void receiveHeading(double heading);
 
-    void checkPen(boolean b);
+    void checkPenStatus(boolean b);
 
     void receiveShow(boolean show);
 
     void receiveShape(int shape);
+
+    void checkPenColor(int index);
+
+    void checkPenSize(double pixels);
 }

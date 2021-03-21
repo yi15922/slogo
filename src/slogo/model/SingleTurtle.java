@@ -120,16 +120,16 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
     return 0;
   }
 
+  private void toggleShow() {
+    myShow = !myShow;
+    notifyObserversOfShow(myShow);
+  }
+
   public int showingP() {
     if (myShow) {
       return 1;
     }
     return 0;
-  }
-
-  private void toggleShow() {
-    myShow = !myShow;
-    notifyObserversOfShow(myShow);
   }
 
   public double home() {
@@ -144,14 +144,16 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   }
 
   //no tests
+  //could have some unnecessary updates
   public double penDown() {
-    notifyObserversOfPen(true);
+    notifyObserversOfPenStatus(true);
     return myPen.penDown();
   }
 
   //no tests
+  //could have some unnecessary updates
   public double penUp() {
-    notifyObserversOfPen(false);
+    notifyObserversOfPenStatus(false);
     return myPen.penUp();
   }
 
@@ -161,6 +163,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
 
   @Override
   public int setPenColor(int index) {
+    notifyObserversOfPenColor(index);
     return myPen.setPenColor(index);
   }
 

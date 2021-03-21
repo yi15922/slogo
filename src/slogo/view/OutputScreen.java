@@ -80,8 +80,10 @@ public class OutputScreen extends Region implements ModelObserver {
 
     }
 
+
+
     @Override
-    public void checkPen(boolean b) {
+    public void checkPenStatus(boolean b) {
         isPenDown = b;
     }
 
@@ -92,6 +94,16 @@ public class OutputScreen extends Region implements ModelObserver {
 
     @Override
     public void receiveShape(int shape) {
+
+    }
+
+    @Override
+    public void checkPenColor(int index) {
+
+    }
+
+    @Override
+    public void checkPenSize(double pixels) {
 
     }
 
