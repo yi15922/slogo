@@ -70,9 +70,7 @@ public class Compiler implements InputObserver {
       }
       functionTokens.add(tokenToAdd);
     }
-
-    new SLogoFunction(functionTokens, turtle).run();
-
+    new SLogoFunction(functionTokens, turtle).runFunction();
   }
 
 
