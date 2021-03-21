@@ -34,7 +34,7 @@ public class View implements AlertObserver, UserActionObserver {
     private static final String DEFAULT_RESOURCE_PACKAGE = "slogo.view.UIResources.";
     private static final String MENUBAR_BUTTONS_BUNDLE = "menuBar";
 
-    private final StackPane myWorkspace;
+    private final WorkspaceDisplay myWorkspace;
     private final InputConsole myInput;
     private final InputLog myLog;
     private ResourceBundle myLanguages;
@@ -128,8 +128,8 @@ public class View implements AlertObserver, UserActionObserver {
         return log;
     }
 
-    private StackPane createWorkSpace() {
-        StackPane workspace = new StackPane();
+    private WorkspaceDisplay createWorkSpace() {
+        WorkspaceDisplay workspace = new WorkspaceDisplay();
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
         return workspace;
     }

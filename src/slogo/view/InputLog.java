@@ -21,12 +21,6 @@ public class InputLog extends VBox implements InputObserver, Observable<UserActi
     TextArea myLogScreen;
     String myHistory = "";
 
-    public InputLog() {
-//        myLogScreen = new TextArea();
-//        myLogScreen.setWrapText(true);
-//        this.setVgrow(myLogScreen, Priority.ALWAYS);
-//        myLogScreen.setEditable(false);
-    }
 
     @Override
     public void receiveUserInput(String input) {
