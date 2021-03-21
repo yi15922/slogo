@@ -52,7 +52,6 @@ public class Workspace implements Observable<WorkspaceObserver> {
    * @param entry the {@code WorkspaceEntry} to add to the workspace.
    */
   public void add(WorkspaceEntry entry){
-    for (WorkspaceObserver o : myObservers) o.receiveWorkspaceEntry(entry);
     workspaceEntryMap.put(entry.toString(), entry);
   }
 
