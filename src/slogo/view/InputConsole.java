@@ -16,17 +16,17 @@ public class InputConsole extends VBox implements Observable<InputObserver>{
     final static String BUTTON_TEXT = "Run";
 
     private List<InputObserver> myInputObservers = new ArrayList<>();
+    private TextArea myInputArea;
 
     public InputConsole() {
-        TextArea inputArea = new TextArea();
-        inputArea.setWrapText(true);
+        myInputArea =  new TextArea();
+        myInputArea.setWrapText(true);
         this.setAlignment(Pos.BOTTOM_LEFT);
         Button button = new Button(BUTTON_TEXT);
         button.setOnAction(e -> {
-            sendInputToObservers(inputArea.getText());
-            inputArea.clear();
+            sendInputToObservers(myInputArea.getText());
         });
-        this.getChildren().addAll(inputArea, button);
+        this.getChildren().addAll(myInputArea, button);
     }
 
     @Override
@@ -44,9 +44,15 @@ public class InputConsole extends VBox implements Observable<InputObserver>{
         myInputObservers.remove(observer);
     }
 
-    private void sendInputToObservers(String input) {
+    public void sendInputToObservers(String input) {
         for (InputObserver o : myInputObservers) {
-            o.receiveUserInput(input);
+            try {
+                o.receiveUserInput(input);
+            } catch (Exception e) {
+                System.out.println("Compiler failed");
+            }
         }
+        myInputArea.clear();
     }
+
 }

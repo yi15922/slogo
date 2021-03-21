@@ -14,6 +14,7 @@ public class TopBar extends HBox {
     private UserActionObserver myInputObserver;
     private ResourceBundle myResources;
 
+    //TODO: Make this implement Observable so that it is clear it is being observed
     public TopBar(UserActionObserver observer, ResourceBundle myResources) {
         myInputObserver = observer;
         this.myResources = myResources;

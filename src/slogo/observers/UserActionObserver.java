@@ -5,5 +5,5 @@ package slogo.observers;
  * interaction with the GUI.
  */
 public interface UserActionObserver {
-    void receiveAction(String s);
+    void receiveAction(String action, Object[] parameters);
 }

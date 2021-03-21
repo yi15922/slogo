@@ -66,25 +66,6 @@ public class View implements AlertObserver, UserActionObserver {
         startProgram();
     }
 
-    private MenuButton createLanguagesDropdown() {
-        MenuButton languages = new MenuButton(myResources.getString("SelectLanguagePrompt"));
-        for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
-            String langKey = keys.nextElement();
-            MenuItem item = new MenuItem(myLanguages.getString(langKey));
-            item.setOnAction(e -> {
-                retrieveResources(myLocale = new Locale(langKey));
-                startProgram();
-            });
-            languages.getItems().add(item);
-        }
-        return languages;
-    }
-
-    private void retrieveResources(Locale locale) {
-        myResources = ResourceBundle.getBundle("MyResources", locale);
-        myMethods = ResourceBundle.getBundle("MyUserActionViewMethods", locale);
-    }
-
     public void startProgram() {
         TopBar topBar = createTopBar(myResources);
         MenuBar macOSMenuBar = new SLogoMenuBar(menubarHandler);
@@ -113,14 +94,35 @@ public class View implements AlertObserver, UserActionObserver {
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Scene scene = new Scene(everything, Double.parseDouble(mySettings.getString("GUIWidth")),
-                                 Double.parseDouble(mySettings.getString("GUIHeight")));
+                Double.parseDouble(mySettings.getString("GUIHeight")));
         myWindow.setScene(scene);
         myWindow.show();
         myOutputScreen.initializeTurtle();
     }
 
+    private MenuButton createLanguagesDropdown() {
+        MenuButton languages = new MenuButton(myResources.getString("SelectLanguagePrompt"));
+        for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
+            String langKey = keys.nextElement();
+            MenuItem item = new MenuItem(myLanguages.getString(langKey));
+            item.setOnAction(e -> {
+                retrieveResources(myLocale = new Locale(langKey));
+                startProgram();
+            });
+            languages.getItems().add(item);
+        }
+        return languages;
+    }
+
+    private void retrieveResources(Locale locale) {
+        myResources = ResourceBundle.getBundle("MyResources", locale);
+        myMethods = ResourceBundle.getBundle("MyUserActionViewMethods", locale);
+    }
+
+
     private InputLog createInputLog(InputConsole input) {
         InputLog log = new InputLog();
+        log.addObserver(this);
         input.addObserver(log);
         log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
         return log;
@@ -169,15 +171,18 @@ public class View implements AlertObserver, UserActionObserver {
     }
 
     @Override
-    public void receiveAction(String action) {
+    public void receiveAction(String action, Object[] args) {
         Class thisClass = this.getClass();
         //converts to lower case use selected locale, since different languages could have different ways
         //of lowercasing letters
         try {
             String methodName = myMethods.getString(action.toLowerCase(myLocale).replaceAll("\\s+",""));
-
-            Method method = thisClass.getDeclaredMethod(methodName, null);
-            method.invoke(this, null);
+            Class[] paramTypes = new Class[args.length];
+            for (int i=0; i< args.length; ++i) {
+                paramTypes[i] = args[i].getClass();
+            }
+            Method method = thisClass.getDeclaredMethod(methodName, paramTypes);
+            method.invoke(this, args);
         } catch (NoSuchMethodException ignore) {
             receiveErrorAlert("Something went wrong calling the method\n" +
                     "Make sure .properties files have correct method names written");
@@ -197,6 +202,10 @@ public class View implements AlertObserver, UserActionObserver {
 
     private void changePenColor() {
         myOutputScreen.changePenColor(createDialogueAndGetColor());
+    }
+
+    private void runCommand(String command) {
+        myInput.sendInputToObservers(command);
     }
 
     private String createDialogueAndGetColor() {
