@@ -1,6 +1,7 @@
 package slogo.compiler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -8,6 +9,8 @@ import java.util.Queue;
 import slogo.Main;
 import slogo.SLogoException;
 import slogo.compiler.command.IDCommand;
+import slogo.compiler.command.SLogoUserDefinedCommand;
+import slogo.compiler.token.SLogoVariable;
 import slogo.model.Turtle;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
@@ -71,11 +74,21 @@ public class Compiler implements InputObserver {
         tokenToAdd = makeList();
       }
       else if (tokenToAdd.getClass().equals(IDCommand.class)) {
-
+        tokenToAdd = new SLogoVariable("ID");
+        containsID = true;
       }
       functionTokens.add(tokenToAdd);
     }
-    new SLogoFunction(functionTokens, turtle).runFunction();
+    if (containsID) {
+      SLogoUserDefinedCommand wrapperCommand = new SLogoUserDefinedCommand("wrapper");
+      SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(new SLogoVariable("ID"))));
+      SLogoList commandList = new SLogoList(new ArrayList<>(functionTokens));
+      wrapperCommand.giveParameters(variableList, commandList);
+      // todo: call Turtle method
+    }
+    else {
+      new SLogoFunction(functionTokens, turtle).runFunction();
+    }
   }
 
 
