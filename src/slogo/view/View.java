@@ -173,25 +173,24 @@ public class View implements AlertObserver, UserActionObserver {
     @Override
     public void receiveAction(String action, Object[] args) {
         Class thisClass = this.getClass();
+        String error = "";
         //converts to lower case use selected locale, since different languages could have different ways
         //of lowercasing letters
         try {
-            String methodName = myMethods.getString(action.toLowerCase(myLocale).replaceAll("\\s+",""));
+            error = mySettings.getString("UserActionNotKey") + action;
+            String methodName = myMethods.getString(action.toLowerCase(myLocale).replaceAll("\\s+", ""));
             Class[] paramTypes = new Class[args.length];
-            for (int i=0; i< args.length; ++i) {
+            for (int i = 0; i < args.length; ++i) {
                 paramTypes[i] = args[i].getClass();
             }
+            error = mySettings.getString("MethodNotImplemented") +  methodName + "\t" + Arrays.toString(paramTypes);
             Method method = thisClass.getDeclaredMethod(methodName, paramTypes);
+
+            error = mySettings.getString("ViewMethodInvocationError");
+
             method.invoke(this, args);
-        } catch (NoSuchMethodException ignore) {
-            receiveErrorAlert("Something went wrong calling the method\n" +
-                    "Make sure .properties files have correct method names written");
-        } catch (IllegalAccessException ignore) {
-            receiveErrorAlert("Something went wrong calling the method\n" +
-                    "Make sure .properties files have correct method names written");
-        } catch (InvocationTargetException ignore) {
-            receiveErrorAlert("Something went wrong calling the method\n" +
-                    "Make sure .properties files have correct method names written");
+        } catch (Exception ignore) {
+            receiveErrorAlert(error);
         }
     }
 
