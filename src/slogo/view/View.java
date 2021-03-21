@@ -46,6 +46,7 @@ public class View implements AlertObserver, UserActionObserver {
     private final InputObserver myInputObserver;
     private Stage myWindow;
     private OutputScreen myOutputScreen;
+    private StatsDisplay myStatsDisplay;
     private final EventHandler<ActionEvent> menubarHandler;
 
 
@@ -59,6 +60,7 @@ public class View implements AlertObserver, UserActionObserver {
         //fields assigned here instead of start program so they are not reset when language is switched
         myOutputScreen = createOutputScreen();
         myModel.addObserver(myOutputScreen);
+        myModel.addObserver(myStatsDisplay);
         myWorkspace = createWorkSpace();
         myInput = createInputConsole();
         myLog = createInputLog(myInput);
