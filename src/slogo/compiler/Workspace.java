@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import slogo.Main;
 import slogo.Observable;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.command.MakeUserInstructionCommand;
@@ -84,11 +85,11 @@ public class Workspace implements Observable<WorkspaceObserver> {
     WorkspaceEntry newEntry;
     if (ret == null) {
       if (entryType.equals("UserDefinedCommand")) {
-        System.out.printf("Creating user defined command %s in workspace\n", name);
+        if (Main.DEBUG) System.out.printf("Creating user defined command %s in workspace\n", name);
         newEntry = new SLogoUserDefinedCommand(name);
         add(newEntry);
       } else if (entryType.equals("Variable")) {
-        System.out.printf("Creating variable %s in workspace\n", name);
+        if (Main.DEBUG) System.out.printf("Creating variable %s in workspace\n", name);
         newEntry = new SLogoVariable(name);
         add(newEntry);
       } else {
