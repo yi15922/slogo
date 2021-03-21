@@ -15,12 +15,10 @@ import slogo.compiler.token.SLogoVariable;
 
 public class SLogoUserDefinedCommand extends SLogoCommand {
   private Deque<SLogoToken> tokenQueue;
-  private List<SLogoFunction> functionList;
   private Map<String, Integer> variableMap;
 
   public SLogoUserDefinedCommand(String name) throws SLogoException {
     super(name);
-    functionList = new ArrayList<>();
     variableMap = new HashMap<>();
     tokenQueue = new ArrayDeque<>();
   }
@@ -51,26 +49,11 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       }
       replacedCommandQueue.add(token);
     }
-    while (! replacedCommandQueue.isEmpty()) {
-      try {
-        SLogoCommand command = (SLogoCommand) replacedCommandQueue.poll();
-        SLogoFunction innerFunction = new SLogoFunction(replacedCommandQueue, modelTurtle);
-        functionList.add(innerFunction);
-      }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid command syntax");
-      }
-    }
-    SLogoToken returnToken = new SLogoConstant(0);
-    for (SLogoFunction function : functionList) {
-      returnToken = function.run();
-    }
-    return returnToken;
+    return new SLogoFunction(replacedCommandQueue, modelTurtle).runFunction();
   }
 
   private boolean verifyCommandDefinition() throws SLogoException {
     Deque<SLogoToken> dummyCommandQueue = new ArrayDeque<>();
-    List<SLogoFunction> dummyFunctionList = new ArrayList<>();
     for (SLogoToken token : tokenQueue) {
       if (token.isEqualTokenType(new SLogoVariable("dummy"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
@@ -82,16 +65,11 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       }
       dummyCommandQueue.add(token);
     }
-    while (! dummyCommandQueue.isEmpty()) {
-      try {
-        SLogoCommand command = (SLogoCommand) dummyCommandQueue.poll();
-        SLogoFunction innerFunction = new SLogoFunction(dummyCommandQueue, modelTurtle);
-        dummyFunctionList.add(innerFunction);
-        command.resetCommand();
-      }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid command syntax");
-      }
+    try {
+      new SLogoFunction(dummyCommandQueue, modelTurtle).runFunction();
+    }
+    catch (SLogoException e) {
+      return false;
     }
     return true;
   }

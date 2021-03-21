@@ -87,7 +87,7 @@ public class View implements AlertObserver, UserActionObserver {
 
     public void startProgram() {
         TopBar topBar = createTopBar(myResources);
-        MenuBar macOSMenuBar = makeMacOSMenuBar();
+        MenuBar macOSMenuBar = new SLogoMenuBar(menubarHandler);
 
 
 
@@ -190,74 +190,6 @@ public class View implements AlertObserver, UserActionObserver {
         }
     }
 
-    /**
-     * Populates the system default menu bar on MacOS devices.
-     *
-     * Detects the operating system, and if the system is MacOS, creates a menu bar with various
-     * menus and options such as open, save, or open new window. Many of these options can
-     * have keyboard combinations attached to them.
-     * @return a {@code MenuBar} object.
-     */
-    private MenuBar makeMacOSMenuBar(){
-        MenuBar menuBar = new MenuBar();
-        String os = System.getProperty("os.name");
-        if (os != null && os.startsWith("Mac")) {
-            Platform.runLater(() -> menuBar.useSystemMenuBarProperty().set(true)) ;
-        }
-
-        ResourceBundle menubarBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + MENUBAR_BUTTONS_BUNDLE);
-
-        menuBar.getMenus().add(makeMenuFromProperties("File", menubarBundle));
-        return menuBar;
-    }
-
-    /**
-     * Creates a {@code Menu} with all corresponding {@code MenuItem}s from a properties
-     * file.
-     *
-     * An {@code String} input is needed for the name of the menu. This method will then
-     * look in the properties file for all menu items for this menu, and add them as children
-     * to this menu. This will invoke {@code makeMenuButton} to create menu item buttons as well
-     * as their {@code EventHandler}.
-     *
-     * @param menuName name of the top level menu to create
-     * @param bundle resource bundle for the menu bar
-     * @return a {@code Menu} object complete with menu items connected to event handlers.
-     */
-    private Menu makeMenuFromProperties(String menuName, ResourceBundle bundle){
-        String fileMenu = bundle.getString(menuName + ".menu");
-        Menu menu = null;
-        LinkedList<String> menuItems = new LinkedList<String>(Arrays.asList(fileMenu.split(",")));
-        if (menuItems.size() != 0) {
-            menu = new Menu(menuItems.remove());
-            while (menuItems.size() != 0) {
-                MenuItem newMenuItem = makeMenuButton(menuItems.remove(), menubarHandler, bundle);
-                menu.getItems().add(newMenuItem);
-            }
-        }
-        return menu;
-    }
-
-    /**
-     * Creates a menu button using data from a resource bundle.
-     *
-     * The ID of the {@code MenuItem} created will also be used by reflection later to
-     * invoke methods.
-     *
-     * @param property the property name of the button being created
-     * @param eHandler the {@code EventHandler }for the button being created
-     * @param bundle a {@code ResourceBundle} for the button being created
-     * @return a {@code MenuItem} with a label, an ID, and an event handler
-     */
-    private MenuItem makeMenuButton(String property, EventHandler<ActionEvent> eHandler,
-                                    ResourceBundle bundle) {
-        MenuItem result = new MenuItem();
-        String label = bundle.getString(property);
-        result.setText(label);
-        result.setOnAction(eHandler);
-        result.setId(property);
-        return result;
-    }
 
     private void changeBackgroundColor() {
         myOutputScreen.changeBackgroundColor(createDialogueAndGetColor());
