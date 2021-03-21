@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
+import slogo.Turtle;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
@@ -16,7 +17,7 @@ public class TellCommand extends SLogoCommand {
 
   public TellCommand() {
     super("Tell");
-    expectedParameters.add(new SLogoList(""));
+    expectedParameters.add(new SLogoList("turtles"));
     turtleIDs = new ArrayList<>();
   }
 
@@ -30,7 +31,7 @@ public class TellCommand extends SLogoCommand {
   @Override
   public SLogoToken run() throws SLogoException {
     SLogoList tokenList = (SLogoList) expectedParameters.get(0);
-    parseTokenList(new ArrayDeque<>(tokenList.getTokenList()));
+    turtleIDs = new TurtleListHelper(tokenList, modelTurtle).getTurtleIDList();
     if (turtleIDs.size() == 1) {
       singleElementList();
     }
@@ -49,21 +50,4 @@ public class TellCommand extends SLogoCommand {
     }
   }
 
-  private void parseTokenList(Deque<SLogoToken> givenTokens) {
-    while (! givenTokens.isEmpty()) {
-      SLogoToken nextToken = givenTokens.peek();
-      if (nextToken.isEqualTokenType(new SLogoConstant(0)) || nextToken.isEqualTokenType(new SLogoVariable(""))) {
-        turtleIDs.add((int) givenTokens.poll().getValue());
-      }
-      else {
-        try {
-          SLogoToken resultToken = new SLogoFunction(givenTokens, modelTurtle).runSingleCommand();
-          givenTokens.addFirst(resultToken);
-        }
-        catch (SLogoException e) {
-          throw new SLogoException("Invalid turtle ID list");
-        }
-      }
-    }
-  }
 }
