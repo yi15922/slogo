@@ -321,4 +321,16 @@ class CommandTest {
     assertEquals(10.0, runOneArgumentCommand(new TellCommand(), new SLogoList(turtleIDList)));
   }
 
+  @Test
+  void testOneArgumentDisplayCommands() {
+    assertEquals(1.0, runOneArgumentCommand(new SetBackgroundCommand(), new SLogoConstant(1)));
+    assertEquals(5.0, runOneArgumentCommand(new SetBackgroundCommand(), new SLogoVariable("index", 5)));
+    assertEquals(1.0, runOneArgumentCommand(new SetPenColorCommand(), new SLogoConstant(1)));
+    assertEquals(5.0, runOneArgumentCommand(new SetPenColorCommand(), new SLogoVariable("index", 5)));
+    assertEquals(1.0, runOneArgumentCommand(new SetShapeCommand(), new SLogoConstant(1)));
+    assertEquals(5.0, runOneArgumentCommand(new SetShapeCommand(), new SLogoVariable("index", 5)));
+    assertEquals(10.0, runOneArgumentCommand(new SetPenSizeCommand(), new SLogoConstant(10)));
+    assertEquals(50.0, runOneArgumentCommand(new SetPenSizeCommand(), new SLogoVariable("pixels", 50)));
+  }
+
 }
