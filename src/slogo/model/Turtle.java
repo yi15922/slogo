@@ -139,4 +139,14 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   public int turtles() {
     return turtleList.get(0).turtles();
   }
+
+  public int tell(List<Integer> turtles) {
+    for (SingleTurtle turtle: turtleList){
+      turtle.deactivate();
+    }
+    for (int i: turtles) {
+      turtleList.get(i).activate();
+    }
+    return turtles.get(turtles.size()-1);
+  }
 }
