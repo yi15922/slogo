@@ -1,6 +1,7 @@
 package slogo.compiler;
 
 import java.lang.reflect.*;
+import slogo.Main;
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
@@ -47,18 +48,18 @@ public class SLogoTokenMaker {
         obj = getCommandConstructor(inputString).newInstance();
       } catch (ClassNotFoundException | NoSuchMethodException |
           InstantiationException | IllegalAccessException | InvocationTargetException exception) {
-        System.out.printf("Searching workspace for function %s\n", inputString);
+        if (Main.DEBUG) System.out.printf("Searching workspace for function %s\n", inputString);
         obj = workspace.searchAndAddIfAbsent("UserDefinedCommand", inputString);
       }
     } else if (tokenType.equals("Variable")) {
-      System.out.printf("Searching workspace for variable %s\n", inputString);
+      if (Main.DEBUG) System.out.printf("Searching workspace for variable %s\n", inputString);
       return workspace.searchAndAddIfAbsent(tokenType, inputString);
     } else {
       try {
         obj = getTokenConstructor(tokenType).newInstance(inputString);
       } catch (IllegalAccessException | IllegalArgumentException | InstantiationException
           | InvocationTargetException | ClassNotFoundException | NoSuchMethodException exception) {
-        System.err.printf("Cannot create token from string \"%s\"\n", inputString);
+        if (Main.DEBUG) System.err.printf("Cannot create token from string \"%s\"\n", inputString);
         exception.printStackTrace();
         return null;
       }

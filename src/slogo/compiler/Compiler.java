@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import slogo.Main;
 import slogo.SLogoException;
 import slogo.model.Turtle;
 import slogo.compiler.command.SLogoCommand;
@@ -118,7 +119,7 @@ public class Compiler implements InputObserver {
       throw new SLogoException("Unexpected end of file: missing closing ']'?");
     }
     SLogoList ret = new SLogoList(tokenList);
-    System.out.println(ret);
+    if (Main.DEBUG) System.out.println(ret);
     return ret;
   }
 

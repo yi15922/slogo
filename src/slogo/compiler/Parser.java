@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import slogo.Main;
 import slogo.SLogoException;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
@@ -111,7 +112,7 @@ public class Parser {
    */
   private SLogoToken createTokenFromString(String userInput) throws SLogoException {
     String tokenType = determineTokenType(userInput);
-    System.out.printf("Token type: %s\n", tokenType);
+    if (Main.DEBUG) System.out.printf("Token type: %s\n", tokenType);
     if (tokenType == null) return null;
 
     SLogoTokenMaker tokenMaker= new SLogoTokenMaker(workspace);
@@ -170,7 +171,7 @@ public class Parser {
 
     for (Pattern pattern : regexMap.keySet()) {
       Matcher m = pattern.matcher(userInput);
-      System.out.printf("Matching %s with %s\n", userInput, pattern);
+      if (Main.DEBUG) System.out.printf("Matching %s with %s\n", userInput, pattern);
       if (m.matches()) {
         return regexMap.get(pattern);
       }

@@ -23,6 +23,9 @@ import slogo.compiler.Compiler;
  * a {@link View} instance.
  */
 public class Main extends Application {
+    public static final boolean DEBUG = false;
+
+
     /**
      * A method to test (and a joke :).
      */
