@@ -1,16 +1,18 @@
 package slogo.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import slogo.SlogoModel;
 
 public class Turtle extends SlogoModel implements TurtleInterface {
 
-  List<SingleTurtle> turtleList;
+  Map<Integer, SingleTurtle> turtleMap;
+  Map<Integer, Boolean> activeMap;
 
-  public Turtle(){
-    turtleList = new ArrayList<>();
-    turtleList.add(new SingleTurtle());
+  public Turtle() {
+    turtleMap =  new HashMap<>();
+    putIfAbsentActiveTurtle(1, new SingleTurtle());
   }
 
   @Override
@@ -137,16 +139,27 @@ public class Turtle extends SlogoModel implements TurtleInterface {
 
   @Override
   public int turtles() {
-    return turtleList.get(0).turtles();
+    return turtleMap.get(1).turtles();
   }
 
   public int tell(List<Integer> turtles) {
-    for (SingleTurtle turtle: turtleList){
+    deactivateTurtles();
+    for (int i : turtles) {
+      putIfAbsentActiveTurtle(i, new SingleTurtle());
+      activeMap.put(i, true);
+    }
+    //need to do command
+    return turtles.get(turtles.size() - 1);
+  }
+
+  private void putIfAbsentActiveTurtle(int id, SingleTurtle turtle){
+    turtleMap.putIfAbsent(id, turtle);
+    activeMap.putIfAbsent(id, true);
+  }
+
+  private void deactivateTurtles() {
+    for (SingleTurtle turtle : turtleMap.values()) {
       turtle.deactivate();
     }
-    for (int i: turtles) {
-      turtleList.get(i).activate();
-    }
-    return turtles.get(turtles.size()-1);
   }
 }
