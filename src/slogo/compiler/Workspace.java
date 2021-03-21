@@ -1,11 +1,17 @@
 package slogo.compiler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import slogo.Observable;
 import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.command.MakeUserInstructionCommand;
 import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoVariable;
+import slogo.observers.InputObserver;
+import slogo.observers.WorkspaceObserver;
 
 
 /**
@@ -27,8 +33,9 @@ import slogo.compiler.token.SLogoVariable;
  *
  * @author Yi Chen
  */
-public class Workspace {
+public class Workspace implements Observable<WorkspaceObserver> {
   private Map<String, WorkspaceEntry> workspaceEntryMap;
+  private List<WorkspaceObserver> myObservers = new ArrayList<>();
 
   /**
    *
@@ -91,5 +98,20 @@ public class Workspace {
       return newEntry;
     }
     return ret;
+  }
+
+  @Override
+  public boolean isObserver(WorkspaceObserver observer) {
+    return myObservers.contains(observer);
+  }
+
+  @Override
+  public void addObserver(WorkspaceObserver observer) {
+    myObservers.add(observer);
+  }
+
+  @Override
+  public void removeObserver(WorkspaceObserver observer) {
+    myObservers.remove(observer);
   }
 }

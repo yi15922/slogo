@@ -26,7 +26,7 @@ public class LoopHelper {
     for (int i = loopStart; i <= loopEnd; i += loopIncrement) {
       counterVariable.setValue(i);
       System.out.println("Running inner function");
-      returnToken = functionToRun.runFunction();
+      returnToken = functionToRun.run();
     }
     return returnToken;
   }
