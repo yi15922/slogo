@@ -90,4 +90,16 @@ public class OutputScreen extends Region implements ModelObserver {
     public void checkPen(boolean b) {
         isPenDown = b;
     }
+
+    @Override
+    public void receiveShow(boolean show) {
+
+    }
+
+    @Override
+    public void receiveShape(int shape) {
+
+    }
+
+
 }

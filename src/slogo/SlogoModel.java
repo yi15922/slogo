@@ -6,19 +6,25 @@ import slogo.observers.ModelObserver;
 
 public class SlogoModel implements Observable<ModelObserver> {
 
-    protected List<ModelObserver> myObservers = new ArrayList<>();
+  protected List<ModelObserver> myObservers = new ArrayList<>();
 
-    protected void notifyObserversOfPosition(double x, double y) {
-        for (ModelObserver o : myObservers) o.receiveNewPosition(x, y);
+  protected void notifyObserversOfPosition(double x, double y) {
+    for (ModelObserver o : myObservers) {
+      o.receiveNewPosition(x, y);
     }
+  }
 
-    protected void notifyObserversOfPen(boolean b) {
-        for (ModelObserver o : myObservers) o.checkPen(b);
+  protected void notifyObserversOfPen(boolean b) {
+    for (ModelObserver o : myObservers) {
+      o.checkPen(b);
     }
+  }
 
-    protected void notifyObserversOfHeading(double heading) {
-        for (ModelObserver o : myObservers) o.receiveHeading(heading);
+  protected void notifyObserversOfHeading(double heading) {
+    for (ModelObserver o : myObservers) {
+      o.receiveHeading(heading);
     }
+  }
 
   protected void notifyObserversOfShow(boolean show) {
     for (ModelObserver o : myObservers) {
@@ -32,19 +38,19 @@ public class SlogoModel implements Observable<ModelObserver> {
     }
   }
 
-    @Override
-    public boolean isObserver(ModelObserver observer) {
-        return myObservers.contains(observer);
-    }
+  @Override
+  public boolean isObserver(ModelObserver observer) {
+    return myObservers.contains(observer);
+  }
 
-    @Override
-    public void addObserver(ModelObserver observer) {
-        myObservers.add(observer);
-    }
+  @Override
+  public void addObserver(ModelObserver observer) {
+    myObservers.add(observer);
+  }
 
-    @Override
-    public void removeObserver(ModelObserver observer) {
-        myObservers.remove(observer);
-    }
+  @Override
+  public void removeObserver(ModelObserver observer) {
+    myObservers.remove(observer);
+  }
 }
 

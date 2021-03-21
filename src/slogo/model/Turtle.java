@@ -1,8 +1,9 @@
 package slogo.model;
 
 import java.util.List;
+import slogo.SlogoModel;
 
-public class Turtle implements TurtleInterface {
+public class Turtle extends SlogoModel implements TurtleInterface {
 
   List<SingleTurtle> turtleList;
 
