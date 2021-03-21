@@ -84,7 +84,7 @@ public class Parser {
 
     for (String line : allLines) {
       //System.out.println(line);
-      if (line.charAt(0) == '#') {
+      if (line.length() != 0 && line.charAt(0) == '#') {
         continue;
       }
       ArrayList<String> strings = new ArrayList<>(Arrays.asList(line.split(" ")));
@@ -109,7 +109,7 @@ public class Parser {
    * @param userInput
    * @return the {@code SLogoToken} of the correct type.
    */
-  public SLogoToken createTokenFromString(String userInput) throws SLogoException {
+  private SLogoToken createTokenFromString(String userInput) throws SLogoException {
     String tokenType = determineTokenType(userInput);
     System.out.printf("Token type: %s\n", tokenType);
     if (tokenType == null) return null;

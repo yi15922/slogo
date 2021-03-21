@@ -20,21 +20,9 @@ public class IfCommand extends SLogoCommand {
   @Override
   public SLogoToken run() throws SLogoException {
     if (expectedParameters.get(0).getValue() != 0.0) {
-      // todo: refactor code to extract method that creates inner function from token list
       SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
       Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-      SLogoToken returnToken = new SLogoConstant(0);
-      while (! commandQueue.isEmpty()) {
-        try {
-          SLogoFunction innerFunction = new SLogoFunction((SLogoCommand) commandQueue.poll(), commandQueue,
-              modelTurtle);
-          returnToken = innerFunction.run();
-        }
-        catch (ClassCastException e) {
-          throw new SLogoException("Invalid command list syntax");
-        }
-      }
-      return returnToken;
+      return new SLogoFunction(commandQueue, modelTurtle).runFunction();
     }
     else {
       return new SLogoConstant(0);

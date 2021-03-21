@@ -25,49 +25,25 @@ public class ForCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    SLogoList parameterList = (SLogoList) expectedParameters.get(0);
-    Deque<SLogoToken> parameterQueue = new ArrayDeque<>(parameterList.getTokenList());
-    parseParameterQueue(parameterQueue);
+    parseParameterQueue((SLogoList) expectedParameters.get(0));
     SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-    List<SLogoFunction> functionList = new ArrayList<>();
-    SLogoToken returnToken = new SLogoConstant(0);
-    for (int i = start; i <= end; i += increment) {
-      Deque<SLogoToken> copiedCommandQueue = new ArrayDeque<>(commandQueue);
-      counterVariable.setValue(i);
-      while (! copiedCommandQueue.isEmpty()) {
-        try {
-          SLogoCommand innerCommand = (SLogoCommand) copiedCommandQueue.poll();
-          SLogoFunction innerFunction = new SLogoFunction(innerCommand, copiedCommandQueue,
-              modelTurtle);
-          functionList.add(innerFunction);
-        }
-        catch (ClassCastException e) {
-          throw new SLogoException("Invalid command list syntax");
-        }
-      }
-      for (SLogoFunction function : functionList) {
-        returnToken = function.run();
-        function.resetFunction();
-      }
-      functionList.clear();
-    }
-    return returnToken;
+    return new LoopHelper(start, end, increment, new SLogoFunction(commandQueue, modelTurtle), counterVariable).run();
   }
 
-  private void parseParameterQueue(Deque<SLogoToken> tokenQueue) {
+  private void parseParameterQueue(SLogoList parameterList) {
+    Deque<SLogoToken> tokenQueue = new ArrayDeque<>(parameterList.getTokenList());
     try {
       counterVariable = (SLogoVariable) tokenQueue.poll();
     }
     catch (ClassCastException e) {
       throw new SLogoException("Invalid parameter list syntax");
     }
-    SLogoFunction helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue,
-        modelTurtle);
-    start = (int) helperFunction.run().getValue();
-    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue, modelTurtle);
-    end = (int) helperFunction.run().getValue();
-    helperFunction = new SLogoFunction(new EvaluateNumberCommand(), tokenQueue, modelTurtle);
-    increment = (int) helperFunction.run().getValue();
+    tokenQueue.addFirst(new EvaluateNumberCommand());
+    start = (int) new SLogoFunction(tokenQueue, modelTurtle).runSingleCommand().getValue();
+    tokenQueue.addFirst(new EvaluateNumberCommand());
+    end = (int) new SLogoFunction(tokenQueue, modelTurtle).runSingleCommand().getValue();
+    tokenQueue.addFirst(new EvaluateNumberCommand());
+    increment = (int) new SLogoFunction(tokenQueue, modelTurtle).runSingleCommand().getValue();
   }
 }

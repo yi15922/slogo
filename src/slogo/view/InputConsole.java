@@ -5,44 +5,51 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import slogo.Observable;
 import slogo.observers.InputObserver;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputConsole extends VBox {
+public class InputConsole extends VBox implements Observable<InputObserver>{
 
     final static String BUTTON_TEXT = "Run";
 
     private List<InputObserver> myInputObservers = new ArrayList<>();
+    private TextArea myInputArea;
 
     public InputConsole() {
-        TextArea inputArea = new TextArea();
-        inputArea.setWrapText(true);
+        myInputArea =  new TextArea();
+        myInputArea.setWrapText(true);
         this.setAlignment(Pos.BOTTOM_LEFT);
         Button button = new Button(BUTTON_TEXT);
         button.setOnAction(e -> {
-            sendInputToObservers(inputArea.getText());
-            inputArea.clear();
+            sendInputToObservers(myInputArea.getText());
         });
-        this.getChildren().addAll(inputArea, button);
+        this.getChildren().addAll(myInputArea, button);
     }
 
-    public boolean isObserver(InputObserver o) {
-        return myInputObservers.contains(o);
+    @Override
+    public boolean isObserver(InputObserver observer) {
+        return myInputObservers.contains(observer);
     }
 
-    public void addInputObserver(InputObserver o) {
-        myInputObservers.add(o);
+    @Override
+    public void addObserver(InputObserver observer) {
+        myInputObservers.add(observer);
     }
 
-    public void removeInputObserver(Object o) {
-        myInputObservers.remove(o);
+    @Override
+    public void removeObserver(InputObserver observer) {
+        myInputObservers.remove(observer);
     }
 
-    private void sendInputToObservers(String input) {
+    public void sendInputToObservers(String input) {
         for (InputObserver o : myInputObservers) {
             o.receiveUserInput(input);
+            System.out.println("Compiler failed");
         }
+        myInputArea.clear();
     }
+
 }

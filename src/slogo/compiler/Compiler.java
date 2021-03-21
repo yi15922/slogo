@@ -47,7 +47,7 @@ public class Compiler implements InputObserver {
    * the user input string.
    * @param input user input to the console
    */
-  public void makeTokenQueue(String input){
+  private void makeTokenQueue(String input){
     tokenQueue = parser.parseInput(input);
   }
 
@@ -62,18 +62,15 @@ public class Compiler implements InputObserver {
   public void compileAndRun(String input){
     makeTokenQueue(input);
     if (!hasNextToken()) return;
-    SLogoCommand initialCommand = (SLogoCommand) getNextToken();
-    Deque<SLogoToken> parameterTokens = new LinkedList<>();
+    Deque<SLogoToken> functionTokens = new LinkedList<>();
     while (hasNextToken()) {
       SLogoToken tokenToAdd = getNextToken();
       if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
         tokenToAdd = makeList();
       }
-      parameterTokens.add(tokenToAdd);
+      functionTokens.add(tokenToAdd);
     }
-
-    new SLogoFunction(initialCommand, parameterTokens, turtle).run();
-
+    new SLogoFunction(functionTokens, turtle).runFunction();
   }
 
 
@@ -82,7 +79,7 @@ public class Compiler implements InputObserver {
    * Returns null if no more tokens are available.
    * @return a {@code SLogoToken} object or {@code null}.
    */
-  public SLogoToken getNextToken(){
+  private SLogoToken getNextToken(){
     try {
       return tokenQueue.remove();
     } catch (NoSuchElementException | NullPointerException exception) {
@@ -94,7 +91,7 @@ public class Compiler implements InputObserver {
    * Determines whether there are more tokens left in this compile session.
    * @return {@code boolean} whether there are more parsed {@code SLogoToken}s.
    */
-  public boolean hasNextToken(){
+  private boolean hasNextToken(){
     return (tokenQueue != null && tokenQueue.size() != 0);
   }
 
@@ -106,7 +103,7 @@ public class Compiler implements InputObserver {
    * encounters a {@link slogo.compiler.token.SLogoListEnd}.
    * @return a {@code SLogoList} object.
    */
-  public SLogoList makeList() throws SLogoException {
+  private SLogoList makeList() throws SLogoException {
     boolean listEnded = false;
     ArrayList<SLogoToken> tokenList = new ArrayList<>();
     while (hasNextToken()) {

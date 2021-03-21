@@ -6,7 +6,7 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 
 /**
- * Helper class that evaluates the given tokens into a number but does not affect the model
+ * Helper class that evaluates the given tokens into a number
  */
 public class EvaluateNumberCommand extends SLogoCommand {
 

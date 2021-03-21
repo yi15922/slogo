@@ -48,10 +48,7 @@ public class SLogoTokenMaker {
       } catch (ClassNotFoundException | NoSuchMethodException |
           InstantiationException | IllegalAccessException | InvocationTargetException exception) {
         System.out.printf("Searching workspace for function %s\n", inputString);
-        obj = workspace.search(inputString);
-        if (obj == null) {
-          throw new SLogoException("Undefined command %s", inputString);
-        }
+        obj = workspace.searchAndAddIfAbsent("UserDefinedCommand", inputString);
       }
     } else if (tokenType.equals("Variable")) {
       System.out.printf("Searching workspace for variable %s\n", inputString);

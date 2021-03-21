@@ -1,119 +1,228 @@
 package slogo.view;
 
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.SplitPane;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
+import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
+import slogo.observers.UserActionObserver;
 
-public class View {
 
-    private static final String OBJECT_IMAGE = "turtle.png";
-    private static final double WINDOW_HEIGHT = 700;
-    private static final double WINDOW_WIDTH = 1000;
-    private static final double OUTPUT_WIDTH = 500;
-    private static final double OUTPUT_HEIGHT = 500;
-    private static final double MAIN_CONTENT_PADDING = 10;
-    private static final double INPUT_CONSOLE_MAX_HEIGHT = 200;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
+public class View implements AlertObserver, UserActionObserver {
 
-    private SlogoModel myModel;
-    private InputObserver myInputObserver;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "slogo.view.UIResources.";
+    private static final String MENUBAR_BUTTONS_BUNDLE = "menuBar";
 
-    public View(SlogoModel model, InputObserver observer, Stage primaryStage) {
+    private final WorkspaceDisplay myWorkspace;
+    private final InputConsole myInput;
+    private final InputLog myLog;
+    private ResourceBundle myLanguages;
+    private ResourceBundle mySettings;
+    private ResourceBundle myResources;
+    private ResourceBundle myMethods;
+    private Locale myLocale;
+    private final SlogoModel myModel;
+    private final InputObserver myInputObserver;
+    private Stage myWindow;
+    private OutputScreen myOutputScreen;
+    private final EventHandler<ActionEvent> menubarHandler;
+
+
+    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
+        myWindow = primaryStage;
+        myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;
         myInputObserver = observer;
-        startProgram(primaryStage);
+        mySettings = ResourceBundle.getBundle("Settings");
+        retrieveResources(myLocale = new Locale(mySettings.getString("DefaultLanguage")));
+        //fields assigned here instead of start program so they are not reset when language is switched
+        myOutputScreen = createOutputScreen();
+        myModel.addObserver(myOutputScreen);
+        myWorkspace = createWorkSpace();
+        myInput = createInputConsole();
+        myLog = createInputLog(myInput);
+        menubarHandler = handler;
+        startProgram();
     }
 
-    public void startProgram(Stage window) {
-
-        MenuBar menuBar = createMenuBar();
-        OutputScreen output = createOutputScreen();
-        myModel.addObserver(output);
-        InputConsole input = createInputConsole();
-        StackPane workspace = createStackPane();
-        InputLog log = createInputLog(input);
+    public void startProgram() {
+        TopBar topBar = createTopBar(myResources);
+        MenuBar macOSMenuBar = new SLogoMenuBar(menubarHandler);
 
 
 
-        SplitPane outputAndInput = new SplitPane(output, input);
+
+
+        SplitPane outputAndInput = new SplitPane(myOutputScreen, myInput);
         outputAndInput.setOrientation(Orientation.VERTICAL);
+        outputAndInput.setDividerPosition(0,1);
 
-        SplitPane splitPane = new SplitPane(log, workspace);
-        splitPane.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
-        splitPane.setMaxHeight(Double.MAX_VALUE);
-        splitPane.setMaxWidth(Double.MAX_VALUE);
+        SplitPane logAndWorkspace = new SplitPane(myLog, myWorkspace);
+        logAndWorkspace.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+        logAndWorkspace.setMinWidth(Double.parseDouble(mySettings.getString("LogAndWorkSpaceMinWidth")));
+//        logAndWorkspace.setMaxHeight(Double.MAX_VALUE);
+//        logAndWorkspace.setMaxWidth(Double.MAX_VALUE);
 
-        HBox mainContent = new HBox(outputAndInput, splitPane);
-        mainContent.setHgrow(splitPane, Priority.ALWAYS);
+        HBox mainContent = new HBox(outputAndInput, logAndWorkspace);
+        HBox.setHgrow(logAndWorkspace, Priority.ALWAYS);
         mainContent.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        mainContent.setPadding(new Insets(MAIN_CONTENT_PADDING));
+        mainContent.setPadding(new Insets(Double.parseDouble(mySettings.getString("MainContentPadding"))));
 
-        VBox everything = new VBox(menuBar, mainContent);
+        VBox everything = new VBox(macOSMenuBar, topBar, mainContent);
         everything.setVgrow(mainContent, Priority.ALWAYS);
         everything.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Scene scene = new Scene(everything, WINDOW_WIDTH,WINDOW_HEIGHT);
-
-//        window.setResizable(false);
-        window.setScene(scene);
-        window.show();
-        output.setPosition(0,0);
+        Scene scene = new Scene(everything, Double.parseDouble(mySettings.getString("GUIWidth")),
+                Double.parseDouble(mySettings.getString("GUIHeight")));
+        myWindow.setScene(scene);
+        myWindow.show();
+        myOutputScreen.initializeTurtle();
     }
+
+    private MenuButton createLanguagesDropdown() {
+        MenuButton languages = new MenuButton(myResources.getString("SelectLanguagePrompt"));
+        for (Enumeration<String> keys = myLanguages.getKeys(); keys.hasMoreElements();) {
+            String langKey = keys.nextElement();
+            MenuItem item = new MenuItem(myLanguages.getString(langKey));
+            item.setOnAction(e -> {
+                retrieveResources(myLocale = new Locale(langKey));
+                startProgram();
+            });
+            languages.getItems().add(item);
+        }
+        return languages;
+    }
+
+    private void retrieveResources(Locale locale) {
+        myResources = ResourceBundle.getBundle("MyResources", locale);
+        myMethods = ResourceBundle.getBundle("MyUserActionViewMethods", locale);
+    }
+
 
     private InputLog createInputLog(InputConsole input) {
         InputLog log = new InputLog();
-        input.addInputObserver(log);
+        log.addObserver(this);
+        input.addObserver(log);
         log.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
         return log;
     }
 
-    private StackPane createStackPane() {
-        StackPane workspace = new StackPane();
+    private WorkspaceDisplay createWorkSpace() {
+        WorkspaceDisplay workspace = new WorkspaceDisplay();
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
         return workspace;
     }
 
     private InputConsole createInputConsole() {
         InputConsole input = new InputConsole();
-        input.setMaxHeight(INPUT_CONSOLE_MAX_HEIGHT);
-        input.addInputObserver(myInputObserver);
-        input.setMaxWidth(OUTPUT_WIDTH);
+//        input.setMaxHeight(Double.parseDouble(mySettings.getString("InputConsoleMaxHeight")));
+        input.setMaxWidth(Double.parseDouble(mySettings.getString("OutputWidth")));
+        input.addObserver(myInputObserver);
         input.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         return input;
     }
 
     private OutputScreen createOutputScreen() {
-        OutputScreen output = new OutputScreen(new Image(this.getClass().getClassLoader().getResourceAsStream(OBJECT_IMAGE)), OUTPUT_WIDTH, OUTPUT_HEIGHT);
-//        output.setMaxHeight(OUTPUT_HEIGHT);
-//        output.setMinHeight(OUTPUT_HEIGHT);
-//        output.setMaxWidth(OUTPUT_WIDTH);
-//        output.setMinWidth(OUTPUT_WIDTH);
+        OutputScreen output = new OutputScreen(mySettings.getString("ObjectImage"));
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
+        output.setMinHeight(Double.parseDouble(mySettings.getString("OutputMinHeight")));
+        output.setPrefWidth(Double.parseDouble(mySettings.getString("OutputWidth")));
         return output;
     }
 
-    private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar();
-        menuBar.setMinHeight(80);
-        menuBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-        return menuBar;
+    private TopBar createTopBar(ResourceBundle myResources) {
+        mySettings.getKeys();
+        TopBar topBar = new TopBar(this, myResources);
+        topBar.getChildren().add(createLanguagesDropdown());
+        topBar.setMinHeight(Double.parseDouble(mySettings.getString("MenuBarMaxHeight")));
+        topBar.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+        return topBar;
     }
 
-    public void setTurtleX(double x) {}
-    public void setTurtleY(double y) {}
-    public void setTurtleHeading(double angle) {}
+    private void displayAlert(String message, Alert.AlertType type) {
+        Alert alert = new Alert(type, message);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.showAndWait();
+    }
+    @Override
+    public void receiveAlert(String message) {
+        displayAlert(message, Alert.AlertType.INFORMATION);
+    }
 
-//    private void setListeners(List<PropertyChangeListener> listeners) {
-//        for (PropertyChangeListener l : myListeners) {
-//            myTurtle.addListener(l);
-//        }
-//    }
+    @Override
+    public void receiveErrorAlert(String message) {
+        displayAlert(message, Alert.AlertType.ERROR);
+    }
+
+    @Override
+    public void receiveAction(String action, Object[] args) {
+        Class thisClass = this.getClass();
+        String error = "";
+        //converts to lower case use selected locale, since different languages could have different ways
+        //of lowercasing letters
+        try {
+            error = mySettings.getString("UserActionNotKey") + action;
+            String methodName = myMethods.getString(action.toLowerCase(myLocale).replaceAll("\\s+", ""));
+            Class[] paramTypes = new Class[args.length];
+            for (int i = 0; i < args.length; ++i) {
+                paramTypes[i] = args[i].getClass();
+            }
+            error = mySettings.getString("MethodNotImplemented") +  methodName + "\t" + Arrays.toString(paramTypes);
+            Method method = thisClass.getDeclaredMethod(methodName, paramTypes);
+
+            error = mySettings.getString("ViewMethodInvocationError");
+
+            method.invoke(this, args);
+        } catch (Exception ignore) {
+            receiveErrorAlert(error);
+        }
+    }
+
+
+    private void changeBackgroundColor() {
+        myOutputScreen.changeBackgroundColor(createDialogueAndGetColor());
+    }
+
+    private void changePenColor() {
+        myOutputScreen.changePenColor(createDialogueAndGetColor());
+    }
+
+    private void runCommand(String command) {
+        myInput.sendInputToObservers(command);
+    }
+
+    private String createDialogueAndGetColor() {
+        Dialog dialog = new TextInputDialog();
+        dialog.setHeaderText("Color in html, hex, or rgb format");
+        Optional<String> result = dialog.showAndWait();
+        String color = "";
+
+        if (result.isPresent()) {
+
+            color = result.get();
+        }
+        return color;
+    }
 
 }
