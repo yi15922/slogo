@@ -76,8 +76,7 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
 
     /**
      * Any object that implements Command must store a List of Lists of Tokens that it expects as parameters
-     * in order to run properly. The length of the outer list indicates the number of expected parameters,
-     * while each inner list contains all possible types of Tokens that can be taken for that parameter.
+     * in order to run properly. The length of the list indicates the number of expected parameters,
      * @return - List of parameters needed, specifying possible Token types for each parameter
      */
     public int getNumExpectedTokens() {
