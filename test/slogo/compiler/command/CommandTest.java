@@ -63,6 +63,17 @@ class CommandTest {
     return function.runFunction().getValue();
   }
 
+  private double runFourArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2, SLogoToken expr3, SLogoToken expr4) {
+    parameterTokens.clear();
+    parameterTokens.add(testCommand);
+    parameterTokens.add(expr1);
+    parameterTokens.add(expr2);
+    parameterTokens.add(expr3);
+    parameterTokens.add(expr4);
+    function = new SLogoFunction(parameterTokens, modelTurtle);
+    return function.runFunction().getValue();
+  }
+
   @Test
   void testMovementCommands() {
     assertEquals(50.0, runOneArgumentCommand(new ForwardCommand(), new SLogoVariable("pixels", 50)));
@@ -331,6 +342,12 @@ class CommandTest {
     assertEquals(5.0, runOneArgumentCommand(new SetShapeCommand(), new SLogoVariable("index", 5)));
     assertEquals(10.0, runOneArgumentCommand(new SetPenSizeCommand(), new SLogoConstant(10)));
     assertEquals(50.0, runOneArgumentCommand(new SetPenSizeCommand(), new SLogoVariable("pixels", 50)));
+  }
+
+  @Test
+  void testSetPaletteCommand() {
+    assertEquals(1.0, runFourArgumentCommand(new SetPaletteCommand(), new SLogoConstant(1), new SLogoConstant(255), new SLogoConstant(255), new SLogoConstant(255)));
+    assertThrows(SLogoException.class, () -> runThreeArgumentCommand(new SetPaletteCommand(), new SLogoConstant(1), new SLogoConstant(255), new SLogoConstant(255)));
   }
 
 }
