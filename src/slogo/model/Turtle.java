@@ -14,6 +14,7 @@ public class Turtle extends SlogoModel implements TurtleInterface {
 
   public Turtle() {
     turtleMap =  new HashMap<>();
+    activeMap = new HashMap<>();
     putIfAbsentActiveTurtle(1, new SingleTurtle());
   }
 
