@@ -39,7 +39,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> replacedCommandQueue = new ArrayDeque<>();
     for (SLogoToken token : tokenQueue) {
-      if (token.isEqualTokenType(new SLogoVariable("dummy"))) { // needs variable reference
+      if (token.isEqualTokenType(new SLogoVariable("parameter"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
           token = expectedParameters.get(variableMap.get(token.toString()));
         }
@@ -49,6 +49,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       }
       replacedCommandQueue.add(token);
     }
+    System.out.println(replacedCommandQueue);
     return new SLogoFunction(replacedCommandQueue, modelTurtle).runFunction();
   }
 
@@ -65,13 +66,13 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       }
       dummyCommandQueue.add(token);
     }
-    while (! dummyCommandQueue.isEmpty()) {
-      try {
-        new SLogoFunction(dummyCommandQueue, modelTurtle).runFunction();
-      }
-      catch (SLogoException e) {
-        throw new SLogoException("Invalid command syntax");
-      }
+    try {
+      SLogoFunction dummyFunction = new SLogoFunction(dummyCommandQueue, modelTurtle);
+      dummyFunction.disableExecution();
+      dummyFunction.runFunction();
+    }
+    catch (SLogoException e) {
+      return false;
     }
     return true;
   }

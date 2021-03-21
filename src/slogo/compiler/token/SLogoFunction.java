@@ -24,6 +24,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   protected List<SLogoCommand> runnableCommandList;
   protected Turtle modelTurtle;
   protected Deque<SLogoToken> functionTokens;
+  protected boolean executeCommands;
 
   /**
    * All Tokens must be initialized with a name, which is almost always the contents of the String
@@ -46,6 +47,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     super("Function");
     this.functionTokens = functionTokens;
     this.modelTurtle = modelTurtle;
+    executeCommands = true;
   }
 
   /**
@@ -58,6 +60,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     SLogoToken returnToken = new SLogoConstant(0);
     Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
     while (! runnableTokens.isEmpty()) {
+      System.out.println("Runnable tokens " + runnableTokens);
       SLogoCommand nextCommand;
       try {
         nextCommand = (SLogoCommand) runnableTokens.poll();
@@ -86,8 +89,10 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
    * @return the return value of the last runnable object in the form of a {@code Token}
    */
   private SLogoToken runCommand(SLogoCommand command, Deque<SLogoToken> remainingTokens) {
+    command.resetCommand();
     command.attachTurtle(modelTurtle);
     while (! command.isReady()) {
+      System.out.println("Remaining tokens " + remainingTokens);
       if (remainingTokens.isEmpty()) {
         throw new SLogoException("Invalid syntax");
       }
@@ -108,9 +113,12 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
         remainingTokens.addFirst(resultToken);
       }
     }
-    SLogoToken returnToken = command.run();
-    command.resetCommand();
-    return returnToken;
+    if (executeCommands) {
+      SLogoToken returnToken = command.run();
+      return returnToken;
+    }
+    System.out.println("Token queue " + remainingTokens);
+    return new SLogoConstant(1);
   }
 
   /**
@@ -128,6 +136,14 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
       throw new SLogoException("Invalid syntax");
     }
     return runCommand(commandToRun, functionTokens);
+  }
+
+  public void enableExecution() {
+    executeCommands = true;
+  }
+
+  public void disableExecution() {
+    executeCommands = false;
   }
 
   @Override
