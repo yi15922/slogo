@@ -53,6 +53,14 @@
         <resource>
             <directory>src</directory>
         </resource>
+        <resource>
+            <directory>data</directory>
+        </resource>
+        <resource>
+            <directory>resources</directory>
+        </resource>
+
+
     </resources>
     <plugins>
         <!-- compiles project source code using correct version and flags -->
