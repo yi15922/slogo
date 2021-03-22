@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import slogo.TurtleModel;
 import slogo.compiler.token.SLogoFunction;
 
 
-public class Turtle implements TurtleInterface {
+public class Turtle extends TurtleModel implements TurtleInterface {
 
   Map<Integer, SingleTurtle> turtleMap;
   Map<Integer, Boolean> activeMap;
@@ -15,7 +16,8 @@ public class Turtle implements TurtleInterface {
   public Turtle() {
     turtleMap = new HashMap<>();
     activeMap = new HashMap<>();
-    putIfAbsentActiveTurtle(1, new SingleTurtle(1));
+    putTurtleIfAbsent(1, new SingleTurtle(1));
+    activeMap.put(1, true);
   }
 
   @Override
@@ -276,22 +278,21 @@ public class Turtle implements TurtleInterface {
     return turtleMap.get(1).turtles();
   }
 
-  public int tell(List<Integer> turtles) {
+  public int tell(List<Integer> turtleIds) {
     deactivateMap(activeMap);
-    for (int i : turtles) {
-      //TODO: notify of new turtle
-      putIfAbsentActiveTurtle(i, new SingleTurtle(i));
-      activeMap.put(i, true);
+    for (int id : turtleIds) {
+      putTurtleIfAbsent(id, new SingleTurtle(id));
+      activeMap.put(id, true);
     }
     //need to do command
-    return turtles.get(turtles.size() - 1);
+    return turtleIds.get(turtleIds.size() - 1);
   }
 
-  public double ask(List<Integer> turtles, SLogoFunction method) {
+  public double ask(List<Integer> turtleIds, SLogoFunction method) {
     Map<Integer, Boolean> originalActiveMap = new HashMap<>(activeMap);
     deactivateMap(activeMap);
-    for (Integer i : turtles) {
-      activeMap.put(i, true);
+    for (Integer id : turtleIds) {
+      activeMap.put(id, true);
     }
     double returned = method.run().getValue();
     activeMap = originalActiveMap;
@@ -304,21 +305,23 @@ public class Turtle implements TurtleInterface {
 
     List<Integer> createdActiveList = new ArrayList<>();
 
-    for (Integer i : turtleMap.keySet()) {
-      activeMap.put(i, true);
+    for (Integer id : turtleMap.keySet()) {
+      activeMap.put(id, true);
       if (condition.run().getValue() == 1) {
-        createdActiveList.add(i);
+        createdActiveList.add(id);
       }
-      activeMap.put(i, false);
+      activeMap.put(id, false);
     }
 
     activeMap = originalActiveMap;
     return ask(createdActiveList, method);
   }
 
-  private void putIfAbsentActiveTurtle(int id, SingleTurtle turtle) {
-    turtleMap.putIfAbsent(id, turtle);
-    activeMap.putIfAbsent(id, true);
+  private void putTurtleIfAbsent(int id, SingleTurtle turtle) {
+    if(!turtleMap.keySet().contains(id)) {
+      turtleMap.put(id, turtle);
+      notifyObserverOfNewTurtle(id);
+    }
   }
 
   private void deactivateMap(Map<Integer, Boolean> map) {
