@@ -53,7 +53,11 @@ public class Compiler implements InputObserver {
    * @param input user input to the console
    */
   private void makeTokenQueue(String input){
-    tokenQueue = parser.parseInput(input);
+    try {
+      tokenQueue = parser.parseInput(input);
+    } catch (Exception e) {
+      WindowAlert.throwErrorAlert(e.getMessage());
+    }
   }
 
   /**

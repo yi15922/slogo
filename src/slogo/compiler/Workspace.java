@@ -54,6 +54,7 @@ public class Workspace implements Observable<WorkspaceObserver> {
    */
   public void add(WorkspaceEntry entry){
     workspaceEntryMap.put(entry.toString(), entry);
+    for (WorkspaceObserver o : myObservers) o.receiveWorkspaceEntry(entry);
   }
 
   /**

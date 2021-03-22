@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
 import slogo.WindowAlert;
+import slogo.compiler.Workspace;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserActionObserver;
@@ -52,7 +53,7 @@ public class View implements UserActionObserver {
     private WindowAlert myWindowAlert;
 
 
-    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
+    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, Workspace modelWorkspace)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;
@@ -64,6 +65,7 @@ public class View implements UserActionObserver {
         myModel.addObserver(myOutputScreen);
         myModel.addObserver(myStatsDisplay);
         myWorkspace = createWorkSpace();
+        modelWorkspace.addObserver(myWorkspace);
         myInput = createInputConsole();
         myLog = createInputLog(myInput);
         menubarHandler = handler;
