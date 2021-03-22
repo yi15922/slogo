@@ -12,40 +12,27 @@ import javafx.scene.shape.Circle;
  * {@code Button} so that the user can click on it. If the given image filename cannot
  * be found in the resources folder, the turtle will be displayed as a circle by default.
  */
-public class TurtleView extends Button {
+// TODO: Make this contain both the image and the button somehow
+public class TurtleView extends ImageView {
 
-  private Node myNode;
-  private static int ID = 0;
+  private Button myButton = new Button();
+
+  private static final int WIDTH = 20;
 
   public TurtleView(String imageFileName){
-    try {
-      myNode = makeDisplayObject("displayObject", 20, new Image(Objects
-          .requireNonNull(this.getClass().getClassLoader().getResourceAsStream(imageFileName))));
-    } catch (Exception ignore) {
-      myNode = new Circle(10);
-    }
-    setMinSize(10, 10);
-    setOnAction(event -> System.out.printf("User clicked turtle %d\n", ID));
-    setOpacity(0);
-    ID++;
+
+    super.setImage(new Image(Objects
+        .requireNonNull(this.getClass().getClassLoader().getResourceAsStream(imageFileName))));
+    setFitWidth(WIDTH);
+    setPreserveRatio(true);
+    myButton.setMinSize(10, 10);
+    myButton.setOpacity(0);
+    setOnMouseClicked(event -> System.out.println("User clicked"));
+
   }
 
-  // make object to be displayed
-  private ImageView makeDisplayObject (String id, int width, Image image) {
-    ImageView result = new ImageView(image);
-    result.setId(id);
-    result.setFitWidth(width);
-    result.setPreserveRatio(true);
-    return result;
-  }
-
-  public Node getTurtleNode(){
-    return myNode;
-  }
 
   public void setPosition(double x, double y){
-    myNode.setLayoutX(x);
-    myNode.setLayoutY(y);
     this.setLayoutX(x);
     this.setLayoutY(y);
   }
