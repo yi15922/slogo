@@ -74,4 +74,9 @@ public class OutputScreen extends Region implements TurtleObserver {
     public void receiveTurtle(int id) {
         System.out.println("Created turtle " + id);
     }
+
+    @Override
+    public void receiveBackground(int index) {
+
+    }
 }

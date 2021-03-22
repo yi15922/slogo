@@ -10,4 +10,9 @@ public class StatsDisplay extends VBox implements TurtleObserver {
   public void receiveTurtle(int id) {
 
   }
+
+  @Override
+  public void receiveBackground(int index) {
+
+  }
 }
