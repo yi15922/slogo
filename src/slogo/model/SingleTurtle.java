@@ -193,13 +193,13 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
     return turtleCount;
   }
 
-  public void activate() {
-    myActive = true;
-  }
-
-  public void deactivate() {
-    myActive = false;
-  }
+//  public void activate() {
+//    myActive = true;
+//  }
+//
+//  public void deactivate() {
+//    myActive = false;
+//  }
 
   private double standardizeAngle(double angle) {
     double returned = angle;

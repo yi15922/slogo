@@ -1,5 +1,6 @@
 package slogo.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +148,7 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   }
 
   public int tell(List<Integer> turtles) {
-    deactivateTurtles();
+    deactivateMap(activeMap);
     for (int i : turtles) {
       putIfAbsentActiveTurtle(i, new SingleTurtle());
       activeMap.put(i, true);
@@ -156,8 +157,33 @@ public class Turtle extends SlogoModel implements TurtleInterface {
     return turtles.get(turtles.size() - 1);
   }
 
-  public double ask(List<Integer> turtles, SLogoFunction method){
-    return 0;
+  public double ask(List<Integer> turtles, SLogoFunction method) {
+    Map<Integer, Boolean> originalActiveMap = new HashMap<>(activeMap);
+    deactivateMap(activeMap);
+    for (Integer i : turtles) {
+      activeMap.put(i, true);
+    }
+    double returned = method.run().getValue();
+    activeMap = originalActiveMap;
+    return returned;
+  }
+
+  public double askWith(SLogoFunction condition, SLogoFunction method) {
+    Map<Integer, Boolean> originalActiveMap = new HashMap<>(activeMap);
+    deactivateMap(activeMap);
+
+    List<Integer> createdActiveList = new ArrayList<>();
+
+    for (Integer i : turtleMap.keySet()) {
+      activeMap.put(i, true);
+      if (condition.run().getValue() == 1) {
+        createdActiveList.add(i);
+      }
+      activeMap.put(i, false);
+    }
+
+    activeMap = originalActiveMap;
+    return ask(createdActiveList, method);
   }
 
   private void putIfAbsentActiveTurtle(int id, SingleTurtle turtle){
@@ -165,9 +191,9 @@ public class Turtle extends SlogoModel implements TurtleInterface {
     activeMap.putIfAbsent(id, true);
   }
 
-  private void deactivateTurtles() {
-    for (SingleTurtle turtle : turtleMap.values()) {
-      turtle.deactivate();
+  private void deactivateMap(Map<Integer, Boolean> map) {
+    for (Integer i : map.keySet()) {
+      map.put(i, false);
     }
   }
 }
