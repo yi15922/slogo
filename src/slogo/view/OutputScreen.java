@@ -18,7 +18,6 @@ import slogo.observers.ModelObserver;
 
 public class OutputScreen extends Region implements ModelObserver {
 
-    private Node myTurtleNode;
     private TurtleView myTurtleView;
     private boolean isPenDown = false;
     private Paint myPenColor = Color.BLACK;
@@ -26,9 +25,7 @@ public class OutputScreen extends Region implements ModelObserver {
 
     public OutputScreen(String displayObject) {
 
-        myTurtleView = new TurtleView(displayObject);
-        myTurtleNode = myTurtleView.getTurtleNode();
-        this.getChildren().add(myTurtleNode);
+        myTurtleView = new TurtleView(displayObject, 0);
         this.getChildren().add(myTurtleView);
 
         // disallows displayed object from appearing outside of output screen
@@ -53,7 +50,7 @@ public class OutputScreen extends Region implements ModelObserver {
     }
 
     private void drawLine(double x, double y) {
-        Line line = new Line(myTurtleNode.getLayoutX(), myTurtleNode.getLayoutY(), x, y);
+        Line line = new Line(myTurtleView.getLayoutX(), myTurtleView.getLayoutY(), x, y);
         line.setStroke(myPenColor);
         this.getChildren().add(line);
     }
@@ -71,39 +68,39 @@ public class OutputScreen extends Region implements ModelObserver {
 
 
     @Override
-    public void receiveNewPosition(double x, double y) {
+    public void receiveNewPosition(int id, double x, double y) {
         setPosition(x, y);
     }
 
     @Override
-    public void receiveHeading(double heading) {
+    public void receiveHeading(int id, double heading) {
 
     }
 
 
 
     @Override
-    public void checkPenStatus(boolean b) {
+    public void checkPenStatus(int id, boolean b) {
         isPenDown = b;
     }
 
     @Override
-    public void receiveShow(boolean show) {
+    public void receiveShow(int id, boolean show) {
 
     }
 
     @Override
-    public void receiveShape(int shape) {
+    public void receiveShape(int id, int shape) {
 
     }
 
     @Override
-    public void checkPenColor(int index) {
+    public void checkPenColor(int id, int index) {
 
     }
 
     @Override
-    public void checkPenSize(double pixels) {
+    public void checkPenSize(int id, double pixels) {
 
     }
 

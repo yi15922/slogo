@@ -6,48 +6,72 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
+import slogo.observers.ModelObserver;
 
 /**
  * An image representation of a {@link slogo.model.SingleTurtle}. This object extends
  * {@code Button} so that the user can click on it. If the given image filename cannot
  * be found in the resources folder, the turtle will be displayed as a circle by default.
  */
-public class TurtleView extends Button {
+// TODO: Make this contain both the image and the button somehow
+public class TurtleView extends ImageView implements ModelObserver {
 
-  private Node myNode;
-  private static int ID = 0;
+  private Button myButton = new Button();
 
-  public TurtleView(String imageFileName){
-    try {
-      myNode = makeDisplayObject("displayObject", 20, new Image(Objects
-          .requireNonNull(this.getClass().getClassLoader().getResourceAsStream(imageFileName))));
-    } catch (Exception ignore) {
-      myNode = new Circle(10);
-    }
-    setMinSize(10, 10);
-    setOnAction(event -> System.out.printf("User clicked turtle %d\n", ID));
-    setOpacity(0);
-    ID++;
+  private static final int WIDTH = 20;
+  private final int ID;
+
+  public TurtleView(String imageFileName, int id){
+
+    super.setImage(new Image(Objects
+        .requireNonNull(this.getClass().getClassLoader().getResourceAsStream(imageFileName))));
+    ID = id;
+    setFitWidth(WIDTH);
+    setPreserveRatio(true);
+    myButton.setMinSize(10, 10);
+    myButton.setOpacity(0);
+    setOnMouseClicked(event -> System.out.println("User clicked " + ID));
+
   }
 
-  // make object to be displayed
-  private ImageView makeDisplayObject (String id, int width, Image image) {
-    ImageView result = new ImageView(image);
-    result.setId(id);
-    result.setFitWidth(width);
-    result.setPreserveRatio(true);
-    return result;
-  }
-
-  public Node getTurtleNode(){
-    return myNode;
-  }
 
   public void setPosition(double x, double y){
-    myNode.setLayoutX(x);
-    myNode.setLayoutY(y);
     this.setLayoutX(x);
     this.setLayoutY(y);
   }
 
+  @Override
+  public void receiveNewPosition(int id, double x, double y) {
+
+  }
+
+  @Override
+  public void receiveHeading(int id, double heading) {
+
+  }
+
+  @Override
+  public void checkPenStatus(int id, boolean b) {
+
+  }
+
+  @Override
+  public void receiveShow(int id, boolean show) {
+
+  }
+
+  @Override
+  public void receiveShape(int id, int shape) {
+
+  }
+
+  @Override
+  public void checkPenColor(int id, int index) {
+
+  }
+
+  @Override
+  public void checkPenSize(int id, double pixels) {
+
+  }
 }
