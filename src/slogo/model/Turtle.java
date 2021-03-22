@@ -17,7 +17,7 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   public Turtle() {
     turtleMap =  new HashMap<>();
     activeMap = new HashMap<>();
-    putIfAbsentActiveTurtle(1, new SingleTurtle());
+    putIfAbsentActiveTurtle(1, new SingleTurtle(1));
   }
 
   @Override
@@ -150,7 +150,7 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   public int tell(List<Integer> turtles) {
     deactivateMap(activeMap);
     for (int i : turtles) {
-      putIfAbsentActiveTurtle(i, new SingleTurtle());
+      putIfAbsentActiveTurtle(i, new SingleTurtle(i));
       activeMap.put(i, true);
     }
     //need to do command

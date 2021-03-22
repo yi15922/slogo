@@ -1,17 +1,17 @@
 package slogo.observers;
 
 public interface ModelObserver {
-    void receiveNewPosition(double x, double y);
+    void receiveNewPosition(int id, double x, double y);
 
-    void receiveHeading(double heading);
+    void receiveHeading(int id, double heading);
 
-    void checkPenStatus(boolean b);
+    void checkPenStatus(int id, boolean b);
 
-    void receiveShow(boolean show);
+    void receiveShow(int id, boolean show);
 
-    void receiveShape(int shape);
+    void receiveShape(int id, int shape);
 
-    void checkPenColor(int index);
+    void checkPenColor(int id, int index);
 
-    void checkPenSize(double pixels);
+    void checkPenSize(int id, double pixels);
 }

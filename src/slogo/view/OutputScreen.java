@@ -71,39 +71,39 @@ public class OutputScreen extends Region implements ModelObserver {
 
 
     @Override
-    public void receiveNewPosition(double x, double y) {
+    public void receiveNewPosition(int id, double x, double y) {
         setPosition(x, y);
     }
 
     @Override
-    public void receiveHeading(double heading) {
+    public void receiveHeading(int id, double heading) {
 
     }
 
 
 
     @Override
-    public void checkPenStatus(boolean b) {
+    public void checkPenStatus(int id, boolean b) {
         isPenDown = b;
     }
 
     @Override
-    public void receiveShow(boolean show) {
+    public void receiveShow(int id, boolean show) {
 
     }
 
     @Override
-    public void receiveShape(int shape) {
+    public void receiveShape(int id, int shape) {
 
     }
 
     @Override
-    public void checkPenColor(int index) {
+    public void checkPenColor(int id, int index) {
 
     }
 
     @Override
-    public void checkPenSize(double pixels) {
+    public void checkPenSize(int id, double pixels) {
 
     }
 

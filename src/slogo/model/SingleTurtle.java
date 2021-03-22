@@ -12,7 +12,6 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   private Pen myPen;
   private boolean myShow;
   private int myID;
-  private boolean myActive;
   private static int turtleCount = 0;
   private int myShape;
   private static final int ROUND_DECIMAL_PLACES = 3;
@@ -23,7 +22,6 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
     myPen = new Pen();
     myShow = true;
     myID = ID;
-    myActive = true;
     turtleCount++;
     myShape=0;
   }
@@ -59,7 +57,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   public double setHeading(double degrees) {
     double oldMyAngle = myAngle;
     myAngle = standardizeAngle(degrees);
-    notifyObserversOfHeading(myAngle);
+    notifyObserversOfHeading(myID, myAngle);
     return standardizeAngle(degrees - oldMyAngle);
   }
 
@@ -92,7 +90,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
     double distance = calculate2PointDistance(myX, myY, x, y);
     myX = round(x);
     myY = round(y);
-    notifyObserversOfPosition(myX, myY);
+    notifyObserversOfPosition(myID, myX, myY);
     return round(distance);
   }
 
@@ -122,7 +120,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
 
   private void toggleShow() {
     myShow = !myShow;
-    notifyObserversOfShow(myShow);
+    notifyObserversOfShow(myID, myShow);
   }
 
   public int showingP() {
@@ -146,14 +144,14 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   //no tests
   //could have some unnecessary updates
   public double penDown() {
-    notifyObserversOfPenStatus(true);
+    notifyObserversOfPenStatus(myID, true);
     return myPen.penDown();
   }
 
   //no tests
   //could have some unnecessary updates
   public double penUp() {
-    notifyObserversOfPenStatus(false);
+    notifyObserversOfPenStatus(myID, false);
     return myPen.penUp();
   }
 
@@ -163,7 +161,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
 
   @Override
   public int setPenColor(int index) {
-    notifyObserversOfPenColor(index);
+    notifyObserversOfPenColor(myID, index);
     return myPen.setPenColor(index);
   }
 
@@ -179,7 +177,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
 
   public int setShape(int index) {
     myShape = index;
-    notifyObserversOfShape(myShape);
+    notifyObserversOfShape(myID, myShape);
     return index;
   }
 
