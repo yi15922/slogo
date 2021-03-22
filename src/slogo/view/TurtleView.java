@@ -46,10 +46,6 @@ public class TurtleView extends ImageView implements ModelObserver {
     myButton.setMinSize(10, 10);
     myButton.setOpacity(0);
     setOnMouseClicked(event -> System.out.println("User clicked " + ID));
-
-    isPenDown = true;
-
-    setPosition(70, 100);
   }
 
 
