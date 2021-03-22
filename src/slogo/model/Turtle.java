@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import slogo.TurtleModel;
 import slogo.compiler.token.SLogoFunction;
+import slogo.observers.ModelObserver;
 
 
 public class Turtle extends TurtleModel implements TurtleInterface {
@@ -20,6 +21,10 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     putTurtleIfAbsent(1, new SingleTurtle(1));
     activeMap.put(1, true);
     myBackground = 0;
+  }
+
+  public void addSingleTurtleObserver(int id, ModelObserver observer){
+    turtleMap.get(id).addObserver(observer);
   }
 
   @Override

@@ -20,18 +20,17 @@ import slogo.observers.ModelObserver;
 
 public class OutputScreen extends Region implements TurtleObserver {
 
-    private TurtleView myTurtleView;
-    private boolean isPenDown = false;
-    private Paint myPenColor = Color.BLACK;
-    private boolean isTurtleInitialized = false;
+    private Collection<TurtleView> myTurtleViews;
     private Turtle myTurtle;
+    private String IMAGEFILE = null;
+    private Paint myPenColor = Color.BLACK;
+
 
     public OutputScreen(String displayObject, Turtle turtle) {
-
+        IMAGEFILE = displayObject;
         myTurtle = turtle;
         turtle.addObserver(this);
-        myTurtleView = new TurtleView(displayObject, 0);
-        this.getChildren().add(myTurtleView);
+
 
         // disallows displayed object from appearing outside of output screen
         Rectangle outputClip = new Rectangle();
@@ -42,23 +41,16 @@ public class OutputScreen extends Region implements TurtleObserver {
         });
     }
 
-    public void initializeTurtle() {
-        if (!isTurtleInitialized) setPosition(0,0);
-        isTurtleInitialized = true;
+    private void addTurtleView(int id){
+        TurtleView newTurtleView = new TurtleView(IMAGEFILE, id, event -> drawLine());
+        this.getChildren().add(newTurtleView);
     }
 
-    public void setPosition(double x, double y) {
-        double localX = x + this.getBoundsInLocal().getWidth()/2;
-        double localY = this.getBoundsInLocal().getHeight()/2 - y;
-        if (isPenDown) drawLine(localX, localY);
-        myTurtleView.setPosition(localX, localY);
+
+    private void drawLine(Line line){
+        this.getChildrenUnmodifiable().add(line);
     }
 
-    private void drawLine(double x, double y) {
-        Line line = new Line(myTurtleView.getLayoutX(), myTurtleView.getLayoutY(), x, y);
-        line.setStroke(myPenColor);
-        this.getChildren().add(line);
-    }
 
 
     public void changeBackgroundColor(String color) {
@@ -73,6 +65,7 @@ public class OutputScreen extends Region implements TurtleObserver {
     @Override
     public void receiveTurtle(int id) {
         System.out.println("Created turtle " + id);
+
     }
 
     @Override
