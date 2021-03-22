@@ -135,7 +135,7 @@ public class View implements UserActionObserver {
     }
 
     private WorkspaceDisplay createWorkSpace() {
-        WorkspaceDisplay workspace = new WorkspaceDisplay();
+        WorkspaceDisplay workspace = new WorkspaceDisplay(this);
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
         return workspace;
     }

@@ -14,6 +14,7 @@ import slogo.observers.WorkspaceObserver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CommandDisplay extends ScrollPane implements Observable<UserActionObserver>, WorkspaceObserver {
 
@@ -39,10 +40,18 @@ public class CommandDisplay extends ScrollPane implements Observable<UserActionO
         SLogoUserDefinedCommand command = (SLogoUserDefinedCommand) entry;
         Label commandName = new Label(command.toString());
         Button runButton = new Button("Run Command");
+        runButton.setOnAction(e -> {
+            Dialog dialog = new TextInputDialog();
+            dialog.setHeaderText(command.toString());
+            dialog.setContentText("Enter " + command.getNumExpectedTokens() + " arguments:");
+            Optional result = dialog.showAndWait();
+            if (result.isPresent()) {
+                for (UserActionObserver o : myObservers) {
+                    o.receiveAction("Run Command", new Object[]{command.toString() + " " + result.get()});
+                }
+            }
+        });
         HBox box = new HBox(commandName, runButton);
         this.setContent(box);
-
-//        MenuButton commandName = new MenuButton(command.toString());
-//        CustomMenuItem commandItem = new CustomMenuItem(commands);
     }
 }
