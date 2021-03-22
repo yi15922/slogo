@@ -32,27 +32,29 @@ public class TurtleView extends ImageView implements ModelObserver {
   private final int ID;
   private boolean isPenDown;
   private Paint myPenColor = Color.BLACK;
-  private Region region;
-  private EventHandler<ActionEvent> lineDrawHandler;
+  private OutputScreen outputScreen;
 
 
-  public TurtleView(String imageFileName, int id, EventHandler<ActionEvent> lineDrawHandler){
-    this.lineDrawHandler = lineDrawHandler;
+  public TurtleView(String imageFileName, int id, OutputScreen outputScreen){
+    this.outputScreen = outputScreen;
     super.setImage(new Image(Objects
         .requireNonNull(this.getClass().getClassLoader().getResourceAsStream(imageFileName))));
     ID = id;
     setFitWidth(WIDTH);
     setPreserveRatio(true);
-    setPosition(0,0)
+    setPosition(50,50);
     myButton.setMinSize(10, 10);
     myButton.setOpacity(0);
     setOnMouseClicked(event -> System.out.println("User clicked " + ID));
 
+    isPenDown = true;
+
+    setPosition(70, 100);
   }
 
 
 
-  public void setPosition(double x, double y){
+  private void setPosition(double x, double y){
     double localX = x + this.getBoundsInLocal().getWidth()/2;
     double localY = this.getBoundsInLocal().getHeight()/2 - y;
     if (isPenDown) drawLine(localX, localY);
@@ -64,7 +66,7 @@ public class TurtleView extends ImageView implements ModelObserver {
   private void drawLine(double x, double y) {
     Line line = new Line(getLayoutX(), getLayoutY(), x, y);
     line.setStroke(myPenColor);
-    lineDrawHandler.handle(null);
+    outputScreen.drawLine(line);
   }
 
 
@@ -80,7 +82,7 @@ public class TurtleView extends ImageView implements ModelObserver {
 
   @Override
   public void checkPenStatus(int id, boolean b) {
-
+    isPenDown = b;
   }
 
   @Override

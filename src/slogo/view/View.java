@@ -110,7 +110,6 @@ public class View implements UserActionObserver {
                 Double.parseDouble(mySettings.getString("GUIHeight")));
         myWindow.setScene(scene);
         myWindow.show();
-        myOutputScreen.initializeTurtle();
     }
 
     private MenuButton createLanguagesDropdown() {

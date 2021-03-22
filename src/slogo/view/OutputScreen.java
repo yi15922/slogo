@@ -31,7 +31,7 @@ public class OutputScreen extends Region implements TurtleObserver {
         myTurtle = turtle;
         turtle.addObserver(this);
 
-
+        this.getChildren().add(new TurtleView(IMAGEFILE, 1, this));
         // disallows displayed object from appearing outside of output screen
         Rectangle outputClip = new Rectangle();
         this.setClip(outputClip);
@@ -42,13 +42,13 @@ public class OutputScreen extends Region implements TurtleObserver {
     }
 
     private void addTurtleView(int id){
-        TurtleView newTurtleView = new TurtleView(IMAGEFILE, id, event -> drawLine());
+        TurtleView newTurtleView = new TurtleView(IMAGEFILE, id, this);
         this.getChildren().add(newTurtleView);
     }
 
 
-    private void drawLine(Line line){
-        this.getChildrenUnmodifiable().add(line);
+    public void drawLine(Line line){
+        this.getChildren().add(line);
     }
 
 
@@ -65,7 +65,7 @@ public class OutputScreen extends Region implements TurtleObserver {
     @Override
     public void receiveTurtle(int id) {
         System.out.println("Created turtle " + id);
-
+        addTurtleView(id);
     }
 
     @Override
