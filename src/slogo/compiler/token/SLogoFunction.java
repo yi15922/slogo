@@ -54,14 +54,15 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
    * of running individual commands.
    * @return - the final command's return value in the form of a {@code Token}
    */
-  public SLogoToken runFunction() {
+  @Override
+  public SLogoToken run() {
     SLogoToken returnToken = new SLogoConstant(0);
     Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
     while (! runnableTokens.isEmpty()) {
       SLogoToken nextToken = runnableTokens.poll();
       if (nextToken.isEqualTokenType(new SLogoFunction("function"))) {
         SLogoFunction nextFunction = (SLogoFunction) nextToken;
-        returnToken = nextFunction.runFunction();
+        returnToken = nextFunction.run();
       }
       else {
         SLogoCommand nextCommand;
@@ -161,13 +162,5 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   }
 
 
-  @Override
-  public SLogoToken run() {
-    SLogoToken resultToken = null;
-    for (SLogoCommand command : runnableCommandList) {
-      resultToken = command.run();
-    }
-    return resultToken;
-  }
 
 }

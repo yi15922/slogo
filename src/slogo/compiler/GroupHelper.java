@@ -25,7 +25,7 @@ import slogo.model.Turtle;
  * 10 10 20 20} becomes {@code towards 10 10 towards 20 20}
  *
  * 2. Nestable: command calls should be nested in one another so the parameters are all 'computed'
- * at once. Examples: {@codw sum 10 20 30} becomes {@code sum sum 10 20 30}, and {@code and 10 20 30}
+ * at once. Examples: {@code sum 10 20 30} becomes {@code sum sum 10 20 30}, and {@code and 10 20 30}
  * becomes {@code and and 10 20 30}
  *
  * 3. No parameter: any parameters given should be ignored. Examples: {@code pd, pi, turtles}
@@ -43,6 +43,8 @@ public class GroupHelper {
   private Deque<SLogoToken> parameterQueue;
   private Deque<SLogoToken> functionQueue;
   private Turtle modelTurtle;
+
+  private final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
 
   public GroupHelper(SLogoList tokenList, Turtle modelTurtle) {
     functionQueue = new ArrayDeque<>();
@@ -126,7 +128,7 @@ public class GroupHelper {
   }
 
   // nested or commands are built that take in notequal commands between every pair of tokens
-  private SLogoFunction notequal() {
+  private SLogoFunction notEqual() {
     List<SLogoToken> evaluatedParamsList = new ArrayList<>();
     while (! parameterQueue.isEmpty()) {
       SLogoToken nextToken = parameterQueue.poll();

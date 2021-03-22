@@ -33,7 +33,7 @@ class CommandTest {
     parameterTokens.clear();
     parameterTokens.add(testCommand);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    return function.runFunction().getValue();
+    return function.run().getValue();
   }
 
   private double runOneArgumentCommand(SLogoCommand testCommand, SLogoToken expr) {
@@ -41,7 +41,7 @@ class CommandTest {
     parameterTokens.add(testCommand);
     parameterTokens.add(expr);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    return function.runFunction().getValue();
+    return function.run().getValue();
   }
 
   private double runTwoArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2) {
@@ -50,7 +50,7 @@ class CommandTest {
     parameterTokens.add(expr1);
     parameterTokens.add(expr2);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    return function.runFunction().getValue();
+    return function.run().getValue();
   }
 
   private double runThreeArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2, SLogoToken expr3) {
@@ -60,7 +60,7 @@ class CommandTest {
     parameterTokens.add(expr2);
     parameterTokens.add(expr3);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    return function.runFunction().getValue();
+    return function.run().getValue();
   }
 
   private double runFourArgumentCommand(SLogoCommand testCommand, SLogoToken expr1, SLogoToken expr2, SLogoToken expr3, SLogoToken expr4) {
@@ -71,7 +71,7 @@ class CommandTest {
     parameterTokens.add(expr3);
     parameterTokens.add(expr4);
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    return function.runFunction().getValue();
+    return function.run().getValue();
   }
 
   @Test
@@ -97,7 +97,7 @@ class CommandTest {
     parameterTokens.add(new ForwardCommand());
     parameterTokens.add(new SLogoConstant(50));
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    assertEquals(50.0, function.runFunction().getValue());
+    assertEquals(50.0, function.run().getValue());
     assertEquals(100.0, modelTurtle.yCor());
   }
 
@@ -118,7 +118,7 @@ class CommandTest {
     parameterTokens.add(new SLogoConstant(50));
     parameterTokens.add(new SLogoConstant(100)); // turtle is at (0, 100), needs to turn to (50, 100)
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    SLogoToken functionResult = function.runFunction();
+    SLogoToken functionResult = function.run();
     assertEquals(100.0, modelTurtle.yCor());
     assertEquals(90.0, functionResult.getValue());
   }
@@ -191,7 +191,7 @@ class CommandTest {
         new SLogoConstant(10)));
     parameterTokens.add(new PiCommand());
     SLogoFunction piFunction = new SLogoFunction(parameterTokens, modelTurtle);
-    assertEquals(1.0, runTwoArgumentCommand(new EqualCommand(), piFunction.runFunction(),
+    assertEquals(1.0, runTwoArgumentCommand(new EqualCommand(), piFunction.run(),
         new SLogoConstant(Math.PI)));
     assertEquals(1.0, runTwoArgumentCommand(new NotEqualCommand(), new SLogoConstant(5),
         new SLogoConstant(10)));
@@ -227,7 +227,7 @@ class CommandTest {
     parameterTokens.add(new ForwardCommand());
     parameterTokens.add(new SLogoConstant(50));
     function = new SLogoFunction(parameterTokens, modelTurtle);
-    assertEquals(1.0, function.runFunction().getValue());
+    assertEquals(1.0, function.run().getValue());
     assertEquals(70.0, modelTurtle.yCor());
   }
 

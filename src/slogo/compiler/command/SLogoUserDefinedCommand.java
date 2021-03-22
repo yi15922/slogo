@@ -1,10 +1,8 @@
 package slogo.compiler.command;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
@@ -50,7 +48,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
       replacedCommandQueue.add(token);
     }
     System.out.println(replacedCommandQueue);
-    return new SLogoFunction(replacedCommandQueue, modelTurtle).runFunction();
+    return new SLogoFunction(replacedCommandQueue, modelTurtle).run();
   }
 
   private boolean verifyCommandDefinition() throws SLogoException {
@@ -69,7 +67,7 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
     try {
       SLogoFunction dummyFunction = new SLogoFunction(dummyCommandQueue, modelTurtle);
       dummyFunction.disableExecution();
-      dummyFunction.runFunction();
+      dummyFunction.run();
     }
     catch (SLogoException e) {
       return false;

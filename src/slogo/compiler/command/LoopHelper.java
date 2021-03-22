@@ -1,6 +1,5 @@
 package slogo.compiler.command;
 
-import javax.swing.event.MenuDragMouseListener;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
@@ -25,7 +24,7 @@ public class LoopHelper {
     SLogoToken returnToken = new SLogoConstant(0);
     for (int i = loopStart; i <= loopEnd; i += loopIncrement) {
       counterVariable.setValue(i);
-      returnToken = functionToRun.runFunction();
+      returnToken = functionToRun.run();
     }
     return returnToken;
   }
