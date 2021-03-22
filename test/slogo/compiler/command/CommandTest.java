@@ -26,6 +26,16 @@ class CommandTest {
   private SLogoFunction function;
   private Compiler testCompiler;
 
+  @Test
+  void testComplicatedCommands() {
+    double result = testCompiler.compileAndRun("if equal? st and fd 1 fd 3 [ fd 50 ]").getValue();
+    assertEquals(50.0, result);
+    result = testCompiler.compileAndRun("to testCommand [ ] [ fd 20 ] testCommand").getValue();
+    assertEquals(20.0, result);
+    result = testCompiler.compileAndRun("repeat ( product 1 2 3 ) [ fd ( sum 1 2 3 4 5 ) ]").getValue();
+    assertEquals(15.0, result);
+  }
+
   @BeforeEach
   void setup() {
     parameterTokens = new ArrayDeque<>();

@@ -66,6 +66,7 @@ Assumptions or Simplifications:
 
 Interesting data files:  
 We did not use data files to run SLogo programs, but we could implement that by using a Scanner to read from a file and pass lines in to the Compiler.
+However, some challenging commands to compile/run are featured in the `CommandTest` class, in the method named `testComplicatedCommands`
 
 Known Bugs:
 * Some commands related to angles return values that are slightly off due to rounding.
