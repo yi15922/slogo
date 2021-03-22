@@ -10,6 +10,8 @@ import slogo.Main;
 import slogo.SLogoException;
 import slogo.compiler.command.IDCommand;
 import slogo.compiler.command.SLogoUserDefinedCommand;
+import slogo.compiler.token.SLogoGroupEnd;
+import slogo.compiler.token.SLogoGroupStart;
 import slogo.compiler.token.SLogoVariable;
 import slogo.model.Turtle;
 import slogo.compiler.token.SLogoFunction;
@@ -72,6 +74,9 @@ public class Compiler implements InputObserver {
       SLogoToken tokenToAdd = getNextToken();
       if (tokenToAdd.getClass().equals(SLogoListStart.class)) {
         tokenToAdd = makeList();
+      }
+      else if (tokenToAdd.getClass().equals(SLogoGroupStart.class)) {
+        tokenToAdd = makeGroupFunction();
       }
       else if (tokenToAdd.getClass().equals(IDCommand.class)) {
         tokenToAdd = new SLogoVariable("ID");
@@ -138,6 +143,25 @@ public class Compiler implements InputObserver {
     SLogoList ret = new SLogoList(tokenList);
     if (Main.DEBUG) System.out.println(ret);
     return ret;
+  }
+
+  private SLogoFunction makeGroupFunction() throws SLogoException {
+    boolean listEnded = false;
+    ArrayList<SLogoToken> tokenList = new ArrayList<>();
+    while (hasNextToken()) {
+      SLogoToken token = getNextToken();
+      if (token.getClass().equals(SLogoGroupEnd.class)) {
+        listEnded = true;
+        break;
+      }
+      tokenList.add(token);
+    }
+    if (!listEnded) {
+      throw new SLogoException("Unexpected end of file: missing closing ')'?");
+    }
+    SLogoList groupList = new SLogoList(tokenList);
+    GroupHelper groupHelper = new GroupHelper(groupList, turtle);
+    return groupHelper.createGroupFunction();
   }
 
   @Override
