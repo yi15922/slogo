@@ -1,11 +1,18 @@
 package slogo.model;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import slogo.SLogoException;
 import slogo.TurtleModel;
+import slogo.compiler.SLogoUserDefinedFunction;
+import slogo.compiler.command.SLogoUserDefinedCommand;
+import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
+import slogo.compiler.token.SLogoToken;
 
 
 public class Turtle extends TurtleModel implements TurtleInterface {
@@ -336,5 +343,28 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   private void deactivateMap(Map<Integer, Boolean> map) {
     map.replaceAll((i, v) -> false);
+  }
+
+  /**
+   * Runs a command that is dependent on each turtle's ID for each individual turtle, passing
+   * in the ID as a parameter
+   * @param commandToRun - the command that needs to be run on each active turtle. It takes in an
+   *                     ID as a parameter.
+   */
+  public SLogoToken runIDFunction(SLogoUserDefinedCommand commandToRun) {
+    SLogoToken returned = new SLogoConstant(0);
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        try {
+          Deque<SLogoToken> commandQueue = new ArrayDeque<>();
+          commandQueue.add(commandToRun);
+          commandQueue.add(new SLogoConstant(id));
+          returned = new SLogoFunction(commandQueue, this).run();
+        } catch (SLogoException e) {
+          throw new SLogoException("Issue running ID function");
+        }
+      }
+    }
+    return returned;
   }
 }
