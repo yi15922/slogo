@@ -1,9 +1,12 @@
 package slogo.compiler;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.ResourceBundle;
 import slogo.SLogoException;
 import slogo.compiler.command.AndCommand;
 import slogo.compiler.command.EvaluateNumberCommand;
@@ -45,6 +48,7 @@ public class GroupHelper {
   private Turtle modelTurtle;
 
   private final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
+  private final String GROUP_TYPE_BUNDLE = "GroupingTypes";
 
   public GroupHelper(SLogoList tokenList, Turtle modelTurtle) {
     functionQueue = new ArrayDeque<>();
@@ -59,8 +63,16 @@ public class GroupHelper {
     }
   }
 
-  public SLogoFunction createGroupFunction() {
-    return null;
+  public SLogoFunction createGroupFunction() throws SLogoException {
+    ResourceBundle groupingBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GROUP_TYPE_BUNDLE);
+    String groupingType = groupingBundle.getString(initCommand.toString());
+    try {
+      Method m = this.getClass().getDeclaredMethod(groupingType);
+      return (SLogoFunction) m.invoke(GroupHelper.this);
+    }
+    catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+      throw new SLogoException("Invalid command type");
+    }
   }
 
   // has to evaluate inner commands in order to get correct number of tokens for each command call
