@@ -14,7 +14,6 @@ public class SetPenColorCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
-    return new SLogoConstant(expectedParameters.get(0).getValue());
+    return new SLogoConstant(modelTurtle.setPenColor((int) expectedParameters.get(0).getValue()));
   }
 }

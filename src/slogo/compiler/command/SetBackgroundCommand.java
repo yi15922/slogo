@@ -14,7 +14,6 @@ public class SetBackgroundCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method with index
-    return new SLogoConstant(expectedParameters.get(0).getValue());
+    return new SLogoConstant(modelTurtle.setBackground((int) expectedParameters.get(0).getValue()));
   }
 }

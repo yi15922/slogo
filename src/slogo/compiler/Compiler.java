@@ -100,8 +100,8 @@ public class Compiler implements InputObserver {
     else {
       try {
         return new SLogoFunction(functionTokens, turtle).run();
-      } catch (Exception ignore) {
-        WindowAlert.throwErrorAlert("Invalid syntax");
+      } catch (Exception e) {
+        WindowAlert.throwErrorAlert(e.getMessage());
       }
     }
     return null;
