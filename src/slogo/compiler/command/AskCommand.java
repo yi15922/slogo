@@ -1,5 +1,6 @@
 package slogo.compiler.command;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import slogo.SLogoException;
@@ -29,8 +30,7 @@ public class AskCommand extends SLogoCommand {
     SLogoList tokenList = (SLogoList) expectedParameters.get(0);
     SLogoList commandList = (SLogoList) expectedParameters.get(1);
     List<Integer> turtleIDs = new TurtleListHelper(tokenList, modelTurtle).getTurtleIDList();
-    // todo: call Turtle method with parameters turtleIDs, new SLogoFunction(new ArrayDeque<>(commandList.getTokenList()), modelTurtle)
-    return null;
+    return new SLogoConstant(modelTurtle.ask(turtleIDs, new SLogoFunction(new ArrayDeque<>(commandList.getTokenList()), modelTurtle)));
   }
 
 }
