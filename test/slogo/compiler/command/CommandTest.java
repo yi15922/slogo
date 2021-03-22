@@ -111,7 +111,7 @@ class CommandTest {
     assertEquals(90.0, runOneArgumentCommand(new RightCommand(), new SLogoVariable("degrees", 90)));
     assertEquals(270.0, modelTurtle.heading());
     assertEquals(120.0, runOneArgumentCommand(new SetHeadingCommand(), new SLogoVariable("degrees", 30)));
-    //assertEquals(30.0, runTwoArgumentCommand(new SetTowardsCommand(), new SLogoVariable("xcor", 100), new SLogoConstant(0)));
+    assertEquals(30.0, runTwoArgumentCommand(new SetTowardsCommand(), new SLogoVariable("xcor", 100), new SLogoConstant(0)));
   }
 
   @Test
@@ -139,6 +139,16 @@ class CommandTest {
     assertEquals(1.0, modelTurtle.showingP());
     assertEquals(0.0, runZeroArgumentCommand(new HideTurtleCommand()));
     assertEquals(0.0, modelTurtle.showingP());
+  }
+
+  @Test
+  void testTurtleQueries() {
+    runOneArgumentCommand(new ForwardCommand(), new SLogoConstant(50));
+    runOneArgumentCommand(new RightCommand(), new SLogoConstant(90));
+    runOneArgumentCommand(new ForwardCommand(), new SLogoConstant(40));
+    assertEquals(40.0, runZeroArgumentCommand(new XCoordinateCommand()));
+    assertEquals(50.0, runZeroArgumentCommand(new YCoordinateCommand()));
+    assertEquals(90.0, runZeroArgumentCommand(new HeadingCommand()));
   }
 
   @Test
@@ -278,8 +288,8 @@ class CommandTest {
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
-    //assertEquals(50.0, runTwoArgumentCommand(new ForCommand(), new SLogoList(parameterList), new SLogoList(commandList)));
-    //assertEquals(200.0, modelTurtle.yCor());
+    assertEquals(50.0, runTwoArgumentCommand(new ForCommand(), new SLogoList(parameterList), new SLogoList(commandList)));
+    assertEquals(200.0, modelTurtle.yCor());
     assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("for [ :count 1 2 0 ] [ fd 50 ]"));
   }
 
@@ -376,8 +386,8 @@ class CommandTest {
 
   @Test
   void testGroupingStackableCommands() {
-    //assertEquals(50.0, testCompiler.compileAndRun("( fd 10 20 30 40 50 )").getValue());
-    //assertEquals(150.0, modelTurtle.yCor());
+    assertEquals(50.0, testCompiler.compileAndRun("( fd 10 20 30 40 50 )").getValue());
+    assertEquals(150.0, modelTurtle.yCor());
     assertEquals(0.0, testCompiler.compileAndRun("( towards 10 10 20 20 )").getValue());
     assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("( towards 10 10 20 )"));
     assertEquals(10.0, testCompiler.compileAndRun("( make :first 5 :second 10 )").getValue());
@@ -427,6 +437,18 @@ class CommandTest {
     assertEquals(1.0, testCompiler.compileAndRun("( notequal? 1 2 1 1 1 )").getValue());
     assertEquals(0.0, testCompiler.compileAndRun("( notequal? 5 5 )").getValue());
     assertEquals(0.0, testCompiler.compileAndRun("( notequal? 1 1 1 1 1 )").getValue());
+  }
+
+  @Test
+  void testIDCommand() {
+    assertEquals(0.0, runZeroArgumentCommand(new IDCommand()));
+  }
+
+  @Test
+  void testTurtlesCommand() {
+    assertEquals(1.0, runZeroArgumentCommand(new TurtlesCommand()));
+    testCompiler.compileAndRun("tell [ 5 ]");
+    assertEquals(5.0, runZeroArgumentCommand(new TurtlesCommand()));
   }
 
 }
