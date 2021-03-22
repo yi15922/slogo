@@ -78,6 +78,7 @@ public class OutputScreen extends Region implements ModelObserver {
         ImageView result = new ImageView(image);
         result.setFitWidth(width);
         result.setPreserveRatio(true);
+        setOnMouseClicked(event -> System.out.println("User clicked"));
         return result;
     }
 
@@ -131,7 +132,7 @@ public class OutputScreen extends Region implements ModelObserver {
         } catch (Exception ignore) {
             myTurtles.put(id, new Circle(10));
         }
-        myPens.put(id, false);
+        myPens.put(id, true);
         myHeadings.put(id, 0.0);
         this.getChildren().add(myTurtles.get(id));
     }
