@@ -282,6 +282,7 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   public int tell(List<Integer> turtleIds) {
     deactivateMap(activeMap);
+    System.out.println(turtleIds);
     for (int id : turtleIds) {
       putTurtleIfAbsent(id, new SingleTurtle(id));
       activeMap.put(id, true);
@@ -327,6 +328,7 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   private void putTurtleIfAbsent(int id, SingleTurtle turtle) {
     if(!turtleMap.keySet().contains(id)) {
+      System.out.println("Added turtle " + id + " in map");
       turtleMap.put(id, turtle);
       notifyObserverOfNewTurtle(id);
     }
