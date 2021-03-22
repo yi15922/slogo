@@ -19,7 +19,6 @@ import slogo.observers.ModelObserver;
 
 public class OutputScreen extends Region implements TurtleObserver {
 
-    private Node myTurtleNode;
     private TurtleView myTurtleView;
     private boolean isPenDown = false;
     private Paint myPenColor = Color.BLACK;
@@ -27,9 +26,7 @@ public class OutputScreen extends Region implements TurtleObserver {
 
     public OutputScreen(String displayObject) {
 
-        myTurtleView = new TurtleView(displayObject);
-        myTurtleNode = myTurtleView.getTurtleNode();
-        this.getChildren().add(myTurtleNode);
+        myTurtleView = new TurtleView(displayObject, 0);
         this.getChildren().add(myTurtleView);
 
         // disallows displayed object from appearing outside of output screen
@@ -54,7 +51,7 @@ public class OutputScreen extends Region implements TurtleObserver {
     }
 
     private void drawLine(double x, double y) {
-        Line line = new Line(myTurtleNode.getLayoutX(), myTurtleNode.getLayoutY(), x, y);
+        Line line = new Line(myTurtleView.getLayoutX(), myTurtleView.getLayoutY(), x, y);
         line.setStroke(myPenColor);
         this.getChildren().add(line);
     }

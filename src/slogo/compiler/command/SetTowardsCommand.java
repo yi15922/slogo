@@ -16,6 +16,7 @@ public class SetTowardsCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
+    System.out.println("Setting heading towards (" + expectedParameters.get(0).getValue() + ", " + expectedParameters.get(1).getValue() + ")");
     return new SLogoConstant(modelTurtle.towards(expectedParameters.get(0).getValue(), expectedParameters.get(0).getValue()));
   }
 }

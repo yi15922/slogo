@@ -19,7 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
 import slogo.TurtleModel;
-import slogo.model.Turtle;
+import slogo.WindowAlert;
+import slogo.compiler.Workspace;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserActionObserver;
@@ -31,7 +32,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-public class View implements AlertObserver, UserActionObserver {
+public class View implements UserActionObserver {
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "slogo.view.UIResources.";
     private static final String MENUBAR_BUTTONS_BUNDLE = "menuBar";
@@ -50,9 +51,11 @@ public class View implements AlertObserver, UserActionObserver {
     private OutputScreen myOutputScreen;
     private StatsDisplay myStatsDisplay;
     private final EventHandler<ActionEvent> menubarHandler;
+    private WindowAlert myWindowAlert;
 
 
-    public View(TurtleModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
+
+    public View(TurtleModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, Workspace modelWorkspace)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;
@@ -64,6 +67,7 @@ public class View implements AlertObserver, UserActionObserver {
         myModel.addObserver(myOutputScreen);
         myModel.addObserver(myStatsDisplay);
         myWorkspace = createWorkSpace();
+        modelWorkspace.addObserver(myWorkspace);
         myInput = createInputConsole();
         myLog = createInputLog(myInput);
         menubarHandler = handler;
@@ -133,7 +137,7 @@ public class View implements AlertObserver, UserActionObserver {
     }
 
     private WorkspaceDisplay createWorkSpace() {
-        WorkspaceDisplay workspace = new WorkspaceDisplay();
+        WorkspaceDisplay workspace = new WorkspaceDisplay(this);
         workspace.setBackground(new Background(new BackgroundFill(Color.CHOCOLATE, CornerRadii.EMPTY, Insets.EMPTY)));
         return workspace;
     }
@@ -164,21 +168,6 @@ public class View implements AlertObserver, UserActionObserver {
         return topBar;
     }
 
-    private void displayAlert(String message, Alert.AlertType type) {
-        Alert alert = new Alert(type, message);
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.showAndWait();
-    }
-    @Override
-    public void receiveAlert(String message) {
-        displayAlert(message, Alert.AlertType.INFORMATION);
-    }
-
-    @Override
-    public void receiveErrorAlert(String message) {
-        displayAlert(message, Alert.AlertType.ERROR);
-    }
-
     @Override
     public void receiveAction(String action, Object[] args) {
         Class thisClass = this.getClass();
@@ -199,7 +188,7 @@ public class View implements AlertObserver, UserActionObserver {
 
             method.invoke(this, args);
         } catch (Exception ignore) {
-            receiveErrorAlert(error);
+            WindowAlert.throwErrorAlert(error);
         }
     }
 

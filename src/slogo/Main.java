@@ -107,7 +107,7 @@ public class Main extends Application {
             }
         };
 
-        new View(modelTurtle, modelCompiler, stage, handler);
+        new View(modelTurtle, modelCompiler, stage, handler, modelWorkspace);
     }
 
     /**

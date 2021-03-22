@@ -27,7 +27,7 @@ public class SettingsDropDown extends MenuButton implements Observable<UserActio
             MenuItem item = new MenuItem(s);
             item.setOnAction(e -> {
                 for (UserActionObserver o : myObservers) {
-                    o.receiveAction(s, null);
+                    o.receiveAction(s, new Object[0]);
                 }
             });
             this.getItems().add(item);
