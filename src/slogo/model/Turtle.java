@@ -282,10 +282,9 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     }
     return returned;
   }
-
-  @Override
+  
   public int turtles() {
-    return turtleMap.get(1).turtles();
+    return turtleMap.keySet().size();
   }
 
   public int tell(List<Integer> turtleIds) {
