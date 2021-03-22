@@ -277,9 +277,8 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     return returned;
   }
 
-  @Override
   public int turtles() {
-    return turtleMap.get(1).turtles();
+    return turtleCount;
   }
 
   public int tell(List<Integer> turtleIds) {
@@ -324,6 +323,11 @@ public class Turtle extends TurtleModel implements TurtleInterface {
   public int setBackground(int index) {
     myBackground = index;
     notifyObserverOfBackground(index);
+    return index;
+  }
+
+  public int setPalette(int index, int r, int g, int b) {
+
     return index;
   }
 

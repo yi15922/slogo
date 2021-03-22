@@ -46,6 +46,4 @@ public interface TurtleInterface {
   int setShape(int index);
 
   int shape();
-
-  int turtles();
 }
