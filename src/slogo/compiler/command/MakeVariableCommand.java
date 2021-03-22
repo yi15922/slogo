@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class MakeVariableCommand extends SLogoCommand {
 
   public MakeVariableCommand() {
-    super("Make");
+    super("MakeVariable");
     expectedParameters.add(new SLogoVariable("variable name"));
     expectedParameters.add(new SLogoVariable("expr"));
   }

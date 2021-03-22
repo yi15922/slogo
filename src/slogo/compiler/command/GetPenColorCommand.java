@@ -6,7 +6,7 @@ import slogo.compiler.token.SLogoToken;
 public class GetPenColorCommand extends SLogoCommand {
 
   public GetPenColorCommand() {
-    super("Get Pen Color");
+    super("GetPenColor");
   }
 
   @Override

@@ -8,7 +8,7 @@ import slogo.compiler.command.SLogoCommand;
 public class ClearScreenCommand extends SLogoCommand {
 
   public ClearScreenCommand() {
-    super("Clear Screen");
+    super("ClearScreen");
   }
 
   @Override

@@ -8,7 +8,7 @@ import slogo.compiler.command.SLogoCommand;
 public class IsShowingCommand extends SLogoCommand {
 
   public IsShowingCommand() {
-    super("Showing P");
+    super("IsShowing");
   }
 
   @Override

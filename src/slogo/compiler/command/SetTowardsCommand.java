@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class SetTowardsCommand extends SLogoCommand {
 
   public SetTowardsCommand() {
-    super("Towards");
+    super("SetTowards");
     expectedParameters.add(new SLogoVariable("x"));
     expectedParameters.add(new SLogoVariable("y"));
   }

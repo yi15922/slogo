@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class CosineCommand extends SLogoCommand {
 
   public CosineCommand() {
-    super("Cos");
+    super("Cosine");
     expectedParameters.add(new SLogoVariable("degrees"));
   }
 

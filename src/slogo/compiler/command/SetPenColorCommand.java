@@ -8,7 +8,7 @@ import slogo.compiler.token.SLogoVariable;
 public class SetPenColorCommand extends SLogoCommand {
 
   public SetPenColorCommand() {
-    super("Set Pen Color");
+    super("SetPenColor");
     expectedParameters.add(new SLogoVariable("index"));
   }
 

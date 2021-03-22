@@ -8,7 +8,7 @@ import slogo.compiler.command.SLogoCommand;
 public class XCoordinateCommand extends SLogoCommand {
 
   public XCoordinateCommand() {
-    super("XCor");
+    super("XCoordinate");
   }
 
   @Override

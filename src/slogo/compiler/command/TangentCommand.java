@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class TangentCommand extends SLogoCommand {
 
   public TangentCommand() {
-    super("Tan");
+    super("Tangent");
     expectedParameters.add(new SLogoVariable("degrees"));
   }
 

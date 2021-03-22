@@ -1,6 +1,20 @@
 package slogo.compiler;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import slogo.SLogoException;
+import slogo.compiler.command.AndCommand;
+import slogo.compiler.command.EvaluateNumberCommand;
+import slogo.compiler.command.OrCommand;
+import slogo.compiler.command.SLogoCommand;
+import slogo.compiler.token.SLogoConstant;
+import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
+import slogo.compiler.token.SLogoToken;
+import slogo.compiler.token.SLogoVariable;
+import slogo.model.Turtle;
 
 /**
  * This class reads from a properties file to determine how to handle extra parameters for a
@@ -25,11 +39,124 @@ import slogo.compiler.token.SLogoList;
  * results must be Or'ed together
  */
 public class GroupHelper {
-  private SLogoList groupList;
+  private SLogoCommand initCommand;
+  private Deque<SLogoToken> parameterQueue;
+  private Deque<SLogoToken> functionQueue;
+  private Turtle modelTurtle;
 
-  public GroupHelper(SLogoList tokenList) {
-    groupList = tokenList;
+  public GroupHelper(SLogoList tokenList, Turtle modelTurtle) {
+    functionQueue = new ArrayDeque<>();
+    this.modelTurtle = modelTurtle;
+    Deque<SLogoToken> tokenQueue = new ArrayDeque<>(tokenList.getTokenList());
+    try {
+      initCommand = (SLogoCommand) tokenQueue.poll();
+      parameterQueue = tokenQueue;
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid group definition");
+    }
   }
 
-  public 
+  public SLogoFunction createGroupFunction() {
+    return null;
+  }
+
+  // has to evaluate inner commands in order to get correct number of tokens for each command call
+  private SLogoFunction stackable() {
+    int numParametersExpected = initCommand.getNumExpectedTokens();
+    while (! parameterQueue.isEmpty()) {
+      functionQueue.add(initCommand);
+      for (int i = 0; i < numParametersExpected; i++) {
+        if (parameterQueue.isEmpty()) {
+          throw new SLogoException("Invalid group list syntax");
+        }
+        SLogoToken nextToken = parameterQueue.poll();
+        if (! nextToken.isEqualTokenType(new SLogoConstant(0)) && ! nextToken.isEqualTokenType(new SLogoVariable("var")) &&
+        ! nextToken.isEqualTokenType(new SLogoList("list"))) {
+          nextToken = evaluateInnerCommand(nextToken);
+        }
+        functionQueue.add(nextToken);
+      }
+    }
+    return new SLogoFunction(functionQueue, modelTurtle);
+  }
+
+  // has to evaluate inner commnads to determine how many command calls to place in the queue
+  private SLogoFunction nestable() {
+    while (! parameterQueue.isEmpty()) {
+      functionQueue.addFirst(initCommand);
+      SLogoToken nextToken = parameterQueue.poll();
+      if (! nextToken.isEqualTokenType(new SLogoConstant(0)) && ! nextToken.isEqualTokenType(new SLogoVariable("var")) &&
+          ! nextToken.isEqualTokenType(new SLogoList("list"))) {
+        nextToken = evaluateInnerCommand(nextToken);
+      }
+      functionQueue.add(nextToken);
+    }
+    functionQueue.remove(); // there should be params-1 nested command calls
+    return new SLogoFunction(functionQueue, modelTurtle);
+  }
+
+  // ignores all parameters
+  private SLogoFunction noParams() {
+    functionQueue.add(initCommand);
+    return new SLogoFunction(functionQueue, modelTurtle);
+  }
+
+  // a bit complicated: essentially, nested and commands are built that take in equal commands
+  // between every pair of tokens
+  private SLogoFunction equal() {
+    List<SLogoToken> evaluatedParamsList = new ArrayList<>();
+    while (! parameterQueue.isEmpty()) {
+      SLogoToken nextToken = parameterQueue.poll();
+      if (! nextToken.isEqualTokenType(new SLogoConstant(0)) && ! nextToken.isEqualTokenType(new SLogoVariable("var"))) {
+        nextToken = evaluateInnerCommand(nextToken);
+      }
+      evaluatedParamsList.add(nextToken);
+    }
+    for (int i = 0; i < evaluatedParamsList.size() - 1; i++) {
+      for (int j = i+1; j < evaluatedParamsList.size(); j++) {
+        functionQueue.addFirst(new AndCommand());
+        functionQueue.add(initCommand);
+        functionQueue.add(evaluatedParamsList.get(i));
+        functionQueue.add(evaluatedParamsList.get(j));
+      }
+    }
+    functionQueue.remove(); // there should be params-1 nested command calls
+    return new SLogoFunction(functionQueue, modelTurtle);
+  }
+
+  // nested or commands are built that take in notequal commands between every pair of tokens
+  private SLogoFunction notequal() {
+    List<SLogoToken> evaluatedParamsList = new ArrayList<>();
+    while (! parameterQueue.isEmpty()) {
+      SLogoToken nextToken = parameterQueue.poll();
+      if (! nextToken.isEqualTokenType(new SLogoConstant(0)) && ! nextToken.isEqualTokenType(new SLogoVariable("var"))) {
+        nextToken = evaluateInnerCommand(nextToken);
+      }
+      evaluatedParamsList.add(nextToken);
+    }
+    for (int i = 0; i < evaluatedParamsList.size() - 1; i++) {
+      for (int j = i+1; j < evaluatedParamsList.size(); j++) {
+        functionQueue.addFirst(new OrCommand());
+        functionQueue.add(initCommand);
+        functionQueue.add(evaluatedParamsList.get(i));
+        functionQueue.add(evaluatedParamsList.get(j));
+      }
+    }
+    functionQueue.remove(); // there should be params-1 nested command calls
+    return new SLogoFunction(functionQueue, modelTurtle);
+  }
+
+  private SLogoToken evaluateInnerCommand(SLogoToken nextToken) throws SLogoException {
+    try {
+      SLogoCommand innerCommand = (SLogoCommand) nextToken;
+      parameterQueue.addFirst(innerCommand);
+      parameterQueue.addFirst(new EvaluateNumberCommand());
+      return new SLogoFunction(parameterQueue, modelTurtle).runSingleCommand();
+    }
+    catch (ClassCastException e) {
+      throw new SLogoException("Invalid group list syntax");
+    }
+  }
+
 }
