@@ -8,45 +8,45 @@ public class SlogoModel implements Observable<ModelObserver> {
 
   protected List<ModelObserver> myObservers = new ArrayList<>();
 
-  protected void notifyObserversOfPosition(double x, double y) {
+  protected void notifyObserversOfPosition(int id, double x, double y) {
     for (ModelObserver o : myObservers) {
-      o.receiveNewPosition(x, y);
+      o.receiveNewPosition(id, x, y);
     }
   }
 
-  protected void notifyObserversOfPenStatus(boolean b) {
+  protected void notifyObserversOfPenStatus(int id, boolean b) {
     for (ModelObserver o : myObservers) {
-      o.checkPenStatus(b);
+      o.checkPenStatus(id, b);
     }
   }
 
-  protected void notifyObserversOfPenColor(int index) {
+  protected void notifyObserversOfPenColor(int id, int index) {
     for (ModelObserver o : myObservers) {
-      o.checkPenColor(index);
+      o.checkPenColor(id, index);
     }
   }
 
-  protected void notifyObserversOfPenSize(double pixels) {
+  protected void notifyObserversOfPenSize(int id, double pixels) {
     for (ModelObserver o : myObservers) {
-      o.checkPenSize(pixels);
+      o.checkPenSize(id, pixels);
     }
   }
 
-  protected void notifyObserversOfHeading(double heading) {
+  protected void notifyObserversOfHeading(int id, double heading) {
     for (ModelObserver o : myObservers) {
-      o.receiveHeading(heading);
+      o.receiveHeading(id, heading);
     }
   }
 
-  protected void notifyObserversOfShow(boolean show) {
+  protected void notifyObserversOfShow(int id, boolean show) {
     for (ModelObserver o : myObservers) {
-      o.receiveShow(show);
+      o.receiveShow(id, show);
     }
   }
 
-  protected void notifyObserversOfShape(int shape) {
+  protected void notifyObserversOfShape(int id, int shape) {
     for (ModelObserver o : myObservers) {
-      o.receiveShape(shape);
+      o.receiveShape(id, shape);
     }
   }
 
