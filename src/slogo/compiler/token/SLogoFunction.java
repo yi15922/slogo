@@ -69,7 +69,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
         try {
           nextCommand = (SLogoCommand) nextToken;
         }
-        catch (ClassCastException e) {
+        catch (ClassCastException ignore) {
           throw new SLogoException("Invalid syntax");
         }
         returnToken = runCommand(nextCommand, runnableTokens);

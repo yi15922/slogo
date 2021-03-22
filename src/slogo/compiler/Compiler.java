@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import slogo.Main;
 import slogo.SLogoException;
+import slogo.WindowAlert;
 import slogo.compiler.command.IDCommand;
 import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoVariable;
@@ -87,7 +88,11 @@ public class Compiler implements InputObserver {
       // todo: call Turtle method
     }
     else {
-      new SLogoFunction(functionTokens, turtle).run();
+      try {
+        new SLogoFunction(functionTokens, turtle).run();
+      } catch (Exception ignore) {
+        WindowAlert.throwErrorAlert("Invalid syntax");
+      }
     }
   }
 

@@ -18,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
+import slogo.WindowAlert;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserActionObserver;
@@ -29,7 +30,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-public class View implements AlertObserver, UserActionObserver {
+public class View implements UserActionObserver {
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "slogo.view.UIResources.";
     private static final String MENUBAR_BUTTONS_BUNDLE = "menuBar";
@@ -48,6 +49,7 @@ public class View implements AlertObserver, UserActionObserver {
     private OutputScreen myOutputScreen;
     private StatsDisplay myStatsDisplay;
     private final EventHandler<ActionEvent> menubarHandler;
+    private WindowAlert myWindowAlert;
 
 
     public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
@@ -162,21 +164,6 @@ public class View implements AlertObserver, UserActionObserver {
         return topBar;
     }
 
-    private void displayAlert(String message, Alert.AlertType type) {
-        Alert alert = new Alert(type, message);
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-        alert.showAndWait();
-    }
-    @Override
-    public void receiveAlert(String message) {
-        displayAlert(message, Alert.AlertType.INFORMATION);
-    }
-
-    @Override
-    public void receiveErrorAlert(String message) {
-        displayAlert(message, Alert.AlertType.ERROR);
-    }
-
     @Override
     public void receiveAction(String action, Object[] args) {
         Class thisClass = this.getClass();
@@ -197,7 +184,7 @@ public class View implements AlertObserver, UserActionObserver {
 
             method.invoke(this, args);
         } catch (Exception ignore) {
-            receiveErrorAlert(error);
+            WindowAlert.throwErrorAlert(error);
         }
     }
 
