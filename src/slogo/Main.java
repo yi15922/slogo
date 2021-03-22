@@ -115,6 +115,7 @@ public class Main extends Application {
      * @param stage a {@code Stage} in which to create the new window.
      */
     private void newWindow(Stage stage, String input) {
+        System.out.println("Main: creating composite turtle");
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);

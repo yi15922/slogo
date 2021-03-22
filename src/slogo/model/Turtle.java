@@ -13,6 +13,7 @@ public class Turtle extends TurtleModel implements TurtleInterface {
   Map<Integer, SingleTurtle> turtleMap;
   Map<Integer, Boolean> activeMap;
   private static int turtleCount;
+  private int myBackground;
 
   public Turtle() {
     turtleMap = new HashMap<>();
@@ -20,6 +21,7 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     putTurtleIfAbsent(1, new SingleTurtle(1));
     activeMap.put(1, true);
     turtleCount = 1;
+    myBackground = 0;
   }
 
   @Override
@@ -282,6 +284,7 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   public int tell(List<Integer> turtleIds) {
     deactivateMap(activeMap);
+    System.out.println(turtleIds);
     for (int id : turtleIds) {
       putTurtleIfAbsent(id, new SingleTurtle(id));
       activeMap.put(id, true);
@@ -319,8 +322,15 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     return ask(createdActiveList, method);
   }
 
+  public int setBackground(int index) {
+    myBackground = index;
+    notifyObserverOfBackground(index);
+    return index;
+  }
+
   private void putTurtleIfAbsent(int id, SingleTurtle turtle) {
     if(!turtleMap.keySet().contains(id)) {
+      System.out.println("Added turtle " + id + " in map");
       turtleMap.put(id, turtle);
       notifyObserverOfNewTurtle(id);
       turtleCount++;
