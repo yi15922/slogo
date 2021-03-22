@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 import slogo.SlogoModel;
 import slogo.compiler.token.SLogoFunction;
-import slogo.model.SingleTurtle;
-import slogo.model.TurtleInterface;
+
 
 public class Turtle extends SlogoModel implements TurtleInterface {
 
@@ -15,131 +14,262 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   Map<Integer, Boolean> activeMap;
 
   public Turtle() {
-    turtleMap =  new HashMap<>();
+    turtleMap = new HashMap<>();
     activeMap = new HashMap<>();
     putIfAbsentActiveTurtle(1, new SingleTurtle(1));
   }
 
   @Override
   public double forward(double pixels) {
-    return 0;
-//    double returned;
-//    for (Turtle t: turtleList) {
-//      if(t.isActive()){
-//        returned = t.forward(pixels);
-//      }
-//    }
-//    return returned;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).forward(pixels);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double back(double pixels) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).back(pixels);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double left(double degrees) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).left(degrees);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double right(double degrees) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).right(degrees);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double setHeading(double degrees) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).setHeading(degrees);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double towards(double x, double y) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).towards(x, y);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double setXY(double x, double y) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).setXY(x, y);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double penDown() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).penDown();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double penUp() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).penUp();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double showTurtle() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).showTurtle();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double hideTurtle() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).hideTurtle();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double home() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).home();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double clearScreen() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).clearScreen();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double xCor() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).xCor();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double yCor() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).yCor();
+      }
+    }
+    return returned;
   }
 
   @Override
   public double heading() {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).heading();
+      }
+    }
+    return returned;
   }
 
   @Override
   public int penDownP() {
-    return 0;
+    int returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).penDownP();
+      }
+    }
+    return returned;
   }
 
   @Override
   public int showingP() {
-    return 0;
+    int returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).showingP();
+      }
+    }
+    return returned;
   }
 
   @Override
   public int setPenColor(int index) {
-    return 0;
+    int returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).setPenColor(index);
+      }
+    }
+    return returned;
   }
 
   @Override
   public double setPenSize(double pixels) {
-    return 0;
+    double returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).setPenSize(pixels);
+      }
+    }
+    return returned;
   }
 
   @Override
   public int setShape(int index) {
-    return 0;
+    int returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).setShape(index);
+      }
+    }
+    return returned;
   }
 
   @Override
   public int penColor() {
-    return 0;
+    int returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).penColor();
+      }
+    }
+    return returned;
   }
 
   @Override
   public int shape() {
-    return 0;
+    int returned = -1;
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        returned = turtleMap.get(id).shape();
+      }
+    }
+    return returned;
   }
 
   @Override
@@ -150,6 +280,7 @@ public class Turtle extends SlogoModel implements TurtleInterface {
   public int tell(List<Integer> turtles) {
     deactivateMap(activeMap);
     for (int i : turtles) {
+      //TODO: notify of new turtle
       putIfAbsentActiveTurtle(i, new SingleTurtle(i));
       activeMap.put(i, true);
     }
@@ -186,14 +317,12 @@ public class Turtle extends SlogoModel implements TurtleInterface {
     return ask(createdActiveList, method);
   }
 
-  private void putIfAbsentActiveTurtle(int id, SingleTurtle turtle){
+  private void putIfAbsentActiveTurtle(int id, SingleTurtle turtle) {
     turtleMap.putIfAbsent(id, turtle);
     activeMap.putIfAbsent(id, true);
   }
 
   private void deactivateMap(Map<Integer, Boolean> map) {
-    for (Integer i : map.keySet()) {
-      map.put(i, false);
-    }
+    map.replaceAll((i, v) -> false);
   }
 }
