@@ -25,7 +25,7 @@ public class OutputScreen extends Region implements ModelObserver {
 
     public OutputScreen(String displayObject) {
 
-        myTurtleView = new TurtleView(displayObject);
+        myTurtleView = new TurtleView(displayObject, 0);
         this.getChildren().add(myTurtleView);
 
         // disallows displayed object from appearing outside of output screen
