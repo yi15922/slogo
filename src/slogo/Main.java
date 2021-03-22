@@ -1,6 +1,8 @@
 package slogo;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Scanner;
@@ -9,6 +11,8 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import slogo.compiler.Parser;
 import slogo.compiler.Workspace;
@@ -66,7 +70,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        newWindow(primaryStage);
+        newWindow(primaryStage, null);
     }
 
     /**
@@ -75,12 +79,30 @@ public class Main extends Application {
      * This is useful for the creation of new windows using reflection.
      */
     public void newWindow(){
-        newWindow(new Stage());
+        newWindow(new Stage(), null);
     }
+
 
     public void open(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose a slogo file to open.");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("SLogo Files", "*.slogo"));
+        File myFile = fileChooser.showOpenDialog(null);
+        String inputString = null;
+
+        if (myFile != null) {
+            try {
+                inputString = new Scanner(myFile)
+                    .useDelimiter("\\Z").next();
+                newWindow(new Stage(), inputString);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
+
+
 
     public void save(){
 
@@ -92,22 +114,19 @@ public class Main extends Application {
      * in the new window is independent from the previous window.
      * @param stage a {@code Stage} in which to create the new window.
      */
-    private void newWindow(Stage stage){
+    private void newWindow(Stage stage, String input) {
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
         Compiler modelCompiler = new Compiler(modelParser, modelTurtle);
 
-        EventHandler<ActionEvent> handler = new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                MenuItem buttonPressed = (MenuItem) event.getSource();
-                String buttonId = buttonPressed.getId();
-                callInstanceMethod(buttonId);
-            }
+        EventHandler<ActionEvent> menuBarHandler = event -> {
+            MenuItem buttonPressed = (MenuItem) event.getSource();
+            String buttonId = buttonPressed.getId();
+            callInstanceMethod(buttonId);
         };
 
-        new View(modelTurtle, modelCompiler, stage, handler, modelWorkspace);
+        new View(modelTurtle, modelCompiler, stage, menuBarHandler, modelWorkspace, input);
     }
 
     /**
@@ -117,7 +136,7 @@ public class Main extends Application {
     private void callInstanceMethod(String name){
         Method methodToCall = null;
         try {
-            System.out.printf("User clicked %s\n", name);
+            if (Main.DEBUG) System.out.printf("User clicked %s\n", name);
             methodToCall = this.getClass().getMethod(name);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

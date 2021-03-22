@@ -1,6 +1,7 @@
 package slogo.view;
 
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -54,8 +55,7 @@ public class View implements UserActionObserver {
     private WindowAlert myWindowAlert;
 
 
-
-    public View(TurtleModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, Workspace modelWorkspace)  {
+    public View(TurtleModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, Workspace modelWorkspace, String input)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;
@@ -72,6 +72,10 @@ public class View implements UserActionObserver {
         myLog = createInputLog(myInput);
         menubarHandler = handler;
         startProgram();
+
+        if (input != null) {
+            runInput(input);
+        }
     }
 
     public void startProgram() {
@@ -201,8 +205,8 @@ public class View implements UserActionObserver {
         myOutputScreen.changePenColor(createDialogueAndGetColor());
     }
 
-    private void runCommand(String command) {
-        myInput.sendInputToObservers(command);
+    public void runInput(String input) {
+        myInput.sendInputToObservers(input);
     }
 
     private String createDialogueAndGetColor() {
