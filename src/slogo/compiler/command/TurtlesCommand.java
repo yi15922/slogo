@@ -1,6 +1,7 @@
 package slogo.compiler.command;
 
 import slogo.SLogoException;
+import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 
 public class TurtlesCommand extends SLogoCommand {
@@ -11,7 +12,6 @@ public class TurtlesCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
-    return null;
+    return new SLogoConstant(modelTurtle.turtles());
   }
 }
