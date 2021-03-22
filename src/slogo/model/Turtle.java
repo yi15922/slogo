@@ -1,11 +1,16 @@
 package slogo.model;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import slogo.TurtleModel;
+import slogo.compiler.command.SLogoUserDefinedCommand;
+import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
+import slogo.compiler.token.SLogoToken;
 import slogo.observers.ModelObserver;
 
 
@@ -277,10 +282,9 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     }
     return returned;
   }
-
-  @Override
+  
   public int turtles() {
-    return turtleMap.get(1).turtles();
+    return turtleMap.keySet().size();
   }
 
   public int tell(List<Integer> turtleIds) {
@@ -350,5 +354,18 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   private void deactivateMap(Map<Integer, Boolean> map) {
     map.replaceAll((i, v) -> false);
+  }
+
+  public SLogoToken runIDFunction(SLogoUserDefinedCommand commandToRun) {
+    SLogoToken returned = new SLogoConstant(0);
+    for (Integer id : turtleMap.keySet()) {
+      if (activeMap.get(id)) {
+        Deque<SLogoToken> commandQueue = new ArrayDeque<>();
+        commandQueue.add(commandToRun);
+        commandQueue.add(new SLogoConstant(id));
+        returned = new SLogoFunction(commandQueue, this).run();
+      }
+    }
+    return returned;
   }
 }
