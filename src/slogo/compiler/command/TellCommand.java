@@ -30,11 +30,7 @@ public class TellCommand extends SLogoCommand {
     if (turtleIDs.size() == 1) {
       singleElementList();
     }
-    // todo: call Turtle method with turtleIDs
-    if (turtleIDs.isEmpty()) {
-      return new SLogoConstant(-1);
-    }
-    return new SLogoConstant(turtleIDs.get(turtleIDs.size() - 1)); // replace with Turtle method
+    return new SLogoConstant(modelTurtle.tell(turtleIDs));
   }
 
   private void singleElementList() {
