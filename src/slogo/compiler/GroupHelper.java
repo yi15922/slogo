@@ -46,6 +46,7 @@ public class GroupHelper {
   private Deque<SLogoToken> parameterQueue;
   private Deque<SLogoToken> functionQueue;
   private Turtle modelTurtle;
+  private SLogoTokenMaker tokenMaker;
 
   private final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
   private final String GROUP_TYPE_BUNDLE = "GroupingTypes";
@@ -53,6 +54,7 @@ public class GroupHelper {
   public GroupHelper(SLogoList tokenList, Turtle modelTurtle) {
     functionQueue = new ArrayDeque<>();
     this.modelTurtle = modelTurtle;
+    tokenMaker = new SLogoTokenMaker(new Workspace());
     Deque<SLogoToken> tokenQueue = new ArrayDeque<>(tokenList.getTokenList());
     try {
       initCommand = (SLogoCommand) tokenQueue.poll();
@@ -85,7 +87,7 @@ public class GroupHelper {
   private SLogoFunction stackable() {
     int numParametersExpected = initCommand.getNumExpectedTokens();
     while (! parameterQueue.isEmpty()) {
-      functionQueue.add(initCommand);
+      functionQueue.add(tokenMaker.make("Command", initCommand.toString()));
       for (int i = 0; i < numParametersExpected; i++) {
         if (parameterQueue.isEmpty()) {
           throw new SLogoException("Invalid group list syntax");
@@ -104,7 +106,7 @@ public class GroupHelper {
   // has to evaluate inner commnads to determine how many command calls to place in the queue
   private SLogoFunction nestable() {
     while (! parameterQueue.isEmpty()) {
-      functionQueue.addFirst(initCommand);
+      functionQueue.addFirst(tokenMaker.make("Command", initCommand.toString()));
       SLogoToken nextToken = parameterQueue.poll();
       if (! nextToken.isEqualTokenType(new SLogoConstant(0)) && ! nextToken.isEqualTokenType(new SLogoVariable("var")) &&
           ! nextToken.isEqualTokenType(new SLogoList("list"))) {

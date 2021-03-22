@@ -28,6 +28,9 @@ public class ForCommand extends SLogoCommand {
     parseParameterQueue((SLogoList) expectedParameters.get(0));
     SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
+    if (increment <= 0) {
+      throw new SLogoException("Invalid loop declaration");
+    }
     return new LoopHelper(start, end, increment, new SLogoFunction(commandQueue, modelTurtle), counterVariable).run();
   }
 

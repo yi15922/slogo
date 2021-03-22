@@ -19,7 +19,6 @@ import slogo.compiler.command.SLogoCommand;
  * @author Patrick Liu
  */
 public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
-  protected List<SLogoCommand> runnableCommandList;
   protected Turtle modelTurtle;
   protected Deque<SLogoToken> functionTokens;
   protected boolean executeCommands;
@@ -97,7 +96,6 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     command.resetCommand();
     command.attachTurtle(modelTurtle);
     while (! command.isReady()) {
-      System.out.println("Remaining tokens " + remainingTokens);
       if (remainingTokens.isEmpty()) {
         throw new SLogoException("Invalid syntax");
       }
