@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import slogo.SLogoException;
+import slogo.compiler.Parser;
+import slogo.compiler.Workspace;
 import slogo.model.Turtle;
 import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoComment;
@@ -16,17 +18,19 @@ import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
+import slogo.compiler.Compiler;
 
 class CommandTest {
   private Turtle modelTurtle;
   private Deque<SLogoToken> parameterTokens;
-  private SLogoCommand command;
   private SLogoFunction function;
+  private Compiler testCompiler;
 
   @BeforeEach
   void setup() {
     parameterTokens = new ArrayDeque<>();
     modelTurtle = new Turtle();
+    testCompiler = new Compiler(new Parser("English", new Workspace()), modelTurtle);
   }
 
   private double runZeroArgumentCommand(SLogoCommand testCommand) {
@@ -367,6 +371,52 @@ class CommandTest {
   void testSetPaletteCommand() {
     assertEquals(1.0, runFourArgumentCommand(new SetPaletteCommand(), new SLogoConstant(1), new SLogoConstant(255), new SLogoConstant(255), new SLogoConstant(255)));
     assertThrows(SLogoException.class, () -> runThreeArgumentCommand(new SetPaletteCommand(), new SLogoConstant(1), new SLogoConstant(255), new SLogoConstant(255)));
+  }
+
+  @Test
+  void testGroupingStackableCommands() {
+    assertEquals(50.0, testCompiler.compileAndRun("( fd 10 20 30 40 50 )").getValue());
+    assertEquals(150.0, modelTurtle.yCor());
+  }
+
+  @Test
+  void testGroupingNestableCommands() {
+    assertEquals(15.0, testCompiler.compileAndRun("sum sum sum sum 1 2 3 4 5").getValue());
+    assertEquals(15.0, testCompiler.compileAndRun("( sum 1 2 3 4 5 )").getValue());
+    assertEquals(-13.0, testCompiler.compileAndRun("( difference 1 2 3 4 5 )").getValue());
+    assertEquals(120.0, testCompiler.compileAndRun("( product 1 2 3 4 5 )").getValue());
+    assertEquals(1.0 / 120.0, testCompiler.compileAndRun("( quotient 1 2 3 4 5 )").getValue());
+    assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("( quotient 1 2 3 4 0"));
+    assertEquals(1.0, testCompiler.compileAndRun("( remainder 1 2 3 4 5 )").getValue());
+    assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("( remainder 1 0 3 4 5"));
+    assertEquals(1.0, testCompiler.compileAndRun("( and 1 2 3 4 5 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( and 0 2 3 4 5 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( and 1 2 3 0 5 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( or 0 0 0 0 0 )").getValue());
+    assertEquals(1.0, testCompiler.compileAndRun("( or 0 0 0 0 1 )").getValue());
+    assertEquals(1.0, testCompiler.compileAndRun("( or 1 2 3 4 5 )").getValue());
+  }
+
+  @Test
+  void testGroupingNoParamCommands() {
+    assertEquals(1.0, testCompiler.compileAndRun("( pd 1 2 3 4 5 )").getValue());
+    assertEquals(1.0, testCompiler.compileAndRun("( pd )").getValue());
+  }
+
+  @Test
+  void testGroupingEqualCommand() {
+    assertEquals(1.0, testCompiler.compileAndRun("( equal? 1 1 1 1 1 )").getValue());
+    assertEquals(1.0, testCompiler.compileAndRun("( equal? 5 5 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( equal? 1 1 1 2 1 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( equal? 1 2 3 4 5 )").getValue());
+  }
+
+  @Test
+  void testGroupingNotEqualCommand() {
+    assertEquals(1.0, testCompiler.compileAndRun("( notequal? 1 2 3 4 5 )").getValue());
+    assertEquals(1.0, testCompiler.compileAndRun("( notequal? 1 2 1 1 1 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( notequal? 5 5 )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( notequal? 1 1 1 1 1 )").getValue());
   }
 
 }

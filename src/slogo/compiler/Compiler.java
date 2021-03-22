@@ -65,10 +65,10 @@ public class Compiler implements InputObserver {
    * Upon successful creation of the {@code SLogoFunction} object, this method will call
    * the function's {@code run()} method.
    */
-  public void compileAndRun(String input){
+  public SLogoToken compileAndRun(String input){
     boolean containsID = false;
     makeTokenQueue(input);
-    if (!hasNextToken()) return;
+    if (!hasNextToken()) return null;
     Deque<SLogoToken> functionTokens = new LinkedList<>();
     while (hasNextToken()) {
       SLogoToken tokenToAdd = getNextToken();
@@ -89,10 +89,11 @@ public class Compiler implements InputObserver {
       SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(new SLogoVariable("ID"))));
       SLogoList commandList = new SLogoList(new ArrayList<>(functionTokens));
       wrapperCommand.giveParameters(variableList, commandList);
+      return null;
       // todo: call Turtle method
     }
     else {
-      new SLogoFunction(functionTokens, turtle).run();
+      return new SLogoFunction(functionTokens, turtle).run();
     }
   }
 
