@@ -58,15 +58,21 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     SLogoToken returnToken = new SLogoConstant(0);
     Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
     while (! runnableTokens.isEmpty()) {
-      System.out.println("Runnable tokens " + runnableTokens);
-      SLogoCommand nextCommand;
-      try {
-        nextCommand = (SLogoCommand) runnableTokens.poll();
+      SLogoToken nextToken = runnableTokens.poll();
+      if (nextToken.isEqualTokenType(new SLogoFunction("function"))) {
+        SLogoFunction nextFunction = (SLogoFunction) nextToken;
+        returnToken = nextFunction.runFunction();
       }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid syntax");
+      else {
+        SLogoCommand nextCommand;
+        try {
+          nextCommand = (SLogoCommand) nextToken;
+        }
+        catch (ClassCastException e) {
+          throw new SLogoException("Invalid syntax");
+        }
+        returnToken = runCommand(nextCommand, runnableTokens);
       }
-      returnToken = runCommand(nextCommand, runnableTokens);
     }
     return returnToken;
   }
