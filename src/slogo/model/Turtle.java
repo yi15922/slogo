@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import slogo.SlogoModel;
+import slogo.compiler.token.SLogoFunction;
 import slogo.model.SingleTurtle;
 import slogo.model.TurtleInterface;
 
@@ -153,6 +154,10 @@ public class Turtle extends SlogoModel implements TurtleInterface {
     }
     //need to do command
     return turtles.get(turtles.size() - 1);
+  }
+
+  public double ask(List<Integer> turtles, SLogoFunction method){
+    return 0;
   }
 
   private void putIfAbsentActiveTurtle(int id, SingleTurtle turtle){
