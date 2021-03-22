@@ -56,7 +56,7 @@ public class ViewTest extends DukeApplicationTest {
             }
         };
 
-        View slogoGUI = new View(modelTurtle, modelCompiler, stage, handler, modelWorkspace);
+        //View slogoGUI = new View(modelTurtle, modelCompiler, stage, handler, modelWorkspace);
 
 
         myLanguageButton = lookup("#languageButton").query();
