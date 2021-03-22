@@ -16,12 +16,12 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   private int myShape;
   private static final int ROUND_DECIMAL_PLACES = 3;
 
-  public SingleTurtle(int ID) {
+  public SingleTurtle(int id) {
     setXY(0, 0);
     setHeading(0);
     myPen = new Pen();
     myShow = true;
-    myID = ID;
+    myID = id;
     turtleCount++;
     myShape=0;
   }

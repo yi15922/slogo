@@ -12,12 +12,14 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   Map<Integer, SingleTurtle> turtleMap;
   Map<Integer, Boolean> activeMap;
+  private static int turtleCount;
 
   public Turtle() {
     turtleMap = new HashMap<>();
     activeMap = new HashMap<>();
     putTurtleIfAbsent(1, new SingleTurtle(1));
     activeMap.put(1, true);
+    turtleCount = 1;
   }
 
   @Override
@@ -321,6 +323,7 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     if(!turtleMap.keySet().contains(id)) {
       turtleMap.put(id, turtle);
       notifyObserverOfNewTurtle(id);
+      turtleCount++;
     }
   }
 
