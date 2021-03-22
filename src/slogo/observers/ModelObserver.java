@@ -14,4 +14,6 @@ public interface ModelObserver {
     void checkPenColor(int id, int index);
 
     void checkPenSize(int id, double pixels);
+
+    void receiveTurtle(int id);
 }

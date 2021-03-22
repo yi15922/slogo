@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import slogo.SlogoModel;
 import slogo.compiler.token.SLogoFunction;
 
 
-public class Turtle extends SlogoModel implements TurtleInterface {
+public class Turtle implements TurtleInterface {
 
   Map<Integer, SingleTurtle> turtleMap;
   Map<Integer, Boolean> activeMap;

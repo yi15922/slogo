@@ -42,5 +42,10 @@ public class StatsDisplay extends VBox implements ModelObserver {
 
   }
 
+  @Override
+  public void receiveTurtle(int id) {
+
+  }
+
 
 }

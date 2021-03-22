@@ -24,6 +24,7 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
     myID = ID;
     turtleCount++;
     myShape=0;
+    notifyObserverOfNewTurtle(myID);
   }
 
   public SingleTurtle() {

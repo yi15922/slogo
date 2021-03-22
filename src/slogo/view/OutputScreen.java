@@ -107,5 +107,10 @@ public class OutputScreen extends Region implements ModelObserver {
 
     }
 
+    @Override
+    public void receiveTurtle(int id) {
+
+    }
+
 
 }

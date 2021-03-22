@@ -50,6 +50,12 @@ public class SlogoModel implements Observable<ModelObserver> {
     }
   }
 
+  protected void notifyObserverOfNewTurtle(int id) {
+    for (ModelObserver o : myObservers) {
+      o.receiveTurtle(id);
+    }
+  }
+
   @Override
   public boolean isObserver(ModelObserver observer) {
     return myObservers.contains(observer);
