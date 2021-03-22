@@ -8,7 +8,7 @@ import slogo.compiler.token.SLogoVariable;
 public class SetBackgroundCommand extends SLogoCommand {
 
   public SetBackgroundCommand() {
-    super("Set Background");
+    super("SetBackground");
     expectedParameters.add(new SLogoVariable("index"));
   }
 

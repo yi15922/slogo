@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class LessThanCommand extends SLogoCommand {
 
   public LessThanCommand() {
-    super("Less");
+    super("LessThan");
     expectedParameters.add(new SLogoVariable("expr1"));
     expectedParameters.add(new SLogoVariable("expr2"));
   }

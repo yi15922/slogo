@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class SetHeadingCommand extends SLogoCommand {
 
   public SetHeadingCommand() {
-    super("Set Heading");
+    super("SetHeading");
     expectedParameters.add(new SLogoVariable("degrees"));
   }
 

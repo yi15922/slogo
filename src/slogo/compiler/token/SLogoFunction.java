@@ -54,19 +54,26 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
    * of running individual commands.
    * @return - the final command's return value in the form of a {@code Token}
    */
-  public SLogoToken runFunction() {
+  @Override
+  public SLogoToken run() {
     SLogoToken returnToken = new SLogoConstant(0);
     Deque<SLogoToken> runnableTokens = new ArrayDeque<>(functionTokens);
     while (! runnableTokens.isEmpty()) {
-      System.out.println("Runnable tokens " + runnableTokens);
-      SLogoCommand nextCommand;
-      try {
-        nextCommand = (SLogoCommand) runnableTokens.poll();
+      SLogoToken nextToken = runnableTokens.poll();
+      if (nextToken.isEqualTokenType(new SLogoFunction("function"))) {
+        SLogoFunction nextFunction = (SLogoFunction) nextToken;
+        returnToken = nextFunction.run();
       }
-      catch (ClassCastException e) {
-        throw new SLogoException("Invalid syntax");
+      else {
+        SLogoCommand nextCommand;
+        try {
+          nextCommand = (SLogoCommand) nextToken;
+        }
+        catch (ClassCastException e) {
+          throw new SLogoException("Invalid syntax");
+        }
+        returnToken = runCommand(nextCommand, runnableTokens);
       }
-      returnToken = runCommand(nextCommand, runnableTokens);
     }
     return returnToken;
   }
@@ -155,13 +162,5 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
   }
 
 
-  @Override
-  public SLogoToken run() {
-    SLogoToken resultToken = null;
-    for (SLogoCommand command : runnableCommandList) {
-      resultToken = command.run();
-    }
-    return resultToken;
-  }
 
 }

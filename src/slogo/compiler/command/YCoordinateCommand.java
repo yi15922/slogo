@@ -8,7 +8,7 @@ import slogo.compiler.command.SLogoCommand;
 public class YCoordinateCommand extends SLogoCommand {
 
   public YCoordinateCommand() {
-    super("YCor");
+    super("YCoordinate");
   }
 
   @Override

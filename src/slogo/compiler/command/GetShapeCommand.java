@@ -6,7 +6,7 @@ import slogo.compiler.token.SLogoToken;
 public class GetShapeCommand extends SLogoCommand {
 
   public GetShapeCommand() {
-    super("Get Shape");
+    super("GetShape");
   }
 
   @Override

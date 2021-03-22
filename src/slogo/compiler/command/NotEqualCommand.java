@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class NotEqualCommand extends SLogoCommand {
 
   public NotEqualCommand() {
-    super("Not Equal");
+    super("NotEqual");
     expectedParameters.add(new SLogoVariable("expr1"));
     expectedParameters.add(new SLogoVariable("expr2"));
   }

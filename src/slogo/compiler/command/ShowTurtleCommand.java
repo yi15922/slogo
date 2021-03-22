@@ -8,7 +8,7 @@ import slogo.compiler.command.SLogoCommand;
 public class ShowTurtleCommand extends SLogoCommand {
 
   public ShowTurtleCommand() {
-    super("Show Turtle");
+    super("ShowTurtle");
   }
 
   @Override

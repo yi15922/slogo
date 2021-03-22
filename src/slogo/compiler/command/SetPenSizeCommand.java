@@ -8,7 +8,7 @@ import slogo.compiler.token.SLogoVariable;
 public class SetPenSizeCommand extends SLogoCommand {
 
   public SetPenSizeCommand() {
-    super("Set Pen Size");
+    super("SetPenSize");
     expectedParameters.add(new SLogoVariable("pixels"));
   }
 

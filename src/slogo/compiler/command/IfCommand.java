@@ -22,7 +22,7 @@ public class IfCommand extends SLogoCommand {
     if (expectedParameters.get(0).getValue() != 0.0) {
       SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
       Deque<SLogoToken> commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-      return new SLogoFunction(commandQueue, modelTurtle).runFunction();
+      return new SLogoFunction(commandQueue, modelTurtle).run();
     }
     else {
       return new SLogoConstant(0);

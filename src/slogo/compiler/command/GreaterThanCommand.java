@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class GreaterThanCommand extends SLogoCommand {
 
   public GreaterThanCommand() {
-    super("Greater");
+    super("GreaterThan");
     expectedParameters.add(new SLogoVariable("expr1"));
     expectedParameters.add(new SLogoVariable("expr2"));
   }

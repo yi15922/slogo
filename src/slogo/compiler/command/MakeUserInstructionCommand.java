@@ -8,7 +8,7 @@ import slogo.compiler.token.SLogoList;
 public class MakeUserInstructionCommand extends SLogoCommand {
 
   public MakeUserInstructionCommand() {
-    super("To");
+    super("MakeUserInstruction");
     expectedParameters.add(new SLogoUserDefinedCommand("command name"));
     expectedParameters.add(new SLogoList("variables"));
     expectedParameters.add(new SLogoList("commands"));

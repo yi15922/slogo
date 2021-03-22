@@ -8,7 +8,7 @@ import slogo.compiler.token.SLogoVariable;
 public class SetPaletteCommand extends SLogoCommand {
 
   public SetPaletteCommand() {
-    super("Set Palette");
+    super("SetPalette");
     expectedParameters.add(new SLogoVariable("index"));
     expectedParameters.add(new SLogoVariable("r"));
     expectedParameters.add(new SLogoVariable("g"));

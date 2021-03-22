@@ -3,7 +3,6 @@ package slogo.compiler.command;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import slogo.SLogoException;
-import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
@@ -29,6 +28,6 @@ public class IfElseCommand extends SLogoCommand {
       commandTokens = (SLogoList) expectedParameters.get(2);
     }
     commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
-    return new SLogoFunction(commandQueue, modelTurtle).runFunction();
+    return new SLogoFunction(commandQueue, modelTurtle).run();
   }
 }

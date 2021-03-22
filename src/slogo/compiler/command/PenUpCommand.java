@@ -8,7 +8,7 @@ import slogo.compiler.command.SLogoCommand;
 public class PenUpCommand extends SLogoCommand {
 
   public PenUpCommand() {
-    super("Pen Up");
+    super("PenUp");
   }
 
   @Override

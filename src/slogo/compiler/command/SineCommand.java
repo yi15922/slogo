@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class SineCommand extends SLogoCommand {
 
   public SineCommand() {
-    super("Sin");
+    super("Sine");
     expectedParameters.add(new SLogoVariable("degrees"));
   }
 

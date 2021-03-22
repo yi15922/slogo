@@ -87,7 +87,7 @@ public class Compiler implements InputObserver {
       // todo: call Turtle method
     }
     else {
-      new SLogoFunction(functionTokens, turtle).runFunction();
+      new SLogoFunction(functionTokens, turtle).run();
     }
   }
 

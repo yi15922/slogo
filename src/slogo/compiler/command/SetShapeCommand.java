@@ -8,7 +8,7 @@ import slogo.compiler.token.SLogoVariable;
 public class SetShapeCommand extends SLogoCommand {
 
   public SetShapeCommand() {
-    super("Set Shape");
+    super("SetShape");
     expectedParameters.add(new SLogoVariable("index"));
   }
 

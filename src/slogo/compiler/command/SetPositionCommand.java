@@ -9,7 +9,7 @@ import slogo.compiler.command.SLogoCommand;
 public class SetPositionCommand extends SLogoCommand {
 
   public SetPositionCommand() {
-    super("Set XY");
+    super("SetPosition");
     expectedParameters.add(new SLogoVariable("x"));
     expectedParameters.add(new SLogoVariable("y"));
   }

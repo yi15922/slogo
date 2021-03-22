@@ -9,7 +9,7 @@ import slogo.compiler.token.SLogoToken;
 public class AskWithCommand extends SLogoCommand {
 
   public AskWithCommand() {
-    super("Ask With");
+    super("AskWith");
     expectedParameters.add(new SLogoList("condition"));
     expectedParameters.add(new SLogoList("commands"));
   }
