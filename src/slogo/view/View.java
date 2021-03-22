@@ -1,6 +1,7 @@
 package slogo.view;
 
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class View implements AlertObserver, UserActionObserver {
     private final EventHandler<ActionEvent> menubarHandler;
 
 
-    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
+    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, String input)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;
@@ -66,6 +67,10 @@ public class View implements AlertObserver, UserActionObserver {
         myLog = createInputLog(myInput);
         menubarHandler = handler;
         startProgram();
+
+        if (input != null) {
+            runInput(input);
+        }
     }
 
     public void startProgram() {
@@ -210,8 +215,8 @@ public class View implements AlertObserver, UserActionObserver {
         myOutputScreen.changePenColor(createDialogueAndGetColor());
     }
 
-    private void runCommand(String command) {
-        myInput.sendInputToObservers(command);
+    public void runInput(String input) {
+        myInput.sendInputToObservers(input);
     }
 
     private String createDialogueAndGetColor() {
