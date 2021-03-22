@@ -3,15 +3,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import slogo.model.SingleTurtle;
 import slogo.model.Turtle;
 
 
 class TurtleTest {
-  Turtle turtle;
+  SingleTurtle turtle;
 
   @BeforeEach
   void setup() {
-    turtle = new Turtle();
+    turtle = new SingleTurtle();
   }
 
   @Test
@@ -66,7 +67,7 @@ class TurtleTest {
 
   @Test
   void testRight() {
-    turtle.left(540);
+    turtle.right(540);
     assertEquals(180, turtle.heading());
   }
 
@@ -128,5 +129,14 @@ class TurtleTest {
   @Test
   void testForwardCommand() {
     assertEquals(100, turtle.forward(100));
+  }
+
+  @Test
+  void testShow(){
+    assertEquals(turtle.showingP(), 1);
+    turtle.hideTurtle();
+    assertEquals(turtle.showingP(), 0);
+    turtle.showTurtle();
+    assertEquals(turtle.showingP(), 1);
   }
 }

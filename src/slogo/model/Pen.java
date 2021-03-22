@@ -33,7 +33,6 @@ public class Pen {
     return 0;
   }
 
-  //no tests
   public double penDown() {
     if (!myPenDown) {
       togglePen();
@@ -41,7 +40,6 @@ public class Pen {
     return 1;
   }
 
-  //no tests
   public double penUp() {
     if (myPenDown) {
       togglePen();

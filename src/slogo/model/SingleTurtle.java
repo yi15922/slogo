@@ -12,17 +12,15 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   private Pen myPen;
   private boolean myShow;
   private int myID;
-  private static int turtleCount = 0;
   private int myShape;
   private static final int ROUND_DECIMAL_PLACES = 3;
 
-  public SingleTurtle(int ID) {
+  public SingleTurtle(int id) {
     setXY(0, 0);
     setHeading(0);
     myPen = new Pen();
     myShow = true;
-    myID = ID;
-    turtleCount++;
+    myID = id;
     myShape=0;
   }
 
@@ -185,12 +183,6 @@ public class SingleTurtle extends SlogoModel implements TurtleInterface {
   public int shape() {
     return myShape;
   }
-
-  @Override
-  public int turtles() {
-    return turtleCount;
-  }
-
 
   private double standardizeAngle(double angle) {
     double returned = angle;
