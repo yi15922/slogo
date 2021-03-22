@@ -1,5 +1,7 @@
-package slogo.view;
+package slogo.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -17,11 +19,11 @@ import slogo.observers.PaletteObserver;
  * Color information is obtained from a {@code ResourceBundle}.
  */
 public class Palette implements Observable<PaletteObserver> {
-  protected List<PaletteObserver> myObservers;
+  protected List<PaletteObserver> myObservers = new ArrayList<>();
   private Color activeColor;
   private Map<Integer, Color> colorMap;
   private Map<Integer, Shape> shapeMap;
-  private final String COLOR_PROPERTIES = "UIResources.colorPalette";
+  private final String COLOR_PROPERTIES = "slogo.view.UIResources.colorPalette";
   private ResourceBundle resources;
 
   /**
@@ -29,10 +31,15 @@ public class Palette implements Observable<PaletteObserver> {
    */
   public Palette(){
     resources = ResourceBundle.getBundle(COLOR_PROPERTIES);
+    colorMap = new HashMap<>();
     for (String index : resources.keySet()) {
       colorMap.put(Integer.parseInt(index), Color.web(resources.getString(index)));
     }
-    setActiveColor(1);
+    activeColor = Color.web(resources.getString(Integer.toString(1)));
+  }
+
+  public Color getActiveColor() {
+    return activeColor;
   }
 
   /**
@@ -62,6 +69,13 @@ public class Palette implements Observable<PaletteObserver> {
     } catch (IllegalArgumentException exception) {
       throw new SLogoException("Invalid hex color input");
     }
+  }
+
+  public Color getColorAtIndex(int index) {
+    Color ret = colorMap.get(index);
+    if (ret == null) throw new SLogoException("Invalid color index");
+    return ret;
+
   }
 
   protected void notifyUpdatedColor(int index) {
