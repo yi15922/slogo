@@ -114,7 +114,7 @@ public class Main extends Application {
      * in the new window is independent from the previous window.
      * @param stage a {@code Stage} in which to create the new window.
      */
-    private void newWindow(Stage stage, String input){
+    private void newWindow(Stage stage, String input) {
         Turtle modelTurtle = new Turtle();
         Workspace modelWorkspace = new Workspace();
         Parser modelParser = new Parser("English", modelWorkspace);
@@ -126,7 +126,7 @@ public class Main extends Application {
             callInstanceMethod(buttonId);
         };
 
-        new View(modelTurtle, modelCompiler, stage, menuBarHandler, input);
+        new View(modelTurtle, modelCompiler, stage, menuBarHandler, modelWorkspace, input);
     }
 
     /**

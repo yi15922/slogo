@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import slogo.Main;
 import slogo.SLogoException;
+import slogo.WindowAlert;
 import slogo.compiler.command.IDCommand;
 import slogo.compiler.command.SLogoUserDefinedCommand;
 import slogo.compiler.token.SLogoGroupEnd;
@@ -54,7 +55,11 @@ public class Compiler implements InputObserver {
    * @param input user input to the console
    */
   private void makeTokenQueue(String input){
-    tokenQueue = parser.parseInput(input);
+    try {
+      tokenQueue = parser.parseInput(input);
+    } catch (Exception e) {
+      WindowAlert.throwErrorAlert(e.getMessage());
+    }
   }
 
   /**
@@ -65,10 +70,10 @@ public class Compiler implements InputObserver {
    * Upon successful creation of the {@code SLogoFunction} object, this method will call
    * the function's {@code run()} method.
    */
-  public void compileAndRun(String input){
+  public SLogoToken compileAndRun(String input){
     boolean containsID = false;
     makeTokenQueue(input);
-    if (!hasNextToken()) return;
+    if (!hasNextToken()) return null;
     Deque<SLogoToken> functionTokens = new LinkedList<>();
     while (hasNextToken()) {
       SLogoToken tokenToAdd = getNextToken();
@@ -89,11 +94,17 @@ public class Compiler implements InputObserver {
       SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(new SLogoVariable("ID"))));
       SLogoList commandList = new SLogoList(new ArrayList<>(functionTokens));
       wrapperCommand.giveParameters(variableList, commandList);
+      return null;
       // todo: call Turtle method
     }
     else {
-      new SLogoFunction(functionTokens, turtle).run();
+      try {
+        return new SLogoFunction(functionTokens, turtle).run();
+      } catch (Exception ignore) {
+        WindowAlert.throwErrorAlert("Invalid syntax");
+      }
     }
+    return null;
   }
 
 
@@ -135,6 +146,12 @@ public class Compiler implements InputObserver {
         listEnded = true;
         break;
       }
+      else if (token.getClass().equals(SLogoListStart.class)) {
+        token = makeList();
+      }
+      else if (token.getClass().equals(SLogoGroupStart.class)) {
+        token = makeGroupFunction();
+      }
       tokenList.add(token);
     }
     if (!listEnded) {
@@ -153,6 +170,12 @@ public class Compiler implements InputObserver {
       if (token.getClass().equals(SLogoGroupEnd.class)) {
         listEnded = true;
         break;
+      }
+      else if (token.getClass().equals(SLogoListStart.class)) {
+        token = makeList();
+      }
+      else if (token.getClass().equals(SLogoGroupStart.class)) {
+        token = makeGroupFunction();
       }
       tokenList.add(token);
     }
