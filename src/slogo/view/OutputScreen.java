@@ -14,6 +14,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import slogo.TurtleObserver;
+import slogo.model.Turtle;
 import slogo.observers.ModelObserver;
 
 
@@ -23,9 +24,12 @@ public class OutputScreen extends Region implements TurtleObserver {
     private boolean isPenDown = false;
     private Paint myPenColor = Color.BLACK;
     private boolean isTurtleInitialized = false;
+    private Turtle myTurtle;
 
-    public OutputScreen(String displayObject) {
+    public OutputScreen(String displayObject, Turtle turtle) {
 
+        myTurtle = turtle;
+        turtle.addObserver(this);
         myTurtleView = new TurtleView(displayObject, 0);
         this.getChildren().add(myTurtleView);
 
@@ -68,6 +72,6 @@ public class OutputScreen extends Region implements TurtleObserver {
 
     @Override
     public void receiveTurtle(int id) {
-
+        System.out.println("Created turtle " + id);
     }
 }

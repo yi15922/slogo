@@ -22,6 +22,7 @@ import slogo.SlogoModel;
 import slogo.TurtleModel;
 import slogo.WindowAlert;
 import slogo.compiler.Workspace;
+import slogo.model.Turtle;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserActionObserver;
@@ -46,7 +47,7 @@ public class View implements UserActionObserver {
     private ResourceBundle myResources;
     private ResourceBundle myMethods;
     private Locale myLocale;
-    private final TurtleModel myModel;
+    private final Turtle myModel;
     private final InputObserver myInputObserver;
     private Stage myWindow;
     private OutputScreen myOutputScreen;
@@ -58,7 +59,7 @@ public class View implements UserActionObserver {
     public View(TurtleModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, Workspace modelWorkspace, String input)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
-        myModel = model;
+        myModel = (Turtle) model;
         myInputObserver = observer;
         mySettings = ResourceBundle.getBundle("Settings");
         retrieveResources(myLocale = new Locale(mySettings.getString("DefaultLanguage")));
@@ -156,7 +157,7 @@ public class View implements UserActionObserver {
     }
 
     private OutputScreen createOutputScreen() {
-        OutputScreen output = new OutputScreen(mySettings.getString("ObjectImage"));
+        OutputScreen output = new OutputScreen(mySettings.getString("ObjectImage"), myModel);
         output.setBackground(new Background(new BackgroundFill(Color.PURPLE, CornerRadii.EMPTY, Insets.EMPTY)));
         output.setMinHeight(Double.parseDouble(mySettings.getString("OutputMinHeight")));
         output.setPrefWidth(Double.parseDouble(mySettings.getString("OutputWidth")));
