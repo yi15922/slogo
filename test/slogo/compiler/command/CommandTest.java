@@ -333,6 +333,25 @@ class CommandTest {
   }
 
   @Test
+  void testAskCommand() {
+    List<SLogoToken> turtleIDList = new ArrayList<>();
+    turtleIDList.add(new SLogoConstant(1));
+    turtleIDList.add(new SLogoConstant(3));
+    turtleIDList.add(new SLogoConstant(5));
+    List<SLogoToken> commandList = new ArrayList<>();
+    commandList.add(new ForwardCommand());
+    commandList.add(new SLogoConstant(50));
+    assertEquals(50.0, runTwoArgumentCommand(new AskCommand(), new SLogoList(turtleIDList), new SLogoList(commandList)));
+    turtleIDList.clear();
+    turtleIDList.add(new SLogoVariable("turtleID", 10));
+    commandList.clear();
+    commandList.add(new SumCommand());
+    commandList.add(new SLogoConstant(10));
+    commandList.add(new SLogoConstant(20));
+    assertEquals(30.0, runTwoArgumentCommand(new AskCommand(), new SLogoList(turtleIDList), new SLogoList(commandList)));
+  }
+
+  @Test
   void testOneArgumentDisplayCommands() {
     assertEquals(1.0, runOneArgumentCommand(new SetBackgroundCommand(), new SLogoConstant(1)));
     assertEquals(5.0, runOneArgumentCommand(new SetBackgroundCommand(), new SLogoVariable("index", 5)));
