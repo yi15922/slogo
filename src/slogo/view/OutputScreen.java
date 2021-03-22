@@ -52,6 +52,7 @@ public class OutputScreen extends Region implements ModelObserver {
     public void initializeTurtle() {
         if (!isTurtleInitialized) setPosition(1,0,0);
         isTurtleInitialized = true;
+        myPens.put(1, true);
     }
 
     public void setPosition(int id, double x, double y) {
