@@ -104,6 +104,10 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
         double tokenValue = nextToken.getValue();
         nextToken = new SLogoVariable("wrapper", tokenValue);
       }
+      else if (nextToken.isEqualTokenType(new SLogoFunction("function"))) {
+        SLogoFunction nextFunction = (SLogoFunction) nextToken;
+        nextToken = new SLogoVariable("wrapper", nextFunction.run().getValue());
+      }
       if (! command.giveNextExpectedToken(nextToken)) {
         SLogoCommand innerCommand;
         try {

@@ -89,21 +89,20 @@ public class Compiler implements InputObserver {
       }
       functionTokens.add(tokenToAdd);
     }
-    if (containsID) {
-      SLogoUserDefinedCommand wrapperCommand = new SLogoUserDefinedCommand("wrapper");
-      SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(new SLogoVariable("ID"))));
-      SLogoList commandList = new SLogoList(new ArrayList<>(functionTokens));
-      wrapperCommand.giveParameters(variableList, commandList);
-      return null;
-      // todo: call Turtle method
-    }
-    else {
-      try {
+    try {
+      if (containsID) {
+        SLogoUserDefinedCommand wrapperCommand = new SLogoUserDefinedCommand("wrapper");
+        SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(new SLogoVariable("ID"))));
+        SLogoList commandList = new SLogoList(new ArrayList<>(functionTokens));
+        wrapperCommand.giveParameters(variableList, commandList);
+        return turtle.runIDFunction(wrapperCommand);
+      }
+      else {
         return new SLogoFunction(functionTokens, turtle).run();
-      } catch (Exception e) {
+      }
+    } catch (Exception e) {
         WindowAlert.throwErrorAlert(e.getMessage());
       }
-    }
     return null;
   }
 
