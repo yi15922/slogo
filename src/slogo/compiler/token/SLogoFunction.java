@@ -69,7 +69,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
           nextCommand = (SLogoCommand) nextToken;
         }
         catch (ClassCastException ignore) {
-          throw new SLogoException("Invalid syntax");
+          throw new SLogoException("Invalid syntax in user-entered String");
         }
         returnToken = runCommand(nextCommand, runnableTokens);
       }
@@ -97,7 +97,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     command.attachTurtle(modelTurtle);
     while (! command.isReady()) {
       if (remainingTokens.isEmpty()) {
-        throw new SLogoException("Invalid syntax");
+        throw new SLogoException("Invalid command syntax");
       }
       SLogoToken nextToken = remainingTokens.poll();
       if (nextToken.isEqualTokenType(new SLogoConstant(0))) {
@@ -110,7 +110,7 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
           innerCommand = (SLogoCommand) nextToken;
         }
         catch (ClassCastException e) {
-          throw new SLogoException("Invalid syntax");
+          throw new SLogoException("Invalid inner command syntax");
         }
         SLogoToken resultToken = runCommand(innerCommand, remainingTokens);
         remainingTokens.addFirst(resultToken);
@@ -120,7 +120,6 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
       SLogoToken returnToken = command.run();
       return returnToken;
     }
-    System.out.println("Token queue " + remainingTokens);
     return new SLogoConstant(1);
   }
 

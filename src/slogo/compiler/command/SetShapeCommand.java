@@ -14,7 +14,6 @@ public class SetShapeCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
-    return new SLogoConstant(expectedParameters.get(0).getValue());
+    return new SLogoConstant(modelTurtle.setShape((int) expectedParameters.get(0).getValue()));
   }
 }

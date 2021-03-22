@@ -14,7 +14,6 @@ public class SetPenSizeCommand extends SLogoCommand {
 
   @Override
   public SLogoToken run() throws SLogoException {
-    // todo: call Turtle method
-    return new SLogoConstant(expectedParameters.get(0).getValue());
+    return new SLogoConstant(modelTurtle.setPenSize(expectedParameters.get(0).getValue()));
   }
 }
