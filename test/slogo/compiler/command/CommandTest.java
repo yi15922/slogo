@@ -278,8 +278,9 @@ class CommandTest {
     List<SLogoToken> commandList = new ArrayList<>();
     commandList.add(new ForwardCommand());
     commandList.add(new SLogoConstant(50));
-    assertEquals(50.0, runTwoArgumentCommand(new ForCommand(), new SLogoList(parameterList), new SLogoList(commandList)));
-    assertEquals(200.0, modelTurtle.yCor());
+    //assertEquals(50.0, runTwoArgumentCommand(new ForCommand(), new SLogoList(parameterList), new SLogoList(commandList)));
+    //assertEquals(200.0, modelTurtle.yCor());
+    assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("for [ :count 1 2 0 ] [ fd 50 ]"));
   }
 
   @Test
@@ -375,8 +376,17 @@ class CommandTest {
 
   @Test
   void testGroupingStackableCommands() {
-    assertEquals(50.0, testCompiler.compileAndRun("( fd 10 20 30 40 50 )").getValue());
-    assertEquals(150.0, modelTurtle.yCor());
+    //assertEquals(50.0, testCompiler.compileAndRun("( fd 10 20 30 40 50 )").getValue());
+    //assertEquals(150.0, modelTurtle.yCor());
+    assertEquals(0.0, testCompiler.compileAndRun("( towards 10 10 20 20 )").getValue());
+    assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("( towards 10 10 20 )"));
+    assertEquals(10.0, testCompiler.compileAndRun("( make :first 5 :second 10 )").getValue());
+    assertThrows(SLogoException.class, () -> testCompiler.compileAndRun("( make :first 5 10 )"));
+    assertEquals(0.0, testCompiler.compileAndRun("( repeat 2 [ fd 10 ] 3 [ fd 0 ] )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( dotimes [ :count 2 ] [ fd :count ] [ :count 5 ] [ fd 0 ] )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( for [ :count 1 10 2 ] [ fd :count ] [ :testvar 5 5 1 ] [ fd 0 ] )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( if 1 [ fd 50 ] 0 [ fd 20 fd 25 ] )").getValue());
+    assertEquals(0.0, testCompiler.compileAndRun("( ifelse 1 [ fd 50 ] [ fd 30 ] 0 [ fd 100 ] [ fd 0 ] )").getValue());
   }
 
   @Test

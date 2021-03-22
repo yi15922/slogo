@@ -136,6 +136,12 @@ public class Compiler implements InputObserver {
         listEnded = true;
         break;
       }
+      else if (token.getClass().equals(SLogoListStart.class)) {
+        token = makeList();
+      }
+      else if (token.getClass().equals(SLogoGroupStart.class)) {
+        token = makeGroupFunction();
+      }
       tokenList.add(token);
     }
     if (!listEnded) {
@@ -154,6 +160,12 @@ public class Compiler implements InputObserver {
       if (token.getClass().equals(SLogoGroupEnd.class)) {
         listEnded = true;
         break;
+      }
+      else if (token.getClass().equals(SLogoListStart.class)) {
+        token = makeList();
+      }
+      else if (token.getClass().equals(SLogoGroupStart.class)) {
+        token = makeGroupFunction();
       }
       tokenList.add(token);
     }
