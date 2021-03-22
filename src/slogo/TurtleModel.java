@@ -14,6 +14,12 @@ public class TurtleModel implements Observable<TurtleObserver>{
     }
   }
 
+  protected void notifyObserverOfBackground(int index) {
+    for (TurtleObserver o : myObservers) {
+      o.receiveBackground(index);
+    }
+  }
+
   @Override
   public boolean isObserver(TurtleObserver observer) {
       return myObservers.contains(observer);

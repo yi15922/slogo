@@ -70,4 +70,9 @@ public class OutputScreen extends Region implements TurtleObserver {
     public void receiveTurtle(int id) {
 
     }
+
+    @Override
+    public void receiveBackground(int index) {
+
+    }
 }

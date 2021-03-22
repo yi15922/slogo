@@ -12,12 +12,14 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   Map<Integer, SingleTurtle> turtleMap;
   Map<Integer, Boolean> activeMap;
+  private int myBackground;
 
   public Turtle() {
     turtleMap = new HashMap<>();
     activeMap = new HashMap<>();
     putTurtleIfAbsent(1, new SingleTurtle(1));
     activeMap.put(1, true);
+    myBackground = 0;
   }
 
   @Override
@@ -315,6 +317,12 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
     activeMap = originalActiveMap;
     return ask(createdActiveList, method);
+  }
+
+  public int setBackground(int index) {
+    myBackground = index;
+    notifyObserverOfBackground(index);
+    return index;
   }
 
   private void putTurtleIfAbsent(int id, SingleTurtle turtle) {
