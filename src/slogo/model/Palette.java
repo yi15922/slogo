@@ -38,6 +38,10 @@ public class Palette implements Observable<PaletteObserver> {
     activeColor = Color.web(resources.getString(Integer.toString(1)));
   }
 
+  /**
+   * Returns the color that is current active
+   * @return the currently active {@code Color} object
+   */
   public Color getActiveColor() {
     return activeColor;
   }
@@ -71,6 +75,12 @@ public class Palette implements Observable<PaletteObserver> {
     }
   }
 
+  /**
+   * Returns the color at the specified index. Throws a {@link SLogoException} if
+   * the index does not have a color associated.
+   * @param index index desired for the color
+   * @return a {@code Color} object or null
+   */
   public Color getColorAtIndex(int index) {
     Color ret = colorMap.get(index);
     if (ret == null) throw new SLogoException("Invalid color index");
