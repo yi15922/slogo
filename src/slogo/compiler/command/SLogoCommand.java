@@ -32,7 +32,7 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
         super(name);
         parameterIndex = 0;
         expectedParameters = new ArrayList<>();
-        modelTurtle = new Turtle();
+        modelTurtle = null;
     }
 
     /**
