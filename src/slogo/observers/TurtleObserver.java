@@ -1,4 +1,4 @@
-package slogo;
+package slogo.observers;
 
 public interface TurtleObserver {
 

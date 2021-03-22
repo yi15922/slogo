@@ -1,35 +1,29 @@
 package slogo.model;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import slogo.SLogoException;
 import slogo.TurtleModel;
-import slogo.compiler.SLogoUserDefinedFunction;
-import slogo.compiler.command.SLogoUserDefinedCommand;
-import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoFunction;
-import slogo.compiler.token.SLogoToken;
+import slogo.observers.ModelObserver;
 
 
 public class Turtle extends TurtleModel implements TurtleInterface {
 
   Map<Integer, SingleTurtle> turtleMap;
   Map<Integer, Boolean> activeMap;
-  private static int turtleCount;
   private int myBackground;
+  private ModelObserver myTurtleObserver;
 
   public Turtle() {
     turtleMap = new HashMap<>();
     activeMap = new HashMap<>();
     putTurtleIfAbsent(1, new SingleTurtle(1));
     activeMap.put(1, true);
-    turtleCount = 1;
     myBackground = 0;
   }
+
 
   @Override
   public double forward(double pixels) {
@@ -284,12 +278,14 @@ public class Turtle extends TurtleModel implements TurtleInterface {
     return returned;
   }
 
+  @Override
   public int turtles() {
-    return turtleCount;
+    return turtleMap.get(1).turtles();
   }
 
   public int tell(List<Integer> turtleIds) {
     deactivateMap(activeMap);
+    System.out.println(turtleIds);
     for (int id : turtleIds) {
       putTurtleIfAbsent(id, new SingleTurtle(id));
       activeMap.put(id, true);
@@ -329,47 +325,30 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   public int setBackground(int index) {
     myBackground = index;
-    notifyObserverOfBackground(index);
-    return index;
-  }
-
-  public int setPalette(int index, int r, int g, int b) {
-
+//    notifyObserverOfBackground(index);
     return index;
   }
 
   private void putTurtleIfAbsent(int id, SingleTurtle turtle) {
     if(!turtleMap.keySet().contains(id)) {
+      System.out.println("Added turtle " + id + " in map");
       turtleMap.put(id, turtle);
-      notifyObserverOfNewTurtle(id);
-      turtleCount++;
+      if (myTurtleObserver != null) {
+//        notifyObserverOfNewTurtle(id);
+        myTurtleObserver.addTurtle(id);
+        turtle.addObserver(myTurtleObserver);
+      }
     }
+  }
+
+  public void assignObserverForTurtles(ModelObserver o) {
+    myTurtleObserver = o;
+//    notifyObserverOfNewTurtle(1);
+    myTurtleObserver.addTurtle(1);
+    turtleMap.get(1).addObserver(myTurtleObserver);
   }
 
   private void deactivateMap(Map<Integer, Boolean> map) {
     map.replaceAll((i, v) -> false);
-  }
-
-  /**
-   * Runs a command that is dependent on each turtle's ID for each individual turtle, passing
-   * in the ID as a parameter
-   * @param commandToRun - the command that needs to be run on each active turtle. It takes in an
-   *                     ID as a parameter.
-   */
-  public SLogoToken runIDFunction(SLogoUserDefinedCommand commandToRun) {
-    SLogoToken returned = new SLogoConstant(0);
-    for (Integer id : turtleMap.keySet()) {
-      if (activeMap.get(id)) {
-        try {
-          Deque<SLogoToken> commandQueue = new ArrayDeque<>();
-          commandQueue.add(commandToRun);
-          commandQueue.add(new SLogoConstant(id));
-          returned = new SLogoFunction(commandQueue, this).run();
-        } catch (SLogoException e) {
-          throw new SLogoException("Issue running ID function");
-        }
-      }
-    }
-    return returned;
   }
 }
