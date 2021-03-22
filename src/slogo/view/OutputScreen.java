@@ -13,10 +13,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import slogo.TurtleObserver;
 import slogo.observers.ModelObserver;
 
 
-public class OutputScreen extends Region implements ModelObserver {
+public class OutputScreen extends Region implements TurtleObserver {
 
     private Node myTurtleNode;
     private TurtleView myTurtleView;
@@ -59,8 +60,6 @@ public class OutputScreen extends Region implements ModelObserver {
     }
 
 
-
-
     public void changeBackgroundColor(String color) {
         if (!color.equals("")) this.setBackground(new Background(new BackgroundFill(Color.valueOf(color), null, null)));
     }
@@ -71,46 +70,7 @@ public class OutputScreen extends Region implements ModelObserver {
 
 
     @Override
-    public void receiveNewPosition(int id, double x, double y) {
-        setPosition(x, y);
-    }
-
-    @Override
-    public void receiveHeading(int id, double heading) {
-
-    }
-
-
-
-    @Override
-    public void checkPenStatus(int id, boolean b) {
-        isPenDown = b;
-    }
-
-    @Override
-    public void receiveShow(int id, boolean show) {
-
-    }
-
-    @Override
-    public void receiveShape(int id, int shape) {
-
-    }
-
-    @Override
-    public void checkPenColor(int id, int index) {
-
-    }
-
-    @Override
-    public void checkPenSize(int id, double pixels) {
-
-    }
-
-    @Override
     public void receiveTurtle(int id) {
 
     }
-
-
 }

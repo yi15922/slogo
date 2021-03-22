@@ -18,6 +18,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import slogo.SlogoModel;
+import slogo.TurtleModel;
+import slogo.model.Turtle;
 import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserActionObserver;
@@ -42,7 +44,7 @@ public class View implements AlertObserver, UserActionObserver {
     private ResourceBundle myResources;
     private ResourceBundle myMethods;
     private Locale myLocale;
-    private final SlogoModel myModel;
+    private final TurtleModel myModel;
     private final InputObserver myInputObserver;
     private Stage myWindow;
     private OutputScreen myOutputScreen;
@@ -50,7 +52,7 @@ public class View implements AlertObserver, UserActionObserver {
     private final EventHandler<ActionEvent> menubarHandler;
 
 
-    public View(SlogoModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
+    public View(TurtleModel model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
         myModel = model;

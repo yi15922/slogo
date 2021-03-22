@@ -15,5 +15,4 @@ public interface ModelObserver {
 
     void checkPenSize(int id, double pixels);
 
-    void receiveTurtle(int id);
 }
