@@ -1,5 +1,7 @@
 package slogo.observers;
 
+import slogo.model.SingleTurtle;
+
 public interface ModelObserver {
     void receiveNewPosition(int id, double x, double y);
 
@@ -15,4 +17,5 @@ public interface ModelObserver {
 
     void checkPenSize(int id, double pixels);
 
+    void addTurtle(int id);
 }
