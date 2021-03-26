@@ -1,8 +1,6 @@
 package slogo.view;
 
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -15,22 +13,25 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import slogo.SlogoModel;
-import slogo.TurtleModel;
 import slogo.WindowAlert;
 import slogo.compiler.Workspace;
 import slogo.model.Turtle;
-import slogo.observers.AlertObserver;
 import slogo.observers.InputObserver;
 import slogo.observers.UserActionObserver;
 
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.ResourceBundle;
+
+/**
+ * The View class represents the window itself. It initializes all required
+ * visual components and retrieves all necessary resources. The class
+ * is ultimately repsonsible for establishing the relationships between
+ * the visual components.
+ *
+ * @author Liam Idrovo
+ */
 public class View implements UserActionObserver {
 
     private static final String DEFAULT_RESOURCE_PACKAGE = "slogo.view.UIResources.";
@@ -53,6 +54,15 @@ public class View implements UserActionObserver {
     private WindowAlert myWindowAlert;
 
 
+    /**
+     * Initializes a View object.
+     *
+     * @param model     Turtle object representing the program's model
+     * @param observer  InputObserver that is added as an observer to the InputConsole
+     * @param primaryStage  JavaFX stage representing the window and to which everything is added
+     * @param handler   handler associated with the MenuBar (not to be confused with TopBar)
+     * @param modelWorkspace    Workspace object to which user defined commands and variables will be saved
+     */
     public View(Turtle model, InputObserver observer, Stage primaryStage, EventHandler<ActionEvent> handler, Workspace modelWorkspace, String input)  {
         myWindow = primaryStage;
         myLanguages = ResourceBundle.getBundle("Languages");
@@ -76,6 +86,13 @@ public class View implements UserActionObserver {
         }
     }
 
+    /**
+     * Adds visual components to the stage and shows the stage.
+     *
+     * This method is called every time a View object is initialized or a
+     * new language is selected. Thus, the most recently selected resources are used
+     * in constructing the visual components.3
+     */
     public void startProgram() {
         TopBar topBar = createTopBar(myResources);
         MenuBar macOSMenuBar = new SLogoMenuBar(menubarHandler);
@@ -108,6 +125,15 @@ public class View implements UserActionObserver {
         myWindow.setScene(scene);
         myWindow.show();
         myOutputScreen.initializeTurtle();
+    }
+
+    /**
+     * Sends input to the InputConsole to be parsed.
+     *
+     * @param input     input to be parsed
+     */
+    public void runInput(String input) {
+        myInput.sendInputToObservers(input);
     }
 
     private MenuButton createLanguagesDropdown() {
@@ -201,10 +227,6 @@ public class View implements UserActionObserver {
 
     private void changePenColor() {
         myOutputScreen.changePenColor(createDialogueAndGetColor());
-    }
-
-    public void runInput(String input) {
-        myInput.sendInputToObservers(input);
     }
 
     private String createDialogueAndGetColor() {

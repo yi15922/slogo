@@ -11,6 +11,11 @@ import slogo.compiler.token.SLogoToken;
 import slogo.observers.UserActionObserver;
 import slogo.observers.WorkspaceObserver;
 
+/**
+ *
+ *
+ * @author Liam Idrovo
+ */
 public class WorkspaceDisplay extends VBox implements WorkspaceObserver {
 
     private CommandDisplay myCommandDisplay;

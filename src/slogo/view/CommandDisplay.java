@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ *
+ * @author Liam Idrovo
+ */
 public class CommandDisplay extends ScrollPane implements Observable<UserActionObserver>, WorkspaceObserver {
 
     private List<UserActionObserver> myObservers = new ArrayList<>();

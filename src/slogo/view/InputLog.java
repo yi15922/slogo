@@ -15,6 +15,11 @@ import slogo.observers.UserActionObserver;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ *
+ * @author Liam Idrovo
+ */
 public class InputLog extends VBox implements InputObserver, Observable<UserActionObserver> {
 
     private List<UserActionObserver> myObservers = new ArrayList<>();

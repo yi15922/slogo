@@ -1,8 +1,13 @@
 package slogo.observers;
 
-import slogo.model.SingleTurtle;
-
+/**
+ * The ModelObserver interface should be implemented by any class seeking to keep
+ * track of changes in data in the turtles.
+ *
+ * @author Liam Idrovo
+ */
 public interface ModelObserver {
+
     void receiveNewPosition(int id, double x, double y);
 
     void receiveHeading(int id, double heading);
