@@ -19,7 +19,13 @@
 - Multi-window support
 - Ability for users to open existing `.slogo` files in a new window
 - All unit tests for above classes
-- Contribution of ideas and algorithms to various backend components such as user input parsing and compiling, the `Token` protocols, and recursive running mechanism to handle nested commands. 
+- Contribution of ideas and algorithms to various backend components such as user input parsing and compiling, the `Token` protocols, and recursive running mechanism to handle nested commands.
+
+###Liam Idrovo
+- Observer interfaces in observers directory
+- classes in view directory (except StatsDisplay and TurtleView)
+- `Observable` interface
+- `WindowAlert`
 
 
 ## Design Goals
@@ -30,7 +36,31 @@
 
 
 ## High-Level Design
-TODO: most of what we wrote in our DESIGN_PLAN document can be added here. 
+The back-end of the program is comprised of the following components: the parser,
+the compiler, slogo functions, and the turtle.
+The parser, represented by the Parser class, checks if input is valid syntax and makes
+slogo tokens out of valid input. The parser relies on input from the graphical console. Thus,
+its observers data from the InputConsole class. A slogo token is a representation of potential
+valid types of user input, such as constants and commands. The compiler, represented by
+the Compiler class, then packages these tokens into a function, represented by the SlogoFunction
+class. A function is essentially a collection of valid commands and their arguments. The Function class
+does the work of running the commands it has been given. Every command has a class representing it, and
+every command is a subclass of SLogoCommand, meaning that every command implements the run() method. When
+the Function class calls a command's run() method, the command then calls the appropriate methods in Turtle, thus
+modifying the model.
+
+The front-end is centralized on the View class, which assembles all required visual components,
+passes the required parameters to them, and adds them to the stage. Every visual element is represented by
+its own class e.g. InputConsole for the text area where user can input commands. The manner in which
+these elements are arranged is decided in View's startProgram(). The observer design pattern
+was used to transfer data between classes representing visual elements and the program's model.
+Whenever class A needed to be updated on new information in class B, the following steps were taken:
+
+1. Class B implements the Observable interface, giving it the ability to hold observers of a specific type.
+2. Class A implements a custom "observer" interface e.g. InputObserver found in observers  directory.
+3. Custom notification methods are declared in the observer interface and implemented in class A.
+4. Class B adds class A as an observer.
+5. Class B notifies A of new data by calling methods defined in the custom observer interface. 
 
 ## Assumptions or Simplifications
 ### Parser
