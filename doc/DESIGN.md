@@ -78,6 +78,9 @@ Whenever class A needed to be updated on new information in class B, the followi
 - There is no way to remove an entry from the workspace
 - Overwriting of an entry in the workspace does not change the object reference, simply its value. Therefore, commands relying on changes in variables in the workspace will immediate get any changes made to the variable. 
 
+###OutputScreen
+The assumption that a turtle would be allowed to wander off-screen without affecting the way the
+model ran or the GUI updated. This greatly simplified the design of the GUI.
 ## Changes from the Plan
 
 
