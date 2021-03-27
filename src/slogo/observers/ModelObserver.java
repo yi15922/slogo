@@ -4,7 +4,7 @@ package slogo.observers;
  * The ModelObserver interface should be implemented by any class seeking to keep
  * track of changes in data in the turtles.
  *
- * @author Liam Idrovo
+ * @author Liam Idrovo, Kenneth Moore III
  */
 public interface ModelObserver {
 

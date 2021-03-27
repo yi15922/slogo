@@ -5,7 +5,11 @@ import java.util.List;
 
 import slogo.observers.TurtleObserver;
 
-public class TurtleModel implements Observable<TurtleObserver>{
+/**
+ * @author Kenneth Moore III
+ * allows multiple turtles (turtle class) to be observed
+ */
+public class TurtleModel implements Observable<TurtleObserver> {
 
   protected List<TurtleObserver> myObservers = new ArrayList<>();
 

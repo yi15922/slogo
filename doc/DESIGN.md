@@ -35,6 +35,20 @@
 - Logic behind multiple turtle commands, including handling ID numbers of different turtles
 - Grouping, allowing commands to take in unlimited parameters, as handled by the `GroupHelper` class
 
+### Kenneth Moore III
+- Turtle Hierarchy 
+  - `SingleTurtle`
+  - `Turtle` which is basically a composite
+  - `TurtleInterface` an attempt at using a design pattern and ensuring common methods
+  
+- `Pen` support class for Turtle
+- Observer Structure for Multiple turtles 
+  - `TurtleModel`
+  - `TurtleObserver`
+  
+- majority of methods in 
+  - `SlogoModel`
+  - `ModelObserver`
 
 ## Design Goals
 - Create a functioning SLogo implementation that fulfills all of the basic requirements and most of the complete requirements.
@@ -77,7 +91,6 @@ Whenever class A needed to be updated on new information in class B, the followi
 - All tokens will be separated by a space character, with the exception of the "#" before a comment line.
 - All variables declared, even if temporary (such as in user defined command declaration) will be added to the workspace and will remain there permanently.
 - All user input must conform to the regex expression of one subclass of `SLogoToken`, otherwise it is a syntax error.
-
 
 ### Compiler
 - All user input tokens in each compiling session will be used to create exactly one runnable `SLogoFunction` instance.
@@ -133,3 +146,4 @@ When the program reloads, the new menubar item will appear with the correct acti
 - The menu bar on MacOS is unresponsive unless the user switches to another app and then switch back to SLogo. This is a known Java bug in the `MenuBar` class.
 - The setPalette command does not do anything because we did not implement changing palette colors. However, it still returns the correct value.
 - New turtles created with the tell command appear in the top-left corner instead of the center of the screen. However, once they are moved they go to the correct location, as if they started in the center. 
+- clearScreen does not work.  

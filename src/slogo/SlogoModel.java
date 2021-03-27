@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import slogo.observers.ModelObserver;
 
+/**
+ * allows an individual turtle to be observed
+ * @author Kenneth Moore III, Liam
+ */
 public class SlogoModel implements Observable<ModelObserver> {
 
   protected List<ModelObserver> myObservers = new ArrayList<>();
