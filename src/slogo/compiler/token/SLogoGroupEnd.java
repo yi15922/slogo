@@ -7,7 +7,7 @@ public class SLogoGroupEnd extends SLogoToken {
    * that is being converted into a Token. For Variable or Function objects, this name will act as the
    * name of the variable or function.
    */
-  public SLogoGroupEnd() {
+  public SLogoGroupEnd(String name) {
     super("GroupEnd");
   }
 
