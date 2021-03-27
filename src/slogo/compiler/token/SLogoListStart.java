@@ -8,7 +8,7 @@ public class SLogoListStart extends SLogoToken {
    * name of the variable or function.
    *
    */
-  public SLogoListStart(String name) {
+  public SLogoListStart() {
     super("ListStart");
   }
 }

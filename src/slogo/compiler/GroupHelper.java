@@ -51,6 +51,11 @@ public class GroupHelper {
   private final String DEFAULT_RESOURCE_PACKAGE = "resources.languages.";
   private final String GROUP_TYPE_BUNDLE = "GroupingTypes";
 
+  /**
+   * Initializes helper class
+   * @param tokenList - all tokens in the group in between the parentheses
+   * @param modelTurtle - the common instance of the model
+   */
   public GroupHelper(SLogoList tokenList, Turtle modelTurtle) {
     functionQueue = new ArrayDeque<>();
     this.modelTurtle = modelTurtle;
