@@ -38,6 +38,7 @@ public class Compiler implements InputObserver {
   private Parser parser;
   private Queue<SLogoToken> tokenQueue;
   private Turtle turtle;
+  private boolean containsID;
 
   /**
    * Creates an instance of a compiler. The instance takes an instance of {@link Parser}.
@@ -71,7 +72,7 @@ public class Compiler implements InputObserver {
    * the function's {@code run()} method.
    */
   public SLogoToken compileAndRun(String input){
-    boolean containsID = false;
+    containsID = false;
     makeTokenQueue(input);
     if (!hasNextToken()) return null;
     Deque<SLogoToken> functionTokens = new LinkedList<>();
@@ -151,6 +152,10 @@ public class Compiler implements InputObserver {
       else if (token.getClass().equals(SLogoGroupStart.class)) {
         token = makeGroupFunction();
       }
+      else if (token.getClass().equals(IDCommand.class)) {
+        token = new SLogoVariable("ID");
+        containsID = true;
+      }
       tokenList.add(token);
     }
     if (!listEnded) {
@@ -175,6 +180,10 @@ public class Compiler implements InputObserver {
       }
       else if (token.getClass().equals(SLogoGroupStart.class)) {
         token = makeGroupFunction();
+      }
+      else if (token.getClass().equals(IDCommand.class)) {
+        token = new SLogoVariable("ID");
+        containsID = true;
       }
       tokenList.add(token);
     }
