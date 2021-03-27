@@ -11,16 +11,31 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
 
+/**
+ * This type of command is unique in that it runs a set of commands specified by the user. Hence,
+ * a user-defined command must store the command list and also a variable list with all parameters
+ * that the command expects. This command is then stored in the Workspace by the Parser.
+ */
 public class SLogoUserDefinedCommand extends SLogoCommand {
   private Deque<SLogoToken> tokenQueue;
   private Map<String, Integer> variableMap;
 
+  /**
+   * Initializes the command with input name
+   */
   public SLogoUserDefinedCommand(String name) throws SLogoException {
     super(name);
     variableMap = new HashMap<>();
     tokenQueue = new ArrayDeque<>();
   }
 
+  /**
+   * Takes in a list of expected parameters and commands to be executed. Parameters are added
+   * to the expectedParameters list just like a regular command.
+   * @param variables - expected parameters
+   * @param commands - commands to be run when this command is called
+   * @throws SLogoException - if a variable is referenced that is not in the expected parameters
+   */
   public void giveParameters(SLogoList variables, SLogoList commands) throws SLogoException {
     for (SLogoToken token : variables.getTokenList()) {
       expectedParameters.add(new SLogoVariable(token.toString()));
@@ -33,6 +48,11 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
     }
   }
 
+  /**
+   * Runs stored command list
+   * @return - result of final command run, or 0 if no commands are run
+   * @throws SLogoException - if variable name is referenced that is not in parameter list
+   */
   @Override
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> replacedCommandQueue = new ArrayDeque<>();
@@ -51,6 +71,9 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
     return new SLogoFunction(replacedCommandQueue, modelTurtle).run();
   }
 
+  // "runs" the given commands to ensure that the command can be successfully defined.
+  // since command syntax is checked at runtime, we need to disable execution of all commands
+  // to ensure that checking the syntax won't affect the model
   private boolean verifyCommandDefinition() throws SLogoException {
     Deque<SLogoToken> dummyCommandQueue = new ArrayDeque<>();
     for (SLogoToken token : tokenQueue) {

@@ -13,7 +13,9 @@ import slogo.compiler.token.SLogoRunnable;
  * All commands must implement this interface, because the Compiler and Function rely on
  * identifying Command objects in order to compile and run a user-entered String.
  * Since commands have different functionalities, any object that implements Command needs
- * access to the slogo.model.Turtle and the Workspace.
+ * access to the model {@code Turtle}. However, Command subclasses do not need access to the
+ * Workspace because the Parser passes instances of all Variable and SLogoUserDefinedCommand
+ * objects directly to the command.
  *
  * @author Patrick Liu
  */

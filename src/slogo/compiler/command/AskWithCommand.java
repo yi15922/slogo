@@ -7,8 +7,16 @@ import slogo.compiler.token.SLogoFunction;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoToken;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of specifying a condition that a turtle
+ * has to meet in order to run the given commands.
+ */
 public class AskWithCommand extends SLogoCommand {
 
+  /**
+   * Initializes the command with name and two expected parameters
+   */
   public AskWithCommand() {
     super("AskWith");
     expectedParameters.add(new SLogoList("condition"));
@@ -21,7 +29,6 @@ public class AskWithCommand extends SLogoCommand {
    * should be run on that turtle. Error checking of function syntax should be performed by the
    * Turtle class.
    * @return - result of last command run
-   * @throws SLogoException
    */
   @Override
   public SLogoToken run() throws SLogoException {

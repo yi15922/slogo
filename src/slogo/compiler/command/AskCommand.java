@@ -10,8 +10,16 @@ import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of specifying which turtles to perform
+ * a given action.
+ */
 public class AskCommand extends SLogoCommand {
 
+  /**
+   * Initializes the command with name and two expected parameters
+   */
   public AskCommand() {
     super("Ask");
     expectedParameters.add(new SLogoList("turtles"));
@@ -23,7 +31,6 @@ public class AskCommand extends SLogoCommand {
    * list of integers contains all IDs of turtles that should be active. The function should
    * be run on only the turtles with active IDs.
    * @return - the result of the last command run by the last turtle in the list
-   * @throws SLogoException
    */
   @Override
   public SLogoToken run() throws SLogoException {
