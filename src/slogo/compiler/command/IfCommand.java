@@ -13,6 +13,12 @@ import slogo.compiler.token.SLogoVariable;
  * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
  * This command provides the functionality of performing the given commands if a condition
  * is met.
+ *
+ * I am submitting this class as part of my code masterpiece to demonstrate the ease of extending
+ * {@code SLogoCommand}. In addition, "if" is a slightly more interesting command to implement,
+ * since it involves running a list of tokens as a {@code SLogoFunction}.
+ *
+ * @author Patrick Liu
  */
 public class IfCommand extends SLogoCommand {
 
