@@ -41,12 +41,14 @@ public class RepeatCommand extends SLogoCommand {
     SLogoList commandTokens = (SLogoList) expectedParameters.get(1);
     commandQueue = new ArrayDeque<>(commandTokens.getTokenList());
     for (SLogoToken token : commandQueue) {
+      System.out.print(token.toString() + ": " + token.getValue() + " ");
       if (token.isEqualTokenType(new SLogoVariable("")) && token.toString().equals(":repcount")) {
         System.out.println("Found repcount variable");
         repcountVariable = (SLogoVariable) token;
         break;
       }
     }
+    System.out.println("");
     return new LoopHelper(1, numTimesToRepeat, 1, new SLogoFunction(commandQueue, modelTurtle),
         repcountVariable).run();
   }

@@ -1,8 +1,10 @@
 package slogo.compiler.command;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import slogo.SLogoException;
 import slogo.compiler.token.SLogoConstant;
@@ -57,6 +59,28 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> replacedCommandQueue = new ArrayDeque<>();
     for (SLogoToken token : tokenQueue) {
+      if (token.isEqualTokenType(new SLogoList("list"))) {
+        SLogoList tokenList = (SLogoList) token;
+        List<SLogoToken> tokenArrayList = tokenList.getTokenList();
+        List<SLogoToken> updatedTokenArrayList = new ArrayList<>();
+        for (int i = 0; i < tokenArrayList.size(); i++) {
+          SLogoToken t = tokenArrayList.get(i);
+          if (t.isEqualTokenType(new SLogoVariable("parameter"))) { // needs variable reference
+            if (variableMap.containsKey(t.toString())) {
+              SLogoVariable tVar = (SLogoVariable) t;
+              tVar.setValue(expectedParameters.get(variableMap.get(t.toString())).getValue());
+              updatedTokenArrayList.add(tVar);
+            }
+            else {
+              throw new SLogoException("Variable name not recognized");
+            }
+          }
+          else {
+            updatedTokenArrayList.add(t);
+          }
+        }
+        token = new SLogoList(tokenArrayList);
+      }
       if (token.isEqualTokenType(new SLogoVariable("parameter"))) { // needs variable reference
         if (variableMap.containsKey(token.toString())) {
           token = expectedParameters.get(variableMap.get(token.toString()));
@@ -65,8 +89,10 @@ public class SLogoUserDefinedCommand extends SLogoCommand {
           throw new SLogoException("Variable name not recognized");
         }
       }
+      System.out.print(token.toString() + ": " + token.getValue() + " ");
       replacedCommandQueue.add(token);
     }
+    System.out.println("");
     System.out.println(replacedCommandQueue);
     return new SLogoFunction(replacedCommandQueue, modelTurtle).run();
   }

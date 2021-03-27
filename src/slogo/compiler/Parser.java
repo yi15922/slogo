@@ -198,4 +198,14 @@ public class Parser {
     return ret;
   }
 
+  /**
+   * Parser places "ID" variable in workspace and returns it to the Compiler
+   * @return - variable with name "ID"
+   */
+  public SLogoVariable getIDVariableInWorkspace() {
+    SLogoVariable idVariable = new SLogoVariable("ID");
+    workspace.add(idVariable);
+    return idVariable;
+  }
+
 }

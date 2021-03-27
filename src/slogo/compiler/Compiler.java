@@ -39,6 +39,7 @@ public class Compiler implements InputObserver {
   private Queue<SLogoToken> tokenQueue;
   private Turtle turtle;
   private boolean containsID;
+  private SLogoVariable idVariable;
 
   /**
    * Creates an instance of a compiler. The instance takes an instance of {@link Parser}.
@@ -47,6 +48,7 @@ public class Compiler implements InputObserver {
   public Compiler(Parser parser, Turtle turtle) {
     this.parser = parser;
     this.turtle = turtle;
+    idVariable = parser.getIDVariableInWorkspace();
   }
 
 
@@ -71,7 +73,7 @@ public class Compiler implements InputObserver {
    * Upon successful creation of the {@code SLogoFunction} object, this method will call
    * the function's {@code run()} method.
    */
-  public SLogoToken compileAndRun(String input){
+  public SLogoToken compileAndRun(String input) {
     containsID = false;
     makeTokenQueue(input);
     if (!hasNextToken()) return null;
@@ -85,7 +87,7 @@ public class Compiler implements InputObserver {
         tokenToAdd = makeGroupFunction();
       }
       else if (tokenToAdd.getClass().equals(IDCommand.class)) {
-        tokenToAdd = new SLogoVariable("ID");
+        tokenToAdd = idVariable;
         containsID = true;
       }
       functionTokens.add(tokenToAdd);
@@ -93,7 +95,7 @@ public class Compiler implements InputObserver {
     try {
       if (containsID) {
         SLogoUserDefinedCommand wrapperCommand = new SLogoUserDefinedCommand("wrapper");
-        SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(new SLogoVariable("ID"))));
+        SLogoList variableList = new SLogoList(new ArrayList<>(Arrays.asList(idVariable)));
         SLogoList commandList = new SLogoList(new ArrayList<>(functionTokens));
         wrapperCommand.giveParameters(variableList, commandList);
         return turtle.runIDFunction(wrapperCommand);
@@ -153,7 +155,7 @@ public class Compiler implements InputObserver {
         token = makeGroupFunction();
       }
       else if (token.getClass().equals(IDCommand.class)) {
-        token = new SLogoVariable("ID");
+        token = idVariable;
         containsID = true;
       }
       tokenList.add(token);
@@ -182,7 +184,7 @@ public class Compiler implements InputObserver {
         token = makeGroupFunction();
       }
       else if (token.getClass().equals(IDCommand.class)) {
-        token = new SLogoVariable("ID");
+        token = idVariable;
         containsID = true;
       }
       tokenList.add(token);
