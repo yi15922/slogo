@@ -8,8 +8,16 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of performing one set of commands if a condition
+ * is met, and another set of commands otherwise.
+ */
 public class IfElseCommand extends SLogoCommand {
 
+  /**
+   * Initializes the command with name and three expected parameters
+   */
   public IfElseCommand() {
     super("IfElse");
     expectedParameters.add(new SLogoVariable("expr"));
@@ -17,6 +25,11 @@ public class IfElseCommand extends SLogoCommand {
     expectedParameters.add(new SLogoList("false commands"));
   }
 
+  /**
+   * Runs command
+   * @return - result of final command run, or 0 if no commands are run
+   * @throws SLogoException - if there is a syntax error in the command list that is run
+   */
   @Override
   public SLogoToken run() throws SLogoException {
     Deque<SLogoToken> commandQueue;

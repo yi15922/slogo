@@ -13,19 +13,32 @@ import slogo.compiler.token.SLogoRunnable;
  * All commands must implement this interface, because the Compiler and Function rely on
  * identifying Command objects in order to compile and run a user-entered String.
  * Since commands have different functionalities, any object that implements Command needs
- * access to the slogo.model.Turtle and the Workspace.
+ * access to the model {@code Turtle}. However, Command subclasses do not need access to the
+ * Workspace because the Parser passes instances of all Variable and SLogoUserDefinedCommand
+ * objects directly to the command.
+ *
+ * I am selecting this superclass as my code masterpiece because I experienced firsthand how
+ * open for extension it was. All commands supported in our SLogo program are subclasses of
+ * SLogoCommand, and implementing a new command only requires changing two methods, as detailed
+ * in the Javadoc. I am also including an example command, {@code IfCommand}, as part of my
+ * code masterpiece. 
  *
  * @author Patrick Liu
  */
 public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnable {
-    protected List<SLogoToken> expectedParameters; // contains the expected types: Variable, Token, or List
-    protected int parameterIndex; // used for keeping track of the Command's progress in order to turn isReady true
+    protected List<SLogoToken> expectedParameters;
+    protected int parameterIndex;
     protected Turtle modelTurtle;
 
     /**
      * All {@link SLogoToken} objects have a name property. For subclasses of {@code SLogoCommand},
      * the default constructor takes in no parameters, and calls the superclass parameter with the
      * name of the command.
+     *
+     * A subclass of this class should call the super constructor and then add expected parameters
+     * to expectedParameters with the desired parameter type. If a number is expected, the parameter
+     * should be added as a {@code SLogoVariable} with the name of the parameter for better code
+     * readability.
      * @param name - the name of the command
      */
     public SLogoCommand(String name) {
@@ -46,7 +59,9 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
     /**
      * Takes in a {@link SLogoToken} object and attempts to add it to the list of parameters. If the
      * given token is the correct type, this method places it in {@code expectedParameters} and returns true.
-     * Otherwise, it returns false.
+     * Otherwise, it returns false. The {@code SLogoFunction} class calling this method should use
+     * the return value of this method to determine whether or not to try running the next token
+     * as a nested command.
      * @param token - a Token expected by the Command as a parameter
      * @return - true if the given parameter was successfully added, false otherwise
      */
@@ -68,6 +83,8 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
      * Running this method is an assurance that the syntax of all parameters is correct; however,
      * this method still can throw an exception if it encounters an issue while running (i.e.
      * an illegal turtle movement).
+     *
+     * A subclass should override this method with the desired functionality of the command.
      * @return - a {@code Constant} token containing the return value of the command.
      */
     @Override
@@ -77,7 +94,7 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
     /**
      * Any object that implements Command must store a List of Lists of Tokens that it expects as parameters
      * in order to run properly. The length of the list indicates the number of expected parameters,
-     * @return - List of parameters needed, specifying possible Token types for each parameter
+     * @return - number of parameters expected
      */
     public int getNumExpectedTokens() {
         return expectedParameters.size();
@@ -104,6 +121,5 @@ public abstract class SLogoCommand extends WorkspaceEntry implements SLogoRunnab
     public void resetCommand() {
         parameterIndex = 0;
     }
-
 
 }

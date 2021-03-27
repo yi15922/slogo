@@ -5,8 +5,15 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of changing the color of a member of the palette.
+ */
 public class SetPaletteCommand extends SLogoCommand {
 
+  /**
+   * Initializes the command with name and four expected parameters
+   */
   public SetPaletteCommand() {
     super("SetPalette");
     expectedParameters.add(new SLogoVariable("index"));
@@ -20,7 +27,6 @@ public class SetPaletteCommand extends SLogoCommand {
    * The command does not error check the rgb values (which must be in the range 0-255 inclusive),
    * so it is up to the Turtle class to do so.
    * @return - the result of the Turtle set palette method
-   * @throws SLogoException
    */
   @Override
   public SLogoToken run() throws SLogoException {

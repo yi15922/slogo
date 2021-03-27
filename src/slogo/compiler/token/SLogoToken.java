@@ -33,10 +33,22 @@ public class SLogoToken {
     return tokenName;
   }
 
+  /**
+   * Compares two tokens to see if they are the same type. This method is useful when running
+   * a command, since we need to feed commands the correct parameter types. Limited in that there
+   * is no easy way to compare commands. Our workaround is to try casting a token to a
+   * SLogoCommand, and performing another action in the catch block.
+   * @param otherToken - the token we are comparing this one to
+   * @return - true if the tokens are equal type, false otherwise
+   */
   public boolean isEqualTokenType(SLogoToken otherToken) {
     return this.getClass().getSimpleName().equals(otherToken.getClass().getSimpleName());
   }
 
+  /**
+   * Returns the value of a Token, which may be 0 at default.
+   * @return - double value of token
+   */
   public double getValue() {
     return tokenValue;
   }

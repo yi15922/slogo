@@ -11,16 +11,29 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoVariable;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of performing the given commands a specified
+ * number of times.
+ */
 public class DoTimesCommand extends SLogoCommand {
   private SLogoVariable counterVariable;
   private int limit;
 
+  /**
+   * Initializes the command with name and two expected parameters
+   */
   public DoTimesCommand() {
     super("DoTimes");
     expectedParameters.add(new SLogoList("parameters"));
     expectedParameters.add(new SLogoList("commands"));
   }
 
+  /**
+   * Runs given commands multiple times by running a LoopHelper
+   * @return - result of final command run
+   * @throws SLogoException - if syntax of command list is incorrect
+   */
   @Override
   public SLogoToken run() throws SLogoException {
     parseParameterList((SLogoList) expectedParameters.get(0));

@@ -4,8 +4,15 @@ import slogo.SLogoException;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of returning a variable with the "ID" property.
+ */
 public class IDCommand extends SLogoCommand {
 
+  /**
+   * Initializes the command with name and zero expected parameters
+   */
   public IDCommand() {
     super("ID");
   }
@@ -18,7 +25,6 @@ public class IDCommand extends SLogoCommand {
    * function for each individual turtle. This way, we maintain the Composite design pattern
    * and do not allow any class but {@code Turtle} access to the data structure of individual turtles.
    * @return - a wrapper variable named "ID," but this command should not be run.
-   * @throws SLogoException
    */
   @Override
   public SLogoToken run() throws SLogoException {

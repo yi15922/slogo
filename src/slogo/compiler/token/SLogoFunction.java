@@ -144,19 +144,37 @@ public class SLogoFunction extends WorkspaceEntry implements SLogoRunnable {
     return runCommand(commandToRun, functionTokens);
   }
 
+  /**
+   * Enables execution of commands if they were disabled. Commands execute by default.
+   */
   public void enableExecution() {
     executeCommands = true;
   }
 
+  /**
+   * Disables execution of commands. Needed by user-defined commands, which need to "run"
+   * the function to prove the command can be successfully defined, but the commnads should
+   * not affect the model.
+   */
   public void disableExecution() {
     executeCommands = false;
   }
 
+  /**
+   * Inherited from SLogoRunnable, but functions are always ready because they do not take in
+   * parameters. This method should not be called.
+   * @return - false
+   */
   @Override
   public boolean isReady() {
     return false;
   }
 
+  /**
+   * Inherited from SLogoRunnable, but functions do not take in parameters as commands do.
+   * @param token - a Token expected
+   * @return - false
+   */
   @Override
   public boolean giveNextExpectedToken(SLogoToken token) {
     return false;

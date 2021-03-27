@@ -30,12 +30,19 @@ public class SLogoVariable extends WorkspaceEntry {
 
   /**
    * Allows {@code Command} or {@code Function} objects to access a variable's value.
-   * @return
+   * @return - value of variable, 0 at default
    */
   public double getValue() {
     return myValue;
   }
 
+  /**
+   * Allows {@code Command} objects to set the value of a variable. This works extremely well
+   * with the Workspace and Parser, since the Parser can create a Variable and pass the same
+   * instance for all future encounters of the variable name, thus ensuring that updating the value
+   * will affect future references to the variable.
+   * @param updatedValue - new value of the variable
+   */
   public void setValue(double updatedValue) {
     myValue = updatedValue;
   }

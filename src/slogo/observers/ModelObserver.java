@@ -1,6 +1,13 @@
 package slogo.observers;
 
+/**
+ * The ModelObserver interface should be implemented by any class seeking to keep
+ * track of changes in data in the turtles.
+ *
+ * @author Liam Idrovo
+ */
 public interface ModelObserver {
+
     void receiveNewPosition(int id, double x, double y);
 
     void receiveHeading(int id, double heading);
@@ -15,4 +22,5 @@ public interface ModelObserver {
 
     void checkPenSize(int id, double pixels);
 
+    void addTurtle(int id);
 }

@@ -11,6 +11,11 @@ import slogo.observers.InputObserver;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ *
+ * @author Liam Idrovo
+ */
 public class InputConsole extends VBox implements Observable<InputObserver>{
 
     final static String BUTTON_TEXT = "Run";
@@ -29,6 +34,18 @@ public class InputConsole extends VBox implements Observable<InputObserver>{
         this.getChildren().addAll(myInputArea, button);
     }
 
+    /**
+     * Calls receiveUserInput on all observers of type InputObserver.
+     *
+     * @param input data representing user input to be sent to observers
+     */
+    public void sendInputToObservers(String input) {
+        for (InputObserver o : myInputObservers) {
+            o.receiveUserInput(input);
+        }
+        myInputArea.clear();
+    }
+
     @Override
     public boolean isObserver(InputObserver observer) {
         return myInputObservers.contains(observer);
@@ -42,13 +59,6 @@ public class InputConsole extends VBox implements Observable<InputObserver>{
     @Override
     public void removeObserver(InputObserver observer) {
         myInputObservers.remove(observer);
-    }
-
-    public void sendInputToObservers(String input) {
-        for (InputObserver o : myInputObservers) {
-            o.receiveUserInput(input);
-        }
-        myInputArea.clear();
     }
 
 }

@@ -7,9 +7,16 @@ import slogo.compiler.token.SLogoConstant;
 import slogo.compiler.token.SLogoList;
 import slogo.compiler.token.SLogoToken;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of creating new turtles.
+ */
 public class TellCommand extends SLogoCommand {
   private List<Integer> turtleIDs;
 
+  /**
+   * Initializes the command with name and one expected parameter
+   */
   public TellCommand() {
     super("Tell");
     expectedParameters.add(new SLogoList("turtles"));
@@ -33,6 +40,7 @@ public class TellCommand extends SLogoCommand {
     return new SLogoConstant(modelTurtle.tell(turtleIDs));
   }
 
+  // turns single element into list containing all integers up to that element
   private void singleElementList() {
     int lastID = turtleIDs.get(0);
     turtleIDs.clear();

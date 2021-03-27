@@ -1,8 +1,7 @@
 package slogo.view;
 
 import javafx.scene.layout.VBox;
-import slogo.TurtleObserver;
-import slogo.observers.ModelObserver;
+import slogo.observers.TurtleObserver;
 
 public class StatsDisplay extends VBox implements TurtleObserver {
 

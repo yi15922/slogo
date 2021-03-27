@@ -6,14 +6,25 @@ import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoVariable;
 import slogo.compiler.command.SLogoCommand;
 
+/**
+ * A subclass of {@code SLogoCommand}, representing a command supported by SLogo.
+ * This command provides the functionality of comparing two inputs for inequality.
+ */
 public class NotEqualCommand extends SLogoCommand {
 
+  /**
+   * Initializes the command with name and two expected parameters
+   */
   public NotEqualCommand() {
     super("NotEqual");
     expectedParameters.add(new SLogoVariable("expr1"));
     expectedParameters.add(new SLogoVariable("expr2"));
   }
 
+  /**
+   * Runs command
+   * @return - 1 if two inputs are not equal, 0 otherwise
+   */
   @Override
   public SLogoToken run() throws SLogoException {
     if (expectedParameters.get(0).getValue() != expectedParameters.get(1).getValue()) {

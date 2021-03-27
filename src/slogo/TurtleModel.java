@@ -2,7 +2,8 @@ package slogo;
 
 import java.util.ArrayList;
 import java.util.List;
-import slogo.observers.ModelObserver;
+
+import slogo.observers.TurtleObserver;
 
 public class TurtleModel implements Observable<TurtleObserver>{
 

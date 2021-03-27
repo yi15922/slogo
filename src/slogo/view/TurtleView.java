@@ -74,4 +74,9 @@ public class TurtleView extends ImageView implements ModelObserver {
   public void checkPenSize(int id, double pixels) {
 
   }
+
+  @Override
+  public void addTurtle(int id) {
+
+  }
 }

@@ -9,12 +9,23 @@ import slogo.observers.UserActionObserver;
 
 import java.util.ResourceBundle;
 
+/**
+ * The TopBar class represents the bar containing actionable buttons at the top of the window.
+ *
+ * @author Liam Idrovo
+ */
 public class TopBar extends HBox {
 
     private UserActionObserver myInputObserver;
     private ResourceBundle myResources;
 
-    //TODO: Make this implement Observable so that it is clear it is being observed
+    /**
+     * Initializes a TopBar object with specified observer added to its observer list and specified
+     * ResourceBundle used to retrieve text displayed on buttons.
+     *
+     * @param observer  UserActionObserver added to TopBar's observer list
+     * @param myResources   ResourceBundle containing display text
+     */
     public TopBar(UserActionObserver observer, ResourceBundle myResources) {
         myInputObserver = observer;
         this.myResources = myResources;
@@ -30,7 +41,4 @@ public class TopBar extends HBox {
 
     }
 
-    public void addElementToTopBar(Node element) {
-
-    }
 }

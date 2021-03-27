@@ -18,6 +18,7 @@ import slogo.compiler.command.SLogoCommand;
 import slogo.compiler.token.SLogoRunnable;
 import slogo.compiler.token.SLogoToken;
 import slogo.compiler.token.SLogoList;
+import slogo.compiler.token.SLogoVariable;
 import slogo.observers.InputObserver;
 
 /**
