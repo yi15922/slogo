@@ -21,6 +21,12 @@ import slogo.compiler.token.SLogoList;
 import slogo.observers.InputObserver;
 
 /**
+ * Masterpiece: this class, and its interactions with {@link Workspace} and {@link SLogoTokenMaker},
+ * is what I would consider good design. The class is highly data driven, and instantiates
+ * different types of tokens using reflection. The combination of this means that no changes need
+ * to be made to these classes to support new commands. This is very valuable for a compiler
+ * application where allowed commands might change frequently.
+ *
  * The {@code Parser} class takes user inputs and converts them into {@link SLogoToken} objects
  * of the correct type. This class simply splits {@code String} inputs by blank spaces and
  * performs no syntax related error checking.
