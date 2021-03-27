@@ -358,12 +358,16 @@ public class Turtle extends TurtleModel implements TurtleInterface {
 
   public SLogoToken runIDFunction(SLogoUserDefinedCommand commandToRun) {
     SLogoToken returned = new SLogoConstant(0);
+    Map<Integer, Boolean> copyActiveMap = new HashMap<>(activeMap);
     for (Integer id : turtleMap.keySet()) {
       if (activeMap.get(id)) {
+        deactivateMap(activeMap);
+        activeMap.put(id, true);
         Deque<SLogoToken> commandQueue = new ArrayDeque<>();
         commandQueue.add(commandToRun);
         commandQueue.add(new SLogoConstant(id));
         returned = new SLogoFunction(commandQueue, this).run();
+        activeMap = new HashMap<>(copyActiveMap);
       }
     }
     return returned;
