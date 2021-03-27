@@ -3,16 +3,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import slogo.model.SingleTurtle;
 import slogo.model.Turtle;
 
 
 class TurtleTest {
-  SingleTurtle turtle;
+  Turtle turtle;
 
   @BeforeEach
   void setup() {
-    turtle = new SingleTurtle();
+    turtle = new Turtle();
   }
 
   @Test

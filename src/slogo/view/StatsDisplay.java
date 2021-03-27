@@ -6,6 +6,10 @@ import slogo.observers.ModelObserver;
 
 public class StatsDisplay extends VBox implements TurtleObserver {
 
+  public StatsDisplay(){
+
+  }
+
   @Override
   public void receiveTurtle(int id) {
 

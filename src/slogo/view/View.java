@@ -64,7 +64,7 @@ public class View implements UserActionObserver {
     retrieveResources(myLocale = new Locale(mySettings.getString("DefaultLanguage")));
     //fields assigned here instead of start program so they are not reset when language is switched
     myOutputScreen = createOutputScreen();
-    myModel.addObserver(myStatsDisplay);
+    //myModel.addObserver(myStatsDisplay);
     myWorkspace = createWorkSpace();
     modelWorkspace.addObserver(myWorkspace);
     myInput = createInputConsole();
